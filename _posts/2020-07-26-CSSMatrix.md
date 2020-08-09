@@ -117,6 +117,25 @@ transform: matrix(a,b,c,d,e,f);
 
 然后用[上面讲到的](#jump)方法，用坐标点去和这个变换矩阵做点乘，就能得到变换后的图形的坐标点了。
 
+
+`缩放scale`调整`a & d`
+
+---
+
+![](../assets/img/2020-08-09/rotate.jpg)
+
+`旋转rotate`调整`a | b | c | d`
+
+---
+
+`平移translate`调整`a & d`
+
+---
+
+`拉伸skew`调整`b & c`
+
+
+
 ## 参考
 
 - [引出这篇blog的动图所对应的网站](https://tympanus.net/Development/IsometricGrids/)
