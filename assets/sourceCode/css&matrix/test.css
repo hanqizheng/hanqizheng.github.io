@@ -1,0 +1,26 @@
+.body {
+  background-color: #e6e6e6;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardGroup {
+  background-color: aquamarine;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(45deg) rotateZ(45deg);
+  /* transform: matrix3d(1, 0, 0, 0, 0, 0.5253, -0.8509, 0, 0, 0.8509, 0.5253, 0, 0, 0, 0, 1) 
+  matrix3d(0.5253, -0.8509, 0, 0, 0.8509, 0.5253, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); */
+}
+
+.item {
+  cursor: pointer;
+  position: absolute;
+  height: 200px;
+  width: 300px;
+  /* transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); */
+  transition: 0.3s ease;
+}

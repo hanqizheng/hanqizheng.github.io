@@ -120,9 +120,13 @@ transform: matrix(a,b,c,d,e,f);
 
 `缩放scale`调整`a & d`
 
+ ![](../assets/img/2020-08-09/ad.jpg)
+
 ---
 
 ![](../assets/img/2020-08-09/rotate.jpg)
+
+![](../assets/img/2020-08-09/abcd.jpg)
 
 `旋转rotate`调整`a | b | c | d`
 
@@ -130,9 +134,253 @@ transform: matrix(a,b,c,d,e,f);
 
 `平移translate`调整`a & d`
 
+![](../assets/img/2020-08-09/ad.jpg)
+
 ---
 
 `拉伸skew`调整`b & c`
+
+![](../assets/img/2020-08-09/bc.jpg)
+
+---
+
+当然这事二维的变换，三维的变换矩阵是4 * 4的矩阵。
+
+大致原理是一摸一样的，所以就不给出数学上的运算过程了。
+
+## 那么，开始实现！
+
+首先我先写三个方块来代替目标中的图片。
+
+这时候的代码也非常简单
+
+```html
+// Test.jsx
+
+<div className="body">
+  <div className="cardGroup">
+    <div className="item" style={{ backgroundColor: '#cccccc' }}></div>
+    <div className="item" style={{ backgroundColor: '#bbbbbb', top: 30, left: 30 }}></div>
+    <div className="item" style={{ backgroundColor: '#eeeeee', top: 60, left: 60 }}></div>
+  </div>
+</div>
+```
+
+样式如下
+
+```css
+.body {
+  background-color: #dfdfdf;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardGroup {
+  position: relative;
+}
+
+.item {
+  position: absolute;
+  height: 200px;
+  width: 300px;
+  transform: translate(-50%, -50%);
+}
+```
+
+这时候再给出一遍目标效果
+
+![](../assets/img/2020-08-09/aimAgain.jpg)
+
+### 我们来分析一下这个变换的过程
+
+#### 1. 首先这个方块是躺倒的感觉
+
+我为了实现让三个方块同时躺倒的感觉，我就需要在包含这三个方块的父级div上统一做操作。
+
+`我选择让这个div分别绕X轴和Z轴旋转45度。`之所以不旋转90度是因为如果真的旋转90度，方块就`真的躺倒了`,那么方块与显示屏永远垂直相交，我们就`看不到方块了`。
+
+### 先补充一下刚才偷懒没说的三维变换矩阵
+
+```css
+div {
+  transfrom: matrix3d(a00, a10, a20, a30, a01, a11, a21, a31, a02, a12, a22, a32, a03, a13, a23, a33)
+}
+```
+
+`matrix3d()`接受16个参数，本质上就是一个4 * 4的矩阵。
+
+![](./../assets/img/2020-08-09/3weijuzhen.jpg)
+
+> 要特别注意这里参数是竖着来排列的
+
+而旋转对应的变换矩阵如下图
+
+![](./../assets/img/2020-08-09/xuanzhuan.jpg)
+
+所以代码如下
+
+这里
+- `sin(45) = 0.8509`
+- `cos(45) = 0.5253`
+
+
+```css
+.cardGroup {
+  transform: matrix3d(1, 0, 0, 0, 0, 0.5253, -0.8509, 0, 0, 0.8509, 0.5253, 0, 0, 0, 0, 1) 
+             matrix3d(0.5253, -0.8509, 0, 0, 0.8509, 0.5253, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+} 
+
+```
+
+> 注意这是一次transform进行了两次matrix3d变换，如果分成两次transform分别变换则得到的结果不一样，因为一次变换是公用当前的坐标轴，分为两次变换的话，`第二次的变换坐标轴已经是第一次变换以后的了`.
+
+效果如下
+
+![](../assets/img/2020-08-09/laydown.jpg)
+
+#### 2.接下来就是要添加hover方块弹起
+
+这个变换是让这个方块位移，但需要注意的是，这个时候的坐标轴已经是变换过的了，所以`向上移动不一定是y轴的移动了`。
+
+这里给出`位移对应的变换矩阵`
+
+![](./../assets/img/2020-08-09/weiyi.jpg)
+
+经过试验，发现是`z轴`的移动。
+
+于是我给`item`类选择器添加一个矩阵变换。
+
+```css
+.item:hover {
+  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -100, 1);
+}
+```
+
+效果就是这个样子
+
+![](./../assets/img/2020-08-09/step2.gif)
+
+#### 3. 接下来要让3个放个都发生位移
+
+**我们会遇到一个问题**，就是`怎么做到，一次hover，3种位移`呢？
+
+这时候我们需要监听`3个方块父元素的hover事件`。然后用`内联style`来改变3个div从而达到我们希望的效果。
+
+我们需要三个`state`来存放对应三个方块的`变换矩阵`
+
+```js
+  const [matrix1, setMatrix1] = useState([
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  ])
+  const [matrix2, setMatrix2] = useState([
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  ])
+  const [matrix3, setMatrix3] = useState([
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  ])
+```
+
+然后我们需要两个事件处理函数
+
+```js
+  const mouseHoverIn = () => {
+    const temp1 = [...matrix1];
+    const temp2 = [...matrix2];
+    const temp3 = [...matrix3];
+
+    temp1[14] = [50]; // 14是对应变换矩阵dz的位置
+    temp2[14] = [100];
+    temp3[14] = [150];
+
+    setMatrix1(temp1);
+    setMatrix2(temp2);
+    setMatrix3(temp3);
+  }
+
+  const mouseHoverOut = () => {
+    const temp = [
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1
+    ]
+    setMatrix1([...temp]);
+    setMatrix2([...temp]);
+    setMatrix3([...temp]);
+  }
+```
+
+![](./../assets/img/2020-08-09/step3.gif)
+
+### 但总觉得哪里怪怪的？
+
+再来仔细看看人家的效果
+
+发现不光发生了`translate变换`。每个方块还带有`轻微的旋转`，而且每次的角度是`随机的`。
+
+![](./../assets/img/2020-08-09/sample.gif)
+
+那我们也来加上旋转
+
+来一个随机角度生成函数
+
+```js
+const getRandomAngle = (start, end) => {
+  return Math.floor(Math.random() * (end - start) + start);
+}
+```
+然后hover函数改变一下
+
+```js
+  const mouseHoverIn = () => {
+    const random1 = getRandomAngle(1, 4);
+    const random2 = getRandomAngle(1, 4);
+    const random3 = getRandomAngle(1, 4);
+
+    const temp1 = [
+      Math.cos(random1), -Math.sin(random1), 0, 0,
+      Math.sin(random1), Math.cos(random1), 0, 0,
+      0, 0, 1, 0,
+      0, 0, 60, 1
+    ];
+    const temp2 = [
+      Math.cos(random2), -Math.sin(random2), 0, 0,
+      Math.sin(random2), Math.cos(random2), 0, 0,
+      0, 0, 1, 0,
+      0, 0, 120, 1
+    ];
+    const temp3 = [
+      Math.cos(random3), -Math.sin(random3), 0, 0,
+      Math.sin(random3), Math.cos(random3), 0, 0,
+      0, 0, 1, 0,
+      0, 0, 180, 1
+    ];
+
+    setMatrix1(temp1);
+    setMatrix2(temp2);
+    setMatrix3(temp3);
+  }
+```
+
+这样大概的效果就出来了，当然我是`为了效果明显把`，把旋转的角度变大了。
+
+![](./../assets/img/2020-08-09/step4.gif)
+
+## 那么这样就算大功告成啦！
+
+[项目地址]()
 
 
 
@@ -143,5 +391,7 @@ transform: matrix(a,b,c,d,e,f);
 - [MDN - transform](https://developer.mozilla.org/en-US/docs/Web/CSS/transform)
 - [理解CSS3 transform中的Matrix(矩阵)](https://www.zhangxinxu.com/wordpress/2012/06/css3-transform-matrix-%E7%9F%A9%E9%98%B5/)
 - [计算机图形学笔记](https://zhuanlan.zhihu.com/p/144323332)
+- [CSS3 matrix - matrix3d介绍](https://www.jianshu.com/p/52e0018e6ce2)
+- [CSS3 matrix3d矩阵变换和动画变换](https://www.jianshu.com/p/c37cf06d5b92)
 
 
