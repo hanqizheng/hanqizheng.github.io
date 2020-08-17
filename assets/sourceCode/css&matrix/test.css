@@ -11,9 +11,9 @@
   background-color: aquamarine;
   position: relative;
   transform-style: preserve-3d;
-  transform: rotateX(45deg) rotateZ(45deg);
-  /* transform: matrix3d(1, 0, 0, 0, 0, 0.5253, -0.8509, 0, 0, 0.8509, 0.5253, 0, 0, 0, 0, 1) 
-  matrix3d(0.5253, -0.8509, 0, 0, 0.8509, 0.5253, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); */
+  /* transform: rotateX(45deg) rotateZ(45deg); */
+  transform: matrix3d(1, 0, 0, 0, 0, 0.5253, -0.8509, 0, 0, 0.8509, 0.5253, 0, 0, 0, 0, 1) 
+  matrix3d(0.5253, -0.8509, 0, 0, 0.8509, 0.5253, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 }
 
 .item {
