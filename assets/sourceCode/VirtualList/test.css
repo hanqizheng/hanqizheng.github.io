@@ -1,0 +1,24 @@
+.body {
+  height: 500px;
+  width: 300px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: aquamarine;
+  overflow-y: scroll;
+  box-sizing: border-box;
+}
+
+.item {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  color: #383838;
+  font-weight: bold;
+  box-sizing: border-box;
+  padding: 0 30px;
+  text-align: center;
+}

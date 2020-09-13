@@ -273,11 +273,11 @@ endOffset = 全部数据总高度 - startOffset - 可视区域数据高度
 <div style={{ paddingBottom: endOffset }}></div>
 ```
 
-![](./../assets/img/2020-09-13/endOffset.gif)
+![](./../assets/img/2020-09-13/result.gif)
 
 **可以看到滚动条在一开始就已经是正常高度了，后面也不会再变。**
 
-## 到现在，我们就已经完成了一个最基本的Virtual List
+### 到现在，我们就已经完成了一个最基本的Virtual List
 
 
 
