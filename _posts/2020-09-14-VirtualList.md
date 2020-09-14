@@ -104,6 +104,8 @@ const Test = () => {
   );
 }
 export default Test;
+
+// 这里的style属性应该是 backgroundColor: rgb(random(), random(), random()), 但是在github pages自动部署总是出错，可能是我的博客模版还不支持jsx这种语法
 ```
 
 现在有一个具体的界面了，稍后就在这个空架子里把虚拟列表加上。
