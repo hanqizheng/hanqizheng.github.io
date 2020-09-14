@@ -94,7 +94,6 @@ const Test = () => {
       {data.map((item) => (
         <dir
           className="item"
-          // style={{ backgroundColor: `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})` }}
           style={{ backgroundColor: item.value % 2 === 0 ? '#cccccc' : '#f5f5f5' }}
           key={item.value}
         >
