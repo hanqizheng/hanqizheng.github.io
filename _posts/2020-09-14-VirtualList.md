@@ -37,7 +37,33 @@ author: "Qizheng Han"
 
 > 图片源于[浅说虚拟列表的实现原理](https://github.com/dwqs/blog/issues/70)
 
-可以看到图中标出的
+可以看到图中标出的`可视区域`，这就是用户能看到的数据区域
+
+> 注：通常我们为了让滚动看起来更真实平滑，可视区域的大小，或者说需要展示在可视区域的数据数量往往是大于真实的可视区域一点。
+
+而虚拟列表的原理也非常简单，就是`只在可视区域内展示数据即可`，用户看不到的数据我们也不需要让浏览器渲染，这样渲染的DOM数就会大大缩小。
+
+### 如何做到上述这一点？
+
+我们可以根据滚动距离和可视范围的上限来`计算出该渲染数据的数据下标`，也就是`startIndex`。那么`渲染数据的截止下标就可以根据行高和startIndex`计算出来(这是固定高的虚拟列表)。
+
+图中另一个比较显眼的是`可滚动区域`，可能这么标示不是很好理解，换种说法就是，如果我真的把数据都渲染出来，那么所需要的高度，或者说所占高度就是这里的`可滚动区域`。
+
+可滚动区域的高度是一定的。当然就算是下拉滚动，总数据量会随着加载逐渐变多，那么把每次加载操作之后看作一个新列表的话，其实列表高度也是一定的。`可滚动区域 = 数据数量 * 每行高度`
+
+**而关键就在怎么渲染这么有限的数据还能让`滚动事件`一直都能够触发**。
+
+这时候就需要用到图中的`startOffset和endOffset来撑开整个容器`，这里的容器是实际渲染数据所在的DOM容器，因为实际渲染的数据个数很有限，容器高度自然就不会很高，`甚至有可能都不会形成滚动条`。所以需要这两个变量来撑开容器。
+
+### 来个小总结
+
+我们要做到的效果是`只渲染用户可见范围内所需要显示的数据`。
+
+- 要做的第一步就是计算startIndex和endIndex从而得到需要渲染的数据。
+- 第二部就是让滚动事件提供的`滚动距离`参与到`startIndex`和`endIndex`的计算中来通过滚动实时渲染出可视区域内的数据。
+- 第三步则是需要做到`如何能一直触发滚动事件？`就需要`startIndex`和`endIndex`的帮助来撑开容器，让滚动一直都在。
+
+
 
 
 
@@ -105,7 +131,7 @@ const Test = () => {
 }
 export default Test;
 
-// 这里的style属性应该是 backgroundColor: rgb(random(), random(), random()), 但是在github pages自动部署总是出错，可能是我的博客模版还不支持jsx这种语法
+// 这里的style属性应该是 backgroundColor: rgb(random() * 255, random() * 255, random() * 255), 但是在github pages自动部署总是出错，可能是我的博客模版还不支持jsx这种语法
 ```
 
 现在有一个具体的界面了，稍后就在这个空架子里把虚拟列表加上。
@@ -167,14 +193,6 @@ const showData = useMemo(() => {
 ![](./../assets/img/2020-09-13/colorFix.png)
 
 
-
-
--------------------
-// 修复便边界值闪烁的问题
-
--------------------
-
-
 ## 4. 为什么滚动不起来？
 
 我拿到了应该显示在`可视范围`的数据，为什么确是这个样子？
@@ -220,7 +238,7 @@ const startOffset = useMemo(() => {
 
 我们需要一个实际的DOM去做这件事，把这个DOM放在我们要渲染的列表上方就好。
 
-```html
+```jsx
 <div style={{ paddingTop: startOffset }}></div>
 ```
 
@@ -271,7 +289,7 @@ endOffset = 全部数据总高度 - startOffset - 可视区域数据高度
 
 我们也同样需要一个实际的DOM来做这个工作，放在渲染的可视数据下方
 
-```html
+```jsx
 <div style={{ paddingBottom: endOffset }}></div>
 ```
 
@@ -281,6 +299,75 @@ endOffset = 全部数据总高度 - startOffset - 可视区域数据高度
 
 ### 到现在，我们就已经完成了一个最基本的Virtual List
 
+---
+
+## 把刚才遇到的问题都解决一下💪
+
+### 先来把遇到的颜色问题修复一下😄
+
+这个修复起来很简单，只需要稍微做下改动就好，直接上代码
+
+```js
+function mockData() {
+  const tempData = [];
+  for (let i = 0; i < 100; i++) {
+    tempData.push({
+      label: `item${i}`,
+      value: i,
+      color: `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})` });
+  }
+  return tempData;
+}
+```
+
+可以看到我给生成假数据的数据中添加一个color项，这样每个颜色就是专属那条数据的了。
+
+### 然后是数据闪烁的问题
+
+这个问题的原因，是因为`使用padding来撑开容器`，计算在边缘值总会出现`微小的偏差`所以会不断地在两个值之间一直闪动。
+
+![](./../assets/img/2020-09-13/flash.gif)
+
+可以看到`startIndex`的值一直在2和3之间来回改变，导致界面是疯狂闪动的。
+
+这时候就要引出第二种虚拟列表的样式写法也就是`绝对定位`。
+
+绝对定位的写法就可以解决这个问题。
+
+因为`利用padding撑开的容器`上下的`offset`都是依赖滚动距离来进行计算的`且因为是用padding去左右实际显示的内容`，所以在某个边界值就会导致：
+  - 根据`当前滚动距离`计算出一个`starOffset`来作为`paddingTop`的值
+  - 赋予`新的pdding`后，会对当前第一个item造成一定的位移
+  - 新的位移会触发新的滚动事件
+  - 这样就形成了无限循环，从而出现抖动
+
+改成绝对定位的元素，`每个item已经脱离normal flow`不会受到padding的影响，当然，现在改成绝对定位的排列也就`不需要上下的offset`去撑开整个容器了。
+
+```jsx
+
+// top = index * row_height
+<div className="bodyContainer" style={{ height: data.length * ROW_HEIGHT }}>
+  {showData.map((item) => (
+    <div
+      className="item"
+      style={{ backgroundColor: item.color, top: item.value * ROW_HEIGHT }}
+      key={`${item.value}`}
+    >
+      {`${item.label}：${item.value}`}
+    </div>
+  ))}
+</div>
+```
+
+可以看到改成绝对定位后，`我们只需要给每个item一个自己的top值`即可。然后我们将容器的高度设置成`数据个数 * 行高`。这么一来就没有上下offset的干扰了。
+
+理解绝对定位布局的虚拟列表比之前带有offset好理解。
+
+- 先想如果`用绝对定位布局写一个普通的列表`，其实就是在计算`每个item距离top的距离`。而这个距离正好就是`top = index * row_height`。整个容器需要的高度是`height = data.length * row_height`。
+- 在`列表虚拟化之后`，这个计算的方法`唯一`受影响的就是计算top值中的`index`。
+- 这个`index`因为数据是截取过的所以`不能是当前数组中item的index`。而应该是`item在原数组中的index`。
+- 这一点是很容易就可以做到的。
+
+可以把绝对定位后的虚拟列表理解成**一个根据元素`自身index`和`行高`计算出的top值排列而成的列表**。每个item的top值
 
 
 
