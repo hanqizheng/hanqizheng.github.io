@@ -1,14 +1,20 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
 import { ROW_HEIGHT, BUFFER } from './constant';
-import './test.css';
+// import './test.css';
+
+// step 4
+import './test2.css';
 
 function mockData() {
   const tempData = [];
-  for (let i = 0; i < 100; i++) {
-    tempData.push({ label: `item${i}`, value: i });
+  for (let i = 0; i < 1000; i++) {
+    tempData.push({
+      label: `item${i}`,
+      value: i,
+      color: `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`
+    });
   }
-
   return tempData;
 }
 
@@ -50,28 +56,23 @@ const Test = () => {
     return data.slice(startIndex, endIndex);
   }, [startIndex, endIndex, data]);
 
-  const startOffset = useMemo(() => {
-    return ~~(currentTop / ROW_HEIGHT) * ROW_HEIGHT;
-  }, [currentTop]);
-
-  // 下偏移量，需要让总高度始终等于dataSource.length * rowHeight，要不然滚动条会异常
-  const endOffset = useMemo(() => {
-    return data.length * ROW_HEIGHT - startOffset - (endIndex - startIndex) * ROW_HEIGHT;
-  }, [data, startOffset, startIndex, endIndex]);
-
   return (
-    <div id="vt" className={"body"} onScroll={(e) => onScroll(e)}>
-      <div style={{ paddingTop: startOffset }}></div>
-      {showData.map((item) => (
-        <dir
-          className="item"
-          style={{ backgroundColor: item.value % 2 === 0 ? '#cccccc' : '#f5f5f5' }}
-          key={`${item.value}`}
-        >
-          {`${item.label}：${item.value}`}
-        </dir>
-      ))}
-      <div style={{ paddingBottom: endOffset }}></div>
+    <div
+      id="vt"
+      className="body"
+      onScroll={(e) => onScroll(e)}
+    >
+      <div className="bodyContainer" style={{ height: data.length * ROW_HEIGHT }}>
+        {showData.map((item) => (
+          <div
+            className="item"
+            style={{ backgroundColor: item.color, top: item.value * ROW_HEIGHT }}
+            key={`${item.value}`}
+          >
+            {`${item.label}：${item.value}`}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

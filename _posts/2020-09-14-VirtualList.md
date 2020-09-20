@@ -236,7 +236,7 @@ const startOffset = useMemo(() => {
 
 我们需要一个实际的DOM去做这件事，把这个DOM放在我们要渲染的列表上方就好。
 
-```jsx
+```html
 <div style={{ paddingTop: startOffset }}></div>
 ```
 
