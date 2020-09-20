@@ -118,13 +118,13 @@ const Test = () => {
   return (
     <div className={"body"} on  onScroll={(e) => onScroll(e)}>
       {data.map((item) => (
-        <dir
+        <div
           className="item"
           style={{ backgroundColor: item.value % 2 === 0 ? '#cccccc' : '#f5f5f5' }}
           key={item.value}
         >
           {`${item.label}：${item.value}`}
-        </dir>
+        </div>
       ))}
     </div>
   );
@@ -170,7 +170,7 @@ useEffect(() => {
 ```js
 // 算展示元素的起始位置
 const startIndex = useMemo(() => {
-  return ~~(currentTop / ROW_HEIGHT);
+  return Math.floor(currentTop / ROW_HEIGHT);
 }, [currentTop]);
 
 // 算展示元素的终止位置
@@ -184,13 +184,11 @@ const showData = useMemo(() => {
 }, [startIndex, endIndex, data]);
 ```
 
-当然这里有个小插曲就是我给每个item是`随机颜色`, 但是每次重新render颜色随机会变成这个样子😂
+当然这里有个小插曲就是我给每个item是`随机颜色`, 但是每次重新render颜色随机会变成这个样子😂（稍后我们解决这个问题）
 
 ![](./../assets/img/2020-09-13/colorError.gif)
 
-所以我换成`奇偶差色`的背景色了。
-
-![](./../assets/img/2020-09-13/colorFix.png)
+> 所以我暂时换成`奇偶差色`的背景色了。
 
 
 ## 4. 为什么滚动不起来？
@@ -230,11 +228,11 @@ const showData = useMemo(() => {
 
 // 上偏移量，需要给偏移量让截取的数据始终显示在可视区域才能一直有scroll事件
 const startOffset = useMemo(() => {
-  return ~~(currentScroll / ROW_HEIGHT) * ROW_HEIGHT;
+  return Math.floor(currentScroll / ROW_HEIGHT) * ROW_HEIGHT;
 }, [currentScroll]);
 ```
 
-上面这段代码`~~(currentScroll / ROW_HEIGHT)`代表`有几个元素滚动出了可视区域`，再乘一个行高就是我们想要的`offset`的值。
+上面这段代码`Math.floor(currentScroll / ROW_HEIGHT)`代表`有几个元素滚动出了可视区域`，再乘一个行高就是我们想要的`offset`的值。
 
 我们需要一个实际的DOM去做这件事，把这个DOM放在我们要渲染的列表上方就好。
 
@@ -252,9 +250,8 @@ const startOffset = useMemo(() => {
 
 ## 5. 为什么滚动条这么奇怪？？😳
 
-细心的小伙伴，你也发现不了，因为我动图太短了😂👻
+细心的小伙伴，可能发现滚动条有点奇怪😂👻
 
-滚动条有点奇怪
 
 ![](./../assets/img/2020-09-13/wiredScroll.gif)
 
@@ -289,7 +286,7 @@ endOffset = 全部数据总高度 - startOffset - 可视区域数据高度
 
 我们也同样需要一个实际的DOM来做这个工作，放在渲染的可视数据下方
 
-```jsx
+```html
 <div style={{ paddingBottom: endOffset }}></div>
 ```
 
@@ -322,6 +319,8 @@ function mockData() {
 
 可以看到我给生成假数据的数据中添加一个color项，这样每个颜色就是专属那条数据的了。
 
+![](./../assets/img/2020-09-13/colorRight.gif)
+
 ### 然后是数据闪烁的问题
 
 这个问题的原因，是因为`使用padding来撑开容器`，计算在边缘值总会出现`微小的偏差`所以会不断地在两个值之间一直闪动。
@@ -342,7 +341,7 @@ function mockData() {
 
 改成绝对定位的元素，`每个item已经脱离normal flow`不会受到padding的影响，当然，现在改成绝对定位的排列也就`不需要上下的offset`去撑开整个容器了。
 
-```jsx
+```html
 
 // top = index * row_height
 <div className="bodyContainer" style={{ height: data.length * ROW_HEIGHT }}>
@@ -367,9 +366,11 @@ function mockData() {
 - 这个`index`因为数据是截取过的所以`不能是当前数组中item的index`。而应该是`item在原数组中的index`。
 - 这一点是很容易就可以做到的。
 
-可以把绝对定位后的虚拟列表理解成**一个根据元素`自身index`和`行高`计算出的top值排列而成的列表**。每个item的top值
+---
 
+## 大功告成⛽️
 
+![](./../assets/img/2020-09-13/result1.gif)
 
 # 源码
 
