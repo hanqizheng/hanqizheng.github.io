@@ -1,0 +1,172 @@
+.buttonBody {
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  animation: bg ease 5s infinite;
+}
+
+.img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 50px;
+  width: 70px;
+  color: #ffffff;
+  z-index: 10;
+}
+
+.spot {
+  position: absolute;
+  border-radius: 50%;
+  height: 75px;
+  width: 75px;
+  animation: spotColorChange 10s ease infinite;
+}
+
+.spot1 {
+  position: absolute;
+  border-radius: 40%;
+  animation: spotColorChange1 10s ease infinite;
+}
+
+.spot3 {
+  position: absolute;
+  border-radius: 70%;
+  animation: spotColorChange3 10s ease infinite;
+}
+
+.dragBar {
+  position: absolute;
+  top: 50%;
+  right: -100px;
+  transform: translateY(-50%);
+  height: 360px;
+  width: 50px;
+}
+
+.dragBar::before {
+  content: " ";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  height: 360px;
+  width: 8px;
+  background-color: #dddddd;
+}
+
+.dragSpot {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 50px;
+  width: 50px;
+  /* background-color: #a7a7a7; */
+}
+
+.dragSpot::after {
+  content: " ";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background-color: #a7a7a7;
+}
+
+.dragText {
+  position: absolute;
+  top: 50%;
+  left: 50px;
+  transform: translateY(-50%);
+  color: #4d4d4d;
+  font-weight: bold;
+  font-size: 40px;
+}
+
+@keyframes bg {
+  0% {
+    background-color: #56cfff;
+  }
+  30% {
+    background-color: #16dcff;
+  }
+  70% {
+    background-color: #2cb2ff;
+  }
+  100% {
+    background-color: #56cfff;
+  }
+}
+
+@keyframes spotColorChange {
+  0% {
+    height: 125px;
+    width: 120px;
+    filter: blur(20px) hue-rotate(210deg);
+    transform: translate(-70%, -70%) rotate(0deg);
+  }
+  40% {
+    height: 135px;
+    width: 130px;
+    filter: blur(30px) hue-rotate(230deg);
+    transform: translate(60%, -50%) rotate(-100deg);
+  }
+  100% {
+    height: 125px;
+    width: 120px;
+    filter: blur(20px) hue-rotate(210deg);
+    transform: translate(-70%, -70%) rotate(0deg);
+  }
+}
+
+@keyframes spotColorChange1 {
+  0% {
+    height: 105px;
+    width: 90px;
+    filter: blur(20px) hue-rotate(210deg);
+    transform: translate(-30%, -15%) rotate(-40deg);
+  }
+  60% {
+    height: 130px;
+    width: 130px;
+    filter: blur(20px) hue-rotate(230deg);
+    transform: translate(-50%, -55%) rotate(40deg);
+  }
+  100% {
+    height: 105px;
+    width: 90px;
+    filter: blur(20px) hue-rotate(210deg);
+    transform: translate(-30%, -15%)  rotate(-40deg);
+  }
+}
+
+@keyframes spotColorChange3 {
+  0% {
+    height: 140px;
+    width: 125px;
+    filter: blur(20px) hue-rotate(220deg);
+    transform: translate(20%, -20%) rotate(0deg);
+  }
+  30% {
+    height: 90px;
+    width: 90px;
+    filter: blur(20px) hue-rotate(210deg);
+    transform: translate(10%, 20%) rotate(60deg);
+  }
+  70% {
+    height: 70px;
+    width: 100px;
+    filter: blur(20px) hue-rotate(230deg);
+    transform: translate(30%, 50%) rotate(60deg);
+  }
+  100% {
+    height: 140px;
+    width: 125px;
+    filter: blur(20px) hue-rotate(220deg);
+    transform: translate(20%, -20%) rotate(0deg);
+  }
+}
