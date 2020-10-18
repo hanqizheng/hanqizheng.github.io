@@ -416,7 +416,7 @@ import arrow from './arrow.svg'
 
 # 最终效果
 
-![](./../assets/img/2020-10-17/step7.gif)
+![](./../assets/img/2020-10-17/resultHD.gif)
 
 这样我们就大功告成了！！🎉🎉
 
