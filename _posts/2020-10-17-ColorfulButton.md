@@ -67,7 +67,8 @@ $ npx create-react-app virtual-scroll
 
 我们需要一个可以拖动的`drag bar`来调节数值。
 
-```html
+```jsx
+{% raw %}
 <div id="dragBar" className="dragBar" onMouseMove={handleMouseMove}>
   <div
     id="dragSpot"
@@ -79,6 +80,7 @@ $ npx create-react-app virtual-scroll
   />
   <span className="dragText">{`${hueDegree}deg`}</span>
 </div>
+{% endraw %}
 ```
 
 我需要一个值`来记录色环的旋转角度`
@@ -161,7 +163,9 @@ const handleMouseMove = useCallback((e) => {
 我们要做到高斯模糊只需要使用`filter: blur()`即可。接受的参数是一个模糊的值。
 
 ```css
-filter: blur(20px);
+.test {
+  filter: blur(20px);
+}
 ```
 
 ![](./../assets/img/2020-10-17/blur.gif)
@@ -185,14 +189,16 @@ filter: blur(20px);
 
 ## 1. 先来一个Button本身
 
-```html
-<!-- button 本身 -->
+```jsx
+{% raw %}
+// button本身
 <div
   className="buttonBody"
   style={{ height, width }}
 >
   ...
 </div>
+{% endraw %}
 ```
 `height`和`width`作为`ColorfulButton`组建的`props`传入可以让用户自定义button的宽高，默认值`都是150px`。
 
@@ -210,7 +216,8 @@ filter: blur(20px);
 
 我们先让他的`色调`随时间改变。因为我默认按照`red`为起始色，所以我需要按照`上方的色环图`，可以看出蓝色主要聚集在`200 - 240 deg`这个范围。
 
-```html
+```jsx
+{% raw %}
 <div
   className="spot"
   style={{
@@ -220,6 +227,7 @@ filter: blur(20px);
     backgroundColor: spotColor,
   }}
 ></div>
+{% endraw %}
 ```
 
 ```css
@@ -230,7 +238,7 @@ filter: blur(20px);
   width: 75px;
   animation: spotTest 3s ease infinite;
 }
-
+{% raw %}
 @keyframes spotTest {
   0% {
     filter: hue-rotate(200deg);
@@ -242,6 +250,7 @@ filter: blur(20px);
     filter: hue-rotate(200deg);
   }
 }
+{% endraw %}
 ```
 
 达成的效果就是这个样子
@@ -251,6 +260,7 @@ filter: blur(20px);
 ## 3. 接下来请出高斯模糊
 
 ```css
+{% raw %}
 @keyframes spotTest {
   0% {
     filter: blur(20px) hue-rotate(200deg);
@@ -262,6 +272,7 @@ filter: blur(20px);
     filter: blur(20px) hue-rotate(200deg);
   }
 }
+{% endraw %}
 ```
 
 然后可以发现模糊程度很大，基本快和Button的背景色融合了。
@@ -287,6 +298,7 @@ filter: blur(20px);
 其实就是单独写了动画，为了后续`animation`要更改`宽高`，所以顺便把`height`和widht移到动画中。
 
 ```css
+{% raw %}
 @keyframes spotColorChange1 {
   0% {
     height: 105px;
@@ -327,6 +339,7 @@ filter: blur(20px);
     filter: blur(20px) hue-rotate(220deg);
   }
 }
+{% endraw %}
 ```
 
 为了让大家看的更清楚，我把先前Button写好的`background-color`换成了`border`
@@ -381,6 +394,7 @@ overflow: hidden;
 为了让效果更平滑舒适，让Button的背景色也在不同的蓝色之间动起来，从而突出动态的背景Spot。
 
 ```css
+{% raw %}
 .buttonBody {
   position: relative;
   border-radius: 50%;
@@ -402,6 +416,7 @@ overflow: hidden;
     background-color: #56cfff;
   }
 }
+{% endraw %}
 ```
 
 最后再加上` -> `
@@ -410,8 +425,10 @@ overflow: hidden;
 import arrow from './arrow.svg'
 ```
 
-```html
+```jsx
+{% raw %}
  <img className="img" src={arrow} alt="arrow"/>
+{% endraw %}
 ```
 
 # 最终效果

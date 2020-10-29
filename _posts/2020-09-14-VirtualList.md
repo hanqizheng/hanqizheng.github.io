@@ -106,7 +106,8 @@ function mockData() {
 
 ### 2. 然后我们来写一个列表渲染这些数据
 
-```js
+```jsx
+{% raw %}
 const Test = () => {
 
   const [data] = useState(mockData());
@@ -120,7 +121,7 @@ const Test = () => {
       {data.map((item) => (
         <div
           className="item"
-          style={{ backgroundColor: item.value % 2 === 0 ? '#cccccc' : '#f5f5f5' }}
+          style={{ backgroundColor: `rgb(${random() * 255}, ${random() * 255}, ${random() * 255}` }}
           key={item.value}
         >
           {`${item.label}：${item.value}`}
@@ -130,8 +131,7 @@ const Test = () => {
   );
 }
 export default Test;
-
-// 这里的style属性应该是 backgroundColor: rgb(random() * 255, random() * 255, random() * 255), 但是在github pages自动部署总是出错，可能是我的博客模版还不支持jsx这种语法
+{% endraw %}
 ```
 
 现在有一个具体的界面了，稍后就在这个空架子里把虚拟列表加上。
@@ -236,8 +236,10 @@ const startOffset = useMemo(() => {
 
 我们需要一个实际的DOM去做这件事，把这个DOM放在我们要渲染的列表上方就好。
 
-```html
+```jsx
+{% raw %}
 <div style={{ paddingTop: startOffset }}></div>
+{% endraw %}
 ```
 
 然后就达到了这个效果
@@ -286,8 +288,10 @@ endOffset = 全部数据总高度 - startOffset - 可视区域数据高度
 
 我们也同样需要一个实际的DOM来做这个工作，放在渲染的可视数据下方
 
-```html
+```jsx
+{% raw %}
 <div style={{ paddingBottom: endOffset }}></div>
+{% endraw %}
 ```
 
 ![](./../assets/img/2020-09-13/result.gif)
@@ -366,8 +370,8 @@ function mockData() {
 
 改成绝对定位的元素，`每个item已经脱离normal flow`不会受到padding的影响，当然，现在改成绝对定位的排列也就`不需要上下的offset`去撑开整个容器了。
 
-```html
-
+```jsx
+{% raw %}
 // top = index * row_height
 <div className="bodyContainer" style={{ height: data.length * ROW_HEIGHT }}>
   {showData.map((item) => (
@@ -380,6 +384,7 @@ function mockData() {
     </div>
   ))}
 </div>
+{% endraw %}
 ```
 
 可以看到改成绝对定位后，`我们只需要给每个item一个自己的top值`即可。然后我们将容器的高度设置成`数据个数 * 行高`。这么一来就没有上下offset的干扰了。

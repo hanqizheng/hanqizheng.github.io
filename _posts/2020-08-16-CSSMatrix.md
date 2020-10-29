@@ -96,7 +96,9 @@ $ npx create-react-app test
 坐标系的`原点`可以通过`transform-origin`属性来设定。
 
 ```css
-transform-origin: 50px 50px;
+.test {
+  transform-origin: 50px 50px;
+}
 ```
 
 当使用这种方式设定坐标原点时，原点本身是在屏幕左上角，正方向分别是`向下和向右`。
@@ -104,7 +106,9 @@ transform-origin: 50px 50px;
 ## transform: Matrix()
 
 ```css
-transform: matrix(a,b,c,d,e,f);
+.test {
+  transform: matrix(a,b,c,d,e,f);
+}
 ```
 
 没错，matrix有`6个参数`。就让一张图来描述这6个参数分别时干嘛的吧。
@@ -154,7 +158,8 @@ transform: matrix(a,b,c,d,e,f);
 
 这时候的代码也非常简单
 
-```html
+```jsx
+{% raw %}
 // Test.jsx
 
 <div className="body">
@@ -164,6 +169,7 @@ transform: matrix(a,b,c,d,e,f);
     <div className="item" style={{ backgroundColor: '#eeeeee', top: 60, left: 60 }}></div>
   </div>
 </div>
+{% endraw %}
 ```
 
 样式如下
