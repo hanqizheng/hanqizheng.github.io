@@ -1,8 +1,8 @@
 # Site settings
 title: 「Handler」
 description: "物华天宝，龙光射牛斗之墟。"
-baseurl: ""
-url: "https://hanqizheng.github.io"
+baseurl: "/aaa"
+url: "https://hanqizheng.vercel.app"
 
 # Google Analytics
 google_analytics: UA—XXXXXXXX-X
@@ -10,7 +10,7 @@ google_analytics: UA—XXXXXXXX-X
 # Author
 author:
   name: Qizheng Han
-  url: https://hanqizheng.vercel.app
+  url: https://hanqizheng.github.io
   email: hanqizheng598@gmail.com
 
 # Build settings
