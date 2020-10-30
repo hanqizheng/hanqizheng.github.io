@@ -2,7 +2,6 @@
 layout: post
 title: "只是朴实无华的Virtual List"
 author: "Qizheng Han"
-permalink: /2020-09-14/VirtualList
 ---
 
 前两天项目的二期优化中有一项是`滚动下拉加载Table卡顿优化`。
