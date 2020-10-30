@@ -1,27 +1,27 @@
 # Site settings
-title:          「Handler」
-description:    "物华天宝，龙光射牛斗之墟。"
-baseurl:        ""
-url:            "https://hanqizheng.github.io"
+title: 「Handler」
+description: "物华天宝，龙光射牛斗之墟。"
+baseurl: ""
+url: "https://hanqizheng.github.io"
 
 # Google Analytics
 google_analytics: UA—XXXXXXXX-X
 
 # Author
 author:
-  name:         Qizheng Han
-  url:          https://hanqizheng.github.io
-  email:        hanqizheng598@gmail.com
+  name: Qizheng Han
+  url: https://hanqizheng.github.io
+  email: hanqizheng598@gmail.com
 
 # Build settings
-markdown:       kramdown
+markdown: kramdown
 include:
   - _pages
 
 # Assets
 sass:
-  sass_dir:     _sass
-  style:        compressed
+  sass_dir: _sass
+  style: compressed
 
 # Gems
 plugins:
@@ -31,17 +31,15 @@ plugins:
   # - jemoji #Uncomment this to allow emoji in your post
 
 # Permalinks
-permalink:      /:year-:month-:day/:title
-paginate:       5
+permalink: /:year-:month-:day/:title
+paginate: 5
 
 # Excludes
-exclude: [ Gemfile, Gemfile.lock, tale.gemspec ]
+exclude: [Gemfile, Gemfile.lock, tale.gemspec]
 
 # Disqus (Set to your disqus id)
-disqus:         jekyll-tale
+disqus: jekyll-tale
 
-theme:      tale
-
-paginate:   5
+theme: tale
 
 excerpt_separator: <!--more-->
