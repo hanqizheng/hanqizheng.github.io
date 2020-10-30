@@ -42,7 +42,6 @@ disqus:         jekyll-tale
 
 theme:      tale
 
-permalink:  /:year-:month-:day/:title
 paginate:   5
 
 excerpt_separator: <!--more-->
