@@ -13,7 +13,7 @@ author: "Qizheng Han"
 
 其实就是偶然需要重新登陆一下QQ，结果看到了这么一个Button。
 
-![aim](./../assets/img/2020-10-17/aim.gif)
+![aim](2020/10/../../../assets/img/2020-10-17/aim.gif)
 
 > GIF的画质实在不行，可以自行QQ退出登录看一下😂
 
