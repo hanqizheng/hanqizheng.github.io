@@ -14,11 +14,11 @@ author: "Qizheng Han"
 
 其实就是偶然看到了这个图，很好奇，然后按下了`F12`。
 
-![](./../assets/img/2020-08-09/aim22.gif)
+![](/assets/img/2020-08-09/aim22.gif)
 
 发现了这段神奇的代码。
 
-![](./../assets/img/2020-08-09/code.jpg)
+![](/assets/img/2020-08-09/code.jpg)
 
 觉得这个效果看起来很棒，到底是怎么实现的呢？今天来尝试尝试。废话不多说， Here we go!
 
@@ -60,7 +60,7 @@ $ npx create-react-app test
 
 > 以下图片源自知乎用户[孙小磊]
 
-![](./../assets/img/2020-08-09/2dScaling.jpg)
+![](/assets/img/2020-08-09/2dScaling.jpg)
 
 这里就不仔细展开图形学里的这些知识讲一遍了，就拿张图举个例子。
 
@@ -91,7 +91,7 @@ $ npx create-react-app test
 
 > 图片出自[张鑫旭]个人博客
 
-![](./../assets/img/2020-08-09/zuobiaoxi.png)
+![](/assets/img/2020-08-09/zuobiaoxi.png)
 
 坐标系的`原点`可以通过`transform-origin`属性来设定。
 
@@ -218,13 +218,13 @@ div {
 
 `matrix3d()`接受16个参数，本质上就是一个4 * 4的矩阵。
 
-![](./../assets/img/2020-08-09/3weijuzhen.jpg)
+![](/assets/img/2020-08-09/3weijuzhen.jpg)
 
 > 要特别注意这里参数是竖着来排列的
 
 而旋转对应的变换矩阵如下图
 
-![](./../assets/img/2020-08-09/xuanzhuan.jpg)
+![](/assets/img/2020-08-09/xuanzhuan.jpg)
 
 所以代码如下
 
@@ -253,7 +253,7 @@ div {
 
 这里给出`位移对应的变换矩阵`
 
-![](./../assets/img/2020-08-09/weiyi.jpg)
+![](/assets/img/2020-08-09/weiyi.jpg)
 
 经过试验，发现是`z轴`的移动。
 
@@ -267,7 +267,7 @@ div {
 
 效果就是这个样子
 
-![](./../assets/img/2020-08-09/step2.gif)
+![](/assets/img/2020-08-09/step2.gif)
 
 #### 3. 接下来要让3个放个都发生位移
 
@@ -328,7 +328,7 @@ div {
   }
 ```
 
-![](./../assets/img/2020-08-09/step3.gif)
+![](/assets/img/2020-08-09/step3.gif)
 
 ### 但总觉得哪里怪怪的？
 
@@ -382,7 +382,7 @@ const getRandomAngle = (start, end) => {
 
 这样大概的效果就出来了，当然我是`为了效果明显把`，把旋转的角度变大了。
 
-![](./../assets/img/2020-08-09/step4.gif)
+![](/assets/img/2020-08-09/step4.gif)
 
 ## 那么这样就算大功告成啦！
 
