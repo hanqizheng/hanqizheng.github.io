@@ -237,7 +237,6 @@ function Page({ data }) {
 
 ![](/assets/img/2020-11-15/name.jpg)
 
-
 ## 完成另一个目标，用Severless function来实现一个表单
 
 ```jsx
