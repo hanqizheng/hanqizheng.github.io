@@ -420,6 +420,7 @@ module.exports = {
     new Pack2020Plugin()
   ]
 }
+// 。。。
 ```
 
 运行了`npm run dev`之后可以看到命令行中多了一行
