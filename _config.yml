@@ -42,4 +42,6 @@ disqus: jekyll-tale
 
 theme: tale
 
+destination: _site
+
 excerpt_separator: <!--more-->
