@@ -4,9 +4,9 @@ title: "来自Serverless的一句hello, world!"
 author: "Qizheng Han"
 ---
 
-Severless的相关内容也是一个自己博客心愿单中的老钉子户了。但是一直迟迟没有写是因为自己一直不是很明白我用Serverless能做些什么，就算我知道了它的概念。
+Severless的相关内容也是一个自己博客心愿单中的老钉子户了。 但是一直迟迟没有写是因为自己一直不是很明白我用Serverless能做些什么， 就算我知道了它的概念。 
 
-而且意识到Serverless可能还需要一定的Node技术栈，又想起了曾经实习期自己(当时实习写Node)Node潜入潜出的经历。🤦‍♂️
+而且意识到Serverless可能还需要一定的Node技术栈， 又想起了曾经实习期自己(当时实习写Node)Node潜入潜出的经历。🤦‍♂️
 
 也不由的就会把这件事拖延了。但是今天，我们拒绝❌拖延，node也好serverless也罢，我们就从一句`hello，world!`学起。
 

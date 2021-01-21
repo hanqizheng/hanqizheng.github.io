@@ -1,6 +1,6 @@
 * {
   @include box-sizing;
-  line-height: 1.5;
+  line-height: 2.5;
 }
 
 html,
@@ -11,7 +11,7 @@ body {
 }
 
 html {
-  font-family: $serif-primary;
+  font-family: "SF Pro SC","HanHei SC","SF Pro Text","Myriad Set Pro","SF Pro Icons","Apple Legacy Chevron","PingFang SC","Helvetica Neue","Helvetica","Arial",sans-serif;
   font-size: 14px;
   overflow-y: scroll;
 
@@ -31,7 +31,7 @@ h4,
 h5,
 h6 {
   color: $default-shade;
-  font-family: $sans-serif;
+  font-family: "SF Pro SC","HanHei SC","SF Pro Text","Myriad Set Pro","SF Pro Icons","Apple Legacy Chevron","PingFang SC","Helvetica Neue","Helvetica","Arial",sans-serif;
   line-height: normal;
 }
 
