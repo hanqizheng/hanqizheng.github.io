@@ -115,7 +115,7 @@ $ npx create-react-app test
 
 > 图片出自[张鑫旭]个人博客
 
-![](../assets/img/2020-08-09/matrix.gif)
+![](/assets/img/2020-08-09/matrix.gif)
 
 **其实就是通过配置这`6个参数`来调整这个`变换矩阵`**。
 
@@ -124,13 +124,13 @@ $ npx create-react-app test
 
 `缩放scale`调整`a & d`
 
- ![](../assets/img/2020-08-09/ad.jpg)
+ ![](/assets/img/2020-08-09/ad.jpg)
 
 ---
 
-![](../assets/img/2020-08-09/rotate.jpg)
+![](/assets/img/2020-08-09/rotate.jpg)
 
-![](../assets/img/2020-08-09/abcd.jpg)
+![](/assets/img/2020-08-09/abcd.jpg)
 
 `旋转rotate`调整`a | b | c | d`
 
@@ -138,13 +138,13 @@ $ npx create-react-app test
 
 `平移translate`调整`a & d`
 
-![](../assets/img/2020-08-09/ad.jpg)
+![](/assets/img/2020-08-09/ad.jpg)
 
 ---
 
 `拉伸skew`调整`b & c`
 
-![](../assets/img/2020-08-09/bc.jpg)
+![](/assets/img/2020-08-09/bc.jpg)
 
 ---
 
@@ -198,7 +198,7 @@ $ npx create-react-app test
 
 这时候再给出一遍目标效果
 
-![](../assets/img/2020-08-09/aimAgain.jpg)
+![](/assets/img/2020-08-09/aimAgain.jpg)
 
 ### 我们来分析一下这个变换的过程
 
@@ -245,7 +245,7 @@ div {
 
 效果如下
 
-![](../assets/img/2020-08-09/laydown.jpg)
+![](/assets/img/2020-08-09/laydown.jpg)
 
 #### 2.接下来就是要添加hover方块弹起
 
