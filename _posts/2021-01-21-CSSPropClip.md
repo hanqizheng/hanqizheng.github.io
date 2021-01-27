@@ -4,11 +4,11 @@ title: "CSS之clip一些花里胡哨的东西"
 author: "Qizheng Han"
 ---
 
-最近的我，有点才思枯竭的感觉 🤯。其实就是拖延。
+最近的我，有点才思枯竭的感觉🤯。其实就是拖延。
 
-众所周知喜欢搞一些花里胡哨的东西。 继上次的`gradient` & `hue-rotate`之后
+众所周知喜欢搞一些花里胡哨的东西。继上次的`gradient` & `hue-rotate`之后
 
-今天我们引来了一个新的神级属性(自封)`clip`，ta ～ da ～!
+今天我们引来了一个新的神级属性(自封)`clip`，ta～da～! 
 
 ## 先来个简单的
 
@@ -95,7 +95,7 @@ author: "Qizheng Han"
 
   ![](/assets/img/2021-01-24/paddingBox.jpg)
 
-  可以看到在设定了`padding-box`之后背景色的范围就仅限`除了`bordr 以外的范围。
+  可以看到在设定了`padding-box`之后背景色的范围就仅限`除了`border 以外的范围。
 
 - background-clip: content-box;
 
@@ -222,7 +222,7 @@ CSS中的mask属性允许用户屏蔽或剪裁特定点的图像来实现，部�
 
 可以看到我在绘制`矩形`使用的是`polygon()`。他接受具体的点值或者百分比。大概原理如下图。
 
-TODO【绘制图】
+![](/assets/img/2021-01-24/drawA.jpg)
 
 然后可以看到两个矩形在绘制时给的坐标点时`一摸一样的`，因为这个百分比`是相对当前容器的宽度`。
 
@@ -244,7 +244,7 @@ TODO【绘制图】
 
 给出的4个点
 
-TODO绘制图2
+![](/assets/img/2021-01-24/drawB.jpg)
 
 ![](/assets/img/2021-01-24/leftworng.gif) 
 
