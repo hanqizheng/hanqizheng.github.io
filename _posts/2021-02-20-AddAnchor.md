@@ -23,13 +23,15 @@ author: "Qizheng Han"
 
 > 首先要来科普一下里面的几个概念
 > 
+> `static site`: 直接把当前所要渲染的东西呈现到用户的浏览器上的界面。没有后端。
+> 
 > `markup language`: 是标记语言的意思，即在文本中加入一些说明符号来指示排版要求，字体大小，位置等。通过标记语法，使普通文本内容具有不同的格式。
 >
 > markdown就是一种标记语言，html也是。
 
 - 是一个`静态的`网页生成器
 - 这里的`take`姑且意译成`针对`，即是针对你最喜欢的`标记型语言`(恕我浅薄，本文主要以markdown为主)里的文本
-- 那这个`静态`怎么提现呢？其实就是写好`layout文件`，把对应的`.md`文件按照layout所制定的规则进行`转换`，就可以"制造"出`静态的`界面(.html)。
+- 那这个`静态`怎么体现呢？其实就是写好`layout文件`，把对应的`.md`文件按照layout所制定的规则进行`转换`，就可以"制造"出`静态的`界面(.html)。
 - 你可以扭转界面的外观和感觉，也可以改变其对应的url，数据在界面的展示效果等等。
 
 其实可以用这张图来简单说明一下：
@@ -49,11 +51,10 @@ author: "Qizheng Han"
 
 Mac是自动集成了Ruby的。
 
-TODO: 润色 搞笑不知道ruby
 
 如果提示Ruby环境的报错大家可以自行谷歌度娘一下`ruby安装`或者点击[这里](https://www.ruby-lang.org/zh_cn/documentation/installation/)
 
-> 其实是我老早就装过了，忘记怎么装了
+> 其实事实是我老早就装过了，忘记怎么装了
 
 ### 然后我们来安装Jekyll
 
@@ -80,9 +81,8 @@ $ jekyll new-theme my-theme
 
 可以看到目录结构是这个样子。
 
-![](/assets/img/20201-02-28/directory.jpg)
+![](/assets/img/20201-02-28/directory1.jpg)
 
-TODO：来解释一下目录结构
 
 
 接下来我们先运行项目，看看效果是什么。
@@ -133,9 +133,10 @@ $ bundle exec jekyll serve
 
 > Liquid is a template engine
 
-其实大家如果写过Express就应该了解过`ejs`，这个`Liquid`和ejs非常相似。
+其实大家如果写过Express就应该了解过`ejs`，这个`Liquid`和ejs非常相似。`模版引擎`我用大白话说一下就是在对应的地方填写好变量，这个时候就能把这个文件当成一个模版，变量的不同就能复用同样结构的一个文件。`有那么一丢丢像抽离出来的一个function`。
 
-变量用{{  }} 所包裹
+变量用`{{  }}`所包裹
+
 ```liquid
 {% raw %}
 <h1>{{ title }}</h1>
@@ -211,7 +212,7 @@ title: Home
 ```
 这里是比较重要的一环，把这里大概弄懂基本对Liquid就没什么难度了。
 
-- 顶部的`---`所包裹的内容是配置内容，这里规定`home.html`这个layout要使用`default.html`的layout。对没错，layout只见也可以互相饮用后。
+- 顶部的`---`所包裹的内容是配置内容，规定了`home.html`这个layout要使用`default.html`的layout。对没错，layout之间也可以互相引用。
 - 我们用到了一个`for循环`来循环把我们的每篇博客循环展示在首页上。
 - `site.posts | post.date | post.title`是`Jekyll`内置的一个`filter`或者说是变量。[点这里](https://jekyllrb.com/docs/liquid/filters/)看详情。
 - 所以我这段代码就是在`首页`上循环`_posts`文件夹中的`post`，把他们的`date`和`title`展示在首页。
@@ -399,9 +400,9 @@ Jekyll我们只要接触过`github pages`就一定听说过。但是平时拿来
 
 ## 但归根结底，大概流程就是下方这个图：
 
-TODO： 一个最终总结的流程图
+![](/assets/img/20201-02-28/final.jpg)
 
-
+---
 
 
 所以看完这篇博客的你是不是如下图呢？
