@@ -198,10 +198,7 @@ title: Home
 然后我们制定好了首页的layout文件是哪一个，接下来就要具体去编写这个layout文件了。
 
 ```html
----
-layout: default
----
-
+{% raw %}
 <div>
   {% for post in site.posts %}
     <div>
@@ -210,15 +207,198 @@ layout: default
     </div>
   {% endfor %}
 </div>
+{% endraw %}
+```
+这里是比较重要的一环，把这里大概弄懂基本对Liquid就没什么难度了。
+
+- 顶部的`---`所包裹的内容是配置内容，这里规定`home.html`这个layout要使用`default.html`的layout。对没错，layout只见也可以互相饮用后。
+- 我们用到了一个`for循环`来循环把我们的每篇博客循环展示在首页上。
+- `site.posts | post.date | post.title`是`Jekyll`内置的一个`filter`或者说是变量。[点这里](https://jekyllrb.com/docs/liquid/filters/)看详情。
+- 所以我这段代码就是在`首页`上循环`_posts`文件夹中的`post`，把他们的`date`和`title`展示在首页。
+
+![](/assets/img/20201-02-28/step1.jpg)
+
+可以看到红框中是我们循环出来的一片博客的日期和标题(创建项目自带的)
+
+
+但是我不想要`默认的`Header和Footer，这个时候我们也可以去自定义。
+
+## 自定义主页的全部
+
+在`_layouts`文件夹里创建一个`default.html`
+
+然后让我们的`home.html`引用这个layout作为其自身的layout。
+
+**没错，layout还能引用别的layout**
+
+```html
+---
+layout: default
+---
+{% raw %}
+<div>
+  {% for post in site.posts %}
+    <div>
+      <div>{{ post.date | date: "%B %d, %Y" }}</div>
+      <div>{{ post.title }}</div>
+    </div>
+  {% endfor %}
+</div>
+{% endraw %}
+```
+然后我们来编辑一下`default.html`。
+
+```html
+{% raw %}
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <main>
+      {{ content }}
+    </main>
+  </body>
+</html>
+{% endraw %}
 ```
 
+然后发现界面变成这个样子了
 
+![](/assets/img/20201-02-28/step2.jpg)
 
+这样看只剩下我们刚才写好的渲染内容，默认的东西都没了。
 
+现在我们可以改动一下`default.html`来定义自己的header和footer
 
+这时候我们需要再在根目录下创建一个`_includes`文件
 
+```
+|- other folder...
+|- includes     <--here
+  |
+  |- header.html   <--here
+  |- footer.html   <--here
+|- ...
+```
 
+我们来自定义自己的header
 
+```html
+<header>
+  This is github.com/hanqizheng header
+</header>
+```
+
+然后是自己的footer
+```html
+<footer>
+  This is github.com/hanqizheng footer
+</footer>
+```
+
+可以看到现在我有自己的Header、Content、Footer了，但是太tm丑了！！！！
+![](/assets/img/20201-02-28/step3.jpg)
+
+## 如何给自己的博客界面添加样式呢？
+
+既然是学习新东西，我们来写一下`sass`。
+
+**其实。。。`sass`和`css`基本一摸一样。。。**
+
+我们先来修改一下Header的样式
+
+---
+补充：
+
+这个修改样式那叫个坑啊...
+
+首先, 我们来写一下header的样式
+
+```scss
+// _sass/windranger/header.scss
+.header {
+  height: 70px;
+  color: black;
+  font-size: 25px;
+  border-bottom: 1px solid #cccccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+// _sass/windranger/footer.scss
+.footer {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #cccccc;
+  justify-content: center;
+}
+
+// _sass/windranger/content.scss
+.content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.post-list {
+  &-item {
+    padding: 20px 0;
+    font-size: 30px;
+  }
+}
+```
+
+然后我们需要在`_config.yml`中添加一条关于`scss`的配置。
+
+```
+sass:
+  sass_dir: _sass
+  style: compressed
+```
+
+最后需要在header中link进来我本最终需要的那个最终的样式文件，而这个文件在哪里呢？我们还没有创建，先来创建一下`assets`文件夹。
+
+```
+|- other folder...
+|- asstes     <--here
+  |
+  |- main.scss   <--here
+|- ...
+```
+
+这个文件中只需要一句话
+
+```scss
+@import 'tale';
+```
+
+这个时候我们就去link进来
+
+```html
+<!-- _includes/header.html -->
+<header>
+  <!-- CSS -->
+  <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
+  <div class="header">github.com/hanqizheng header</div>
+</header>
+```
+
+这个时候样式就起作用了
+
+![](/assets/img/20201-02-28/result.jpg)
+
+# 总结
+
+Jekyll我们只要接触过`github pages`就一定听说过。但是平时拿来直接用却很少关注过他是怎么写的。
+
+但现在我们明白可以通过写Liquid来`生成对应的博客模版页面`，可以有多个模版，模版也能互相套用。
+
+然后我们可以写`scss`来美化界面的样式。
+
+## 但归根结底，大概流程就是下方这个图：
+
+TODO： 一个最终总结的流程图
 
 
 
