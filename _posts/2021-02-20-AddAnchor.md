@@ -363,7 +363,7 @@ sass:
 
 ```
 |- other folder...
-|- asstes     <--here
+|- assets     <--here
   |
   |- main.scss   <--here
 |- ...
