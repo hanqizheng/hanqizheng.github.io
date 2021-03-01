@@ -296,6 +296,7 @@ layout: default
 ```
 
 可以看到现在我有自己的Header、Content、Footer了，但是太tm丑了！！！！
+
 ![](/assets/img/20201-02-28/step3.jpg)
 
 ## 如何给自己的博客界面添加样式呢？
