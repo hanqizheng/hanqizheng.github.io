@@ -135,13 +135,84 @@ $ bundle exec jekyll serve
 
 其实大家如果写过Express就应该了解过`ejs`，这个`Liquid`和ejs非常相似。
 
+变量用{{  }} 所包裹
 ```liquid
-<!-- 变量用{{  }} 所包裹 -->
-
 {% raw %}
 <h1>{{ title }}</h1>
 {% endraw %}
 ```
+
+逻辑判断或者循则是这么写
+```liquid
+{% raw %}
+<ul id="products">
+  {% for product in products %}
+    <li>
+      <h2>{{ product.name }}</h2>
+      Only {{ product.price | price }}
+
+      {{ product.description | prettyprint | paragraph }}
+    </li>
+  {% endfor %}
+</ul>
+{% endraw %}
+```
+
+## 动手来写一段Liquid
+
+我们在刚搭建的环境中先创建一个`_layouts`的目录，用来存放我们不同的layout文件。
+
+```
+// 新建一个_layouts文件夹，然后在该文件夹下创建home.html
+|- other folder...
+|- _layouts     <--here
+  |
+  |-home.html   <--here
+|- _posts
+|- ...
+```
+
+然后我们在根目录下再创建一个`index.html`作为博客的入口文件。
+
+```
+// 新建一个_layouts文件夹，然后在该文件夹下创建home.html
+|- other folder...
+|- _layouts
+|- _posts
+|- ...
+|- index.html   <-- here
+```
+
+入口文件的内容很简单，只需要指明自己使用的是哪个模版即可。值得注意的一点是`根目录可能有一个index.markdown`的文件，和这个`index.html`的文件是类似作用，我们将其`删掉`即可。
+
+
+```html
+// index.html
+
+---
+layout: home
+title: Home
+---
+```
+
+然后我们制定好了首页的layout文件是哪一个，接下来就要具体去编写这个layout文件了。
+
+```html
+---
+layout: default
+---
+
+<div>
+  {% for post in site.posts %}
+    <div>
+      <div>{{ post.date | date: "%B %d, %Y" }}</div>
+      <div>{{ post.title }}</div>
+    </div>
+  {% endfor %}
+</div>
+```
+
+
 
 
 
