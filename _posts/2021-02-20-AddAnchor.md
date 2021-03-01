@@ -119,8 +119,29 @@ $ bundle exec jekyll serve
 
 ![](/assets/img/20201-02-28/initalPage.jpg)
 
+这样项目就算搭建完成了。芜湖！
 
+# Jekyll是怎么工作的？
 
+## 首先要看看什么是Liquid
+
+我们不是在讨论Dota2战队(逃
+
+当然我们要在这里系统的学习`Liquid`是一件费时的事情，我们只需要了解`Liquid`是什么，和它的一些关键的特性就足够了，我们的目的是能用它来写一个Jekyll的简单模版。
+
+这是[Liquid官方仓库](https://github.com/Shopify/liquid)对`Liquid`的定义。
+
+> Liquid is a template engine
+
+其实大家如果写过Express就应该了解过`ejs`，这个`Liquid`和ejs非常相似。
+
+```liquid
+<!-- 变量用{{  }} 所包裹 -->
+
+{% raw %}
+<h1>{{ title }}</h1>
+{% endraw %}
+```
 
 
 
