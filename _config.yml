@@ -40,7 +40,7 @@ exclude: [Gemfile, Gemfile.lock, tale.gemspec]
 # Disqus (Set to your disqus id)
 disqus: jekyll-tale
 
-theme: tale
+theme: wind-ranger
 
 destination: _site
 
