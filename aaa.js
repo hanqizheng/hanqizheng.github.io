@@ -237,7 +237,7 @@ const a = {
         sort: null,
         existsPreFormulaOption: true,
         preSettingField: true,
-        calculateFormulaSnapshot: "任职信息.离职日期",
+        calculateFormulaSnapshot: "离职信息.离职日期",
       },
       {
         groupId: 825,
