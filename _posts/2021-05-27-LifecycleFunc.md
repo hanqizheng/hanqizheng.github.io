@@ -22,13 +22,225 @@ author: "Qizheng Han"
 - componentWillReceiveProps
 - componentWillUpdate
 
-标记为了`UNSAFE`也就是`不安全的`。最先让我注意到这一操作是跑起项目后的大片金黄色的...warning
+标记为了`UNSAFE`也就是`不安全的`。最先让我注意到这一操作是跑起项目后的大片金黄色的...warning。
 
 ![](/assets/img/2021-05-25/warning.jpg)
 
+到`React v17`版本之后就算使用`UNSAFE`词缀开头的被遗弃的生命周期也都会直接在控制台报红色的warning。
+
+![](/assets/img/2021-05-25/warning2.png)
+
 ## UNSAFE_componentWillMount
 
+`componentWillMount()` 在挂载之前被调用。也就说明它是在`render()`之前被调用的。
+
+**而且只会被`调用一次`**，接下来我们可以验证一下。
+
+> 挂载到底是什么呢？
+> 
+> 用React小书中的话来说：
+> 
+> React.js 将组件渲染，并且构造 DOM 元素然后塞入页面的过程称为组件的挂载
+
+```jsx
+{% raw %}
+// App
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  // 因为新建的react是v17，所以只能加UNSAFE前缀
+  UNSAFE_componentWillMount() {
+    console.log('app will mount');
+  }
+
+  render() {
+    return (
+      <div className="appContainer">App</div>
+    );
+  }
+}
+
+export default App;
+{% endraw %}
+```
+
+![](/assets/img/2021-05-25/willMount.png)
+
+### 验证一下父组件更新会不会再次触发子组件的willMount
+
+现在有一个父组件`App`
+
+```jsx
+{% raw %}
+// App
+import React from 'react';
+import './App.css';
+import Test1 from './Test1.jsx';
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 1,
+    }
+  }
+
+  addCount = () => {
+    this.setState({ count: this.state.count + 1 });
+  }
+
+  componentDidUpdate() {
+    console.log('father component update');
+  }
+
+  render() {
+    return (
+      <div className="appContainer">
+        <button className="button" onClick={this.addCount}>Click</button>
+        <div>Count: {this.state.count}</div>
+        <Test1 />
+      </div>
+    );
+  }
+}
+
+export default App;
+
+{% endraw %}
+```
+
+有一个子组件`Test1`
+
+```jsx
+{% raw %}
+import React from 'react';
+
+class Test1 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  UNSAFE_componentWillMount() {
+    console.log('test 1 will mount');
+  }
+
+  render() {
+    return (
+      <div>Test1{this.props.testCount}</div>
+    );
+  }
+}
+
+export default Test1;
+{% endraw %}
+```
+
+![](/assets/img/2021-05-25/willMount.png)
+
+点击按钮让父组件重新渲染，虽然`父组件的改变会导致子组件重新渲染`，但是！`并不会再触发componentWillMount()`。
+
+### 那为什要将componentWillMount()标为UNSAFE？
+
+我们之前说过：
+
+`componentWillMount()` 在挂载之前被调用。也就说明它是在`render()`之前被调用的。
+
+而很多人认为数据请求放在`componentDidMount`里面，但放在`componentWillMount`不是会`更快`获取数据吗？
+
+来模拟一下
+
+```jsx
+{% raw %}
+import React from 'react';
+
+class Test1 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  UNSAFE_componentWillMount() {
+    console.log('test 1 will mount');
+    setTimeout(() => {
+      console.log('fake synchronous options');
+    }, 0);
+  }
+
+  render() {
+    console.log('test1 render');
+    return (
+      <div>Test1{this.props.testCount}</div>
+    );
+  }
+}
+
+export default Test1;
+{% endraw %}
+```
+
+![](/assets/img/2021-05-25/willMount2.jpg)
+
+可以看到，无论如何，`异步的操作`都是`晚于`render的执行，所以看似是更早的请求接口，但实时却并非如此。
+
+还有一个原因，componentWillMount是服务端渲染唯一会调用的生命周期函数，如果你在此方法中请求数据，那么服务端渲染的时候，在服务端和客户端都会分别请求两次相同的数据，这显然也我们想看到的结果。
+
+因为我没有研究过`服务端渲染`，所以结论只能源于其他blog。
+
 ## UNSAFE_componentWillReceiveProps
+
+`componentWillReceiveProps`的官方定义是如果父组件导致组件重新渲染，即使 props 没有更改，也会调用此方法。如果只想处理更改，请确保进行当前值与变更值的比较。
+
+我们先来验证一下：
+
+```jsx
+{% raw %}
+import React from 'react';
+import './App.css';
+import Test1 from './Test1.jsx';
+import Test2 from './Test2';
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 1,
+      testProps: 'test',
+    }
+  }
+
+  addCount = () => {
+    this.setState({ count: this.state.count + 1 });
+  }
+
+  componentDidUpdate() {
+    console.log('father component update');
+  }
+
+  render() {
+    return (
+      <div className="appContainer">
+        <button className="button" onClick={this.addCount}>Click</button>
+        <div>Count: {this.state.count}</div>
+        <Test1 testProps={this.state.testProps} />
+      </div>
+    );
+  }
+}
+
+export default App;
+
+{% endraw %}
+```
+
+首先我们依旧需要父组件`App`来通过点击事件完成`state的更新`。这样就会触发`子组件的重新渲染`。
+
+这个时候把一个不变的props传入子组件。就会发现虽然`props没有改变`，但是依然会`触发componentWillReceiveProps`， 如下图
+
+![](/assets/img/2021-05-25/willReceive.gif)
+
 
 ## UNSAFE_componentWillUpdate
 
