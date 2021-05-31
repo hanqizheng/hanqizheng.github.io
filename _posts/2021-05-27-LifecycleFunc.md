@@ -142,7 +142,7 @@ export default Test1;
 
 点击按钮让父组件重新渲染，虽然`父组件的改变会导致子组件重新渲染`，但是！`并不会再触发componentWillMount()`。
 
-### 那为什要将componentWillMount()标为UNSAFE？
+### 对将componentWillMount()标为UNSAFE的一些思考
 
 我们之前说过：
 
@@ -241,22 +241,85 @@ export default App;
 
 ![](/assets/img/2021-05-25/willReceive.gif)
 
+还需要注意的一点是，`componentWillReceiveProps`在`挂载阶段不执行！！`
 
+### 对将componentWillReceiveProps标记为UNSAFE的一些思考
+
+`componentWillReceiveProps`能拿到下一次`最新的props`，就显然是要和`当前的props`做比较，这才是这个lifecycle的意义所在。
+
+如果两个`props`的内容不一样，会做些什么事呢？？
+
+**最常做的操作应该就是`更新某个与props相关性很强的state`**，也就是setState操作。
+
+那么这个时候就出现问题了。
+
+这个时候我们引入一个`componentDidUpdate`的生命周期
+
+```jsx
+{% raw %}
+import React from 'react';
+
+class Test1 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    console.log('test1 component will receive props: ', this.props, nextProps);
+  }
+
+  componentDidUpdate() {
+    console.log('test 1 update');
+  }
+
+
+  render() {
+    return (
+      <div>Test1{this.props.testCount}</div>
+    );
+  }
+}
+
+export default Test1;
+{% endraw %}
+```
+
+![](/assets/img/2021-05-25/willReceive2.gif)
+
+这个时候可以看到，在外部原因导致该组件重新渲染的时候，`componentDidUpdate`和`componentWillReceiveProps`**都会执行！**
+
+这就会`产生不同的`可以`更新state`的途径。让state的数据源变得`不纯洁（单一）`。
+
+而且需要区分`首次挂载`还是`后续更新`这种额外的逻辑总是会时不时的引发一些奇怪的bug。
 ## UNSAFE_componentWillUpdate
 
+官方对`componentWillUpdate`的定义是：
+
+当组件收到新的 props 或 state 时，会在渲染之前调用 UNSAFE_componentWillUpdate()。使用此作为在更新发生之前执行准备更新的机会。初始渲染不会调用此方法。
+
+需要注意的是，`componentWillUpdate`中是不能进行任何`setState / dispatch`之类的操作。会直接报错！
+
+![](/assets/img/2021-05-25/willUpdate.jpg)
+
+### 对将componentWillUpdate标为UNSAFE的思考
+
+其实说实话，我看了很久也没有搞懂为什么会把`componentWillUpdate`标记为UNSAFE
+
+单纯是因为之前所说的它`不是每次渲染都执行`，而是`仅在后续update`时才触发这一点来说，确实可以算是一个原因。但还是感觉不足以致命。
+
+然后看到了[谈谈对 React 新旧生命周期的理解](https://segmentfault.com/a/1190000038323258)中的这段描述
+
+> componentWillUpdate方法常见的用法是在组件更新前，读取当前某个 DOM 元素的状态，并在 componentDidUpdate 中进行相应的处理。但 React 16 版本后有 `suspense`、`异步渲染机制`等等，render 过程可以`被分割成多次`完成，还可以被暂停甚至回溯，这导致 componentWillUpdate 和 componentDidUpdate 执行前后可能会间隔很长时间，这导致 DOM 元素状态是不安全的，因为这时的值很有可能已经失效了。
+
+这段话中描述特别特别像`React Concurrent Mode`中提及的特性。
+
+所以难道是为了给`Concurrent Mode`铺路？
 # 新给出的两个生命周期
 
 ## getDerivedStateFromProps
 
 ## getSnapshotBeforeUpdate
-
-# 一些额外的思考
-
-其实看到很多`生命周期更迭`的文章中，都有说到了是为了防止使用这些废弃的生命周期会因`React 异步渲染`而带来很多其他问题。
-
-## Concurrent Mode
-
-## 在下一盘大棋
 
 
 # 参考
