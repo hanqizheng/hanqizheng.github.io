@@ -317,7 +317,13 @@ export default Test1;
 所以难道是为了给`Concurrent Mode`铺路？
 # 新给出的两个生命周期
 
+旧的不去，新的不来。
+
+将3个生命周期标记为不安全之后，React官方也给出了两个新的生命周期函数。`getDerivedStateFromProps` 和 `getSnapshotBeforeUpdate`
 ## getDerivedStateFromProps
+
+`getDerivedStateFromProps` 会在调用 render 方法之前调用，并且在初始挂载及后续更新时都会被调用。它应返回一个对象来更新 state，如果返回 null 则不更新任何内容。
+
 
 ## getSnapshotBeforeUpdate
 
