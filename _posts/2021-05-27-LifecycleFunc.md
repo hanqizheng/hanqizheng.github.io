@@ -371,7 +371,7 @@ export default Test1;
 
 > `getSnapshotBeforeUpdate` 在最近一次渲染输出（提交到 DOM 节点）之前调用。它使得组件能在发生更改之前从 DOM 中捕获一些信息（例如，滚动位置）。此生命周期的任何返回值将作为第三个参数传入componentDidUpdate(prevProps, prevState, snapshot)
 
-有点搞不明白是什么意思。。。可以根据定义来写个例子康康。
+有点搞不明白是什么意思。。。可以根据定义来写个例子康康现象。
 
 首先，`getSnapshotBeforeUpdate`必须有返回值，没有返回值是会报warning的。
 
@@ -419,7 +419,23 @@ export default Test2;
 
 `componentDidUpdate`肯定是在`render`之后才会执行的生命周期。可以看到上面动图中，`getSnapshotBeforeUpdate`是`晚于`render`早于`componentDidUpdate。
 
+### 在render()的输出被渲染到DOM之前被调用之前
 
+这句话其实值得好好揣摩一下，因为我们知道React是先操作`Virtual DOM`最终一系列操作之后将其渲染成真实的DOM。
+
+所以`getSnapshotBeforeUpdate`的调用时机应该正好是 render() -> `getSnapshotBeforeUpdate` -> render DOM.
+
+在这样一个时机提供一个生命周期到底是出于一种什么目的呢？
+
+看了一些资料以后，得出的结论是`getSnapshotBeforeUpdate`能**保证**获取到的DOM是与`componentDidUpdate`中的结构**一致**。
+
+这个时候就想到刚才在学习`componentWillUpdate`中提到的一句话
+
+> React 16 版本后有 `suspense`、`异步渲染机制`等等，render 过程可以`被分割成多次`完成，还可以被暂停甚至回溯，这导致 componentWillUpdate 和 componentDidUpdate 执行前后可能会间隔很长时间，这导致 DOM 元素状态是不安全的，因为这时的值很有可能已经失效了。
+
+所以我目前对这个生命周期的理解就是`componentWillUpdate`被标为`UNSAFE`之后的解决办法。给`componentWillUpdate`中一些`UNSAFE`的使用方法提供一了一个`SAFE`的解决方案。。
+
+但说实话，我可能没有领悟到这个生命周期的真谛。
 
 # 参考
 
