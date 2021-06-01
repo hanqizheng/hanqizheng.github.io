@@ -467,8 +467,13 @@ export default Test2;
 
 给出一张特别不恰当的图，这张图`没有任何实际含义`，就是想让大家感受一下这种`数据驱动`的思想，感受一下Class也可以有类似的驱动操作。
 
-TODO: 这里缺张图。。。。iCloud没更新过来。。。后续补上
-![]()
+![](/assets/img/2021-05-25/dataDriven.jpg)
+![](/assets/img/2021-05-25/propsDriven.jpg)
+
+--- 
+
+新的生命周期，还是要真实的在开发中才能理解的更透彻一些，这些，只是开发前的理论基础吧。
+
 # 参考
 
 - [ECMAScript 6 入门](https://es6.ruanyifeng.com/)
@@ -478,5 +483,3 @@ TODO: 这里缺张图。。。。iCloud没更新过来。。。后续补上
 - [React concurrent Mode](https://reactjs.org/docs/concurrent-mode-intro.htmlhttps://reactjs.org/docs/concurrent-mode-intro.html)
 - [Reconciliation - Dan's blog](https://overreacted.io/react-as-a-ui-runtime/#reconciliation)
 - [Reconciliation - Official Document](https://reactjs.org/docs/reconciliation.html)
-
-
