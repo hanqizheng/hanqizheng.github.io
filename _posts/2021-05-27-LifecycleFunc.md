@@ -478,7 +478,7 @@ export default Test2;
 
 - [ECMAScript 6 入门](https://es6.ruanyifeng.com/)
 - [Components and Props](https://reactjs.org/docs/components-and-props.html)
-- [Update on Async Rendering](https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html) <-- maybe this is the reason.
+- [Update on Async Rendering](https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html)
 - [You Probably Don't Need Derived State](https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html)
 - [React concurrent Mode](https://reactjs.org/docs/concurrent-mode-intro.htmlhttps://reactjs.org/docs/concurrent-mode-intro.html)
 - [Reconciliation - Dan's blog](https://overreacted.io/react-as-a-ui-runtime/#reconciliation)
