@@ -365,6 +365,61 @@ export default Test1;
 
 ## getSnapshotBeforeUpdate
 
+这个生命周期对我来说非常陌生，我基本没有怎么了解过它。
+
+先看一下定义: 
+
+> `getSnapshotBeforeUpdate` 在最近一次渲染输出（提交到 DOM 节点）之前调用。它使得组件能在发生更改之前从 DOM 中捕获一些信息（例如，滚动位置）。此生命周期的任何返回值将作为第三个参数传入componentDidUpdate(prevProps, prevState, snapshot)
+
+有点搞不明白是什么意思。。。可以根据定义来写个例子康康。
+
+首先，`getSnapshotBeforeUpdate`必须有返回值，没有返回值是会报warning的。
+
+![](/assets/img/2021-05-25/snapshotWarning.jpg)
+
+```jsx
+{% raw %}
+import React from 'react';
+
+import './Test2.css'
+
+class Test2 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+    }
+  }
+
+  getSnapshotBeforeUpdate(preProps, preState) {
+    console.log('test snapshot -> preProps: ', preProps, 'preState: ', preState);
+    return this.state.count
+  }
+
+  componentDidUpdate(preProps, preState, snapshot) {
+    console.log('test2 update -> preProps: ', preProps, 'preState: ', preState, 'snapshot: ', snapshot);
+  }
+
+  render() {
+    console.log('test2 render', this.state.count)
+    return (
+      <div className="test2Container">
+        <button onClick={() => this.setState({ count: this.state.count + 1 })} className="test2Button">test 2 add</button>
+        <div className="text2">Test 2: {this.state.count}</div>
+      </div>
+    )
+  }
+}
+
+export default Test2;
+{% endraw %} 
+```
+
+![](/assets/img/2021-05-25/snapshot.gif)
+
+`componentDidUpdate`肯定是在`render`之后才会执行的生命周期。可以看到上面动图中，`getSnapshotBeforeUpdate`是`晚于`render`早于`componentDidUpdate。
+
+
 
 # 参考
 
