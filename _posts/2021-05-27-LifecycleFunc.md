@@ -276,13 +276,14 @@ class Test1 extends React.Component {
 
   render() {
     return (
-      <div>Test1{this.props.testCount}</div>
+      <div>Test1{this.props.testCount}</div>  
+        
     );
   }
 }
 
 export default Test1;
-{% endraw %}
+{% endraw %} 
 ```
 
 ![](/assets/img/2021-05-25/willReceive2.gif)
@@ -314,16 +315,53 @@ export default Test1;
 
 这段话中描述特别特别像`React Concurrent Mode`中提及的特性。
 
-所以难道是为了给`Concurrent Mode`铺路？
+所以难道是为了给`Concurrent Mode`铺路(纯属推测无任何依据)？
 # 新给出的两个生命周期
 
 旧的不去，新的不来。
 
 将3个生命周期标记为不安全之后，React官方也给出了两个新的生命周期函数。`getDerivedStateFromProps` 和 `getSnapshotBeforeUpdate`
-## getDerivedStateFromProps
+## static getDerivedStateFromProps
 
-`getDerivedStateFromProps` 会在调用 render 方法之前调用，并且在初始挂载及后续更新时都会被调用。它应返回一个对象来更新 state，如果返回 null 则不更新任何内容。
+`static getDerivedStateFromProps` 会在调用 render 方法之前调用，并且在初始挂载及后续更新时都会被调用。它应返回一个对象来更新 state，如果返回 null 则不更新任何内容。
 
+我们先来用一下`static getDerivedStateFromProps()`
+
+```jsx
+{% raw %}
+import React from 'react';
+
+class Test1 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      testCount: 0,
+    };
+  }
+
+  static getDerivedStateFromProps(nextProps, currentState) {
+    console.log('nextProps: ', nextProps, 'currentState: ', currentState);
+    return {
+      testCount: nextProps.testCount,
+    }
+  }
+
+  render() {
+    return (
+      <div>Test1: {this.props.testCount}</div>
+    );
+  }
+}
+
+export default Test1;
+{% endraw %} 
+```
+
+![](/assets/img/2021-05-25/getDerived.gif)
+
+可以看到`初次渲染`的时候`getDerivedStateFromProps`就已经执行了一次，然后随着父组件的更新，触发了子组件`Test1`的重新渲染。
+
+这个时候`getDerivedStateFromProps`每次渲染都会执行一次。
 
 ## getSnapshotBeforeUpdate
 
