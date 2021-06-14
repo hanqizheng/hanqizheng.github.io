@@ -32,7 +32,314 @@ WTF!
 
 ![](/assets/img/2021-06-14/wtfGirl.jpeg)
 
-# Step 1: 干掉原有的滚动条
+## Step 1: 干掉原有的滚动条
+
+首先我们先搭个架子
+
+```jsx
+// App.js
+{% raw %}
+import "./TestBody.css";
+
+function App() {
+  const testData = new Array(50).fill('item');
+  return (
+    <div className="container">
+      <div className="testContainer">
+        <div className="testBody">
+          {testData.map((item, index) => (
+            <div key={index} className="testItem">{`${item} - ${index}`}</div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;
+{% endraw %}
+```
+
+说实话干掉滚动条的方法还`值得商榷`，因为当前开发的项目中`本身就有对滚动条的样式更改`。所以我这里只是单纯的给出自己的`禁用`原始滚动条的方法，`仅供参考`。
+
+```css
+/* TestBody.css */
+::-webkit-scrollbar {
+  display: none;
+}
+```
+
+## Step2: 构建自己的scrollbar组件
+
+首先我们先来明确一下滚动条由哪几部分组成。
+
+![]() // TODO
+
+可以看到滚动条是由3部分组成的
+
+- 滚动条容器(滚动条所能显示的区域，应该与视口一样高)
+- 滚动条容器的实际高度(应该与视口内容的实际高度一致)
+- 滚动条的dragger(可拖拽的bar，本身的高度应该与视口高度和实际高度之间的比例有关)
+
+> 为了方便我默认50个item，每个item高50px，总高2500px，视口高度为300px
+
+```jsx
+// App.js
+{% raw %}
+function App() {
+  const testData = new Array(50).fill('item');
+  return (
+    <div className="container">
+      <div className="testContainer">
+        <Scrollbar scrollbarContainerHeight={300} />
+        <div className="testBody">
+          {testData.map((item, index) => (
+            <div key={index} className="testItem">{`${item} - ${index}`}</div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+{% endraw %}
+```
+
+```jsx
+// App.js
+{% raw %}
+import React from 'react';
+
+import "./scrollbar.css"
+
+const Scrollbar = ({
+  scrollbarContainerHeight, // 滚动条容器高度
+  scrollbarRealHeight, // 滚动条真实的高度
+}) => {
+
+  return (
+    <div className="scrollbar-viewer" style={{ height: scrollbarContainerHeight }}>
+      <div className="scrollbar-container">
+        <div className="scrollbar-dragger"></div>
+      </div>
+    </div>
+  )
+}
+
+export default Scrollbar;
+{% endraw %}
+```
+
+```css
+.scrollbar-viewer {
+  position: absolute;
+  user-select: none;
+  display: block;
+  right: 0;
+  width: 6px;
+  transition: background-color 0.2s ease;
+  z-index: 1;
+}
+
+.scrollbar-viewer:hover {
+  width: 10px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.scrollbar-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border: none;
+  overflow: scroll;
+}
+
+.scrollbar-dragger {
+  position: absolute;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .2s ease 0s;
+}
+```
+![](/assets/img/2021-06-14/inital.gif)
+
+这样一个大概的滚动条组件架子就搭起来了。但是现在显然是没有任何效果的，我们hover上去只能看到滚动条的轨道却看不到滚动条本身的样子。
+
+## Step3: 计算dragger的高度
+
+刚才说过滚动条的dragger的高度其实是与`滚动条容器的高度(scrollbarContainerHeight)` & `滚动条真实的高度(scrollbarRealHeight)`有关。
+
+其实就是一个简单的`比例公式`
+
+![]()
+
+其实根据这张图就能清楚的看出来比例关系了。
+
+我们需要的是dragger的高度，`draggerHeight`其实在`视口高度(也就是滚动条容器高度)`的占比就应是`视口高度`在`总高度`中的占比。
+
+通过下面这样一个公式就能求出`draggerHeight`
+
+![]()
+
+给出代码
+
+```jsx
+const draggerHeight = useMemo(() => {
+  /**
+    *  scrollbarContainerHeight                 x
+    *  ------------------------   =   ----------------------
+    *   scrollbarRealHeight          scrollbarContainerHeight
+    */
+  return Math.pow(scrollbarContainerHeight, 2) / scrollbarRealHeight;
+}, [scrollbarContainerHeight, scrollbarRealHeight]);
+```
+
+就达到了如下效果
+
+![](/assets/img/2021-06-14/draggerHeight.gif)
+
+## Step 4: 让滚动条动起来
+
+在上一步我们让滚动条的dragger有了正确的高度，但是滚动内容时滚动条显然还不会动，我们接下来就让他动起来！
+
+怎么动呢？？？其实就是让`dragger绝对定位`，而我们只需要不断的根据滚动来计算`top`的偏移量即可。
+
+首先我们需要先添加滚动事件
+
+```jsx
+{% raw %}
+function App() {
+  const testData = new Array(50).fill('item');
+  const [topOffset, setTopOffset] = useState(0);
+
+  const handleScroll = (e) => {
+    setTopOffset(e.target.scrollTop);
+  }
+  return (
+    <div className="container">
+      <div className="testContainer" onScroll={handleScroll}>
+        <Scrollbar topOffset={topOffset} scrollbarContainerHeight={300} scrollbarRealHeight={50 * 50} />
+        <div className="testBody">
+          {testData.map((item, index) => (
+            <div key={index} className="testItem">{`${item} - ${index}`}</div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+{% endraw %}
+```
+
+然后我们将`topOffset`作为参数传入滚动条组件，用于后续计算。
+
+![]()
+
+而滚动条的`偏移量`我们看这张图，`偏移距离`在`视口高度`的占比就是`滚动偏移量`在`总高度`中的占比
+
+![]()
+
+```jsx
+const draggerTop = useMemo(() => {
+  /**
+    *             x                      currentTopOffset
+    *  -----------------------     =   --------------------
+    *  scrollbarContainerHeight        scrollbarRealHeight
+    */
+  return (topOffset * scrollbarContainerHeight) / scrollbarRealHeight;
+}, [topOffset, scrollbarContainerHeight, scrollbarRealHeight]);
+```
+
+然后写好之后兴奋的去滚动了一下内容，wait...滚动条根本没有出现啊。。。
+
+我们漏了一个显示滚动条的逻辑（目前只有hover上去显示的逻辑）
+
+## Step5: 滚动条的显隐
+
+滚动条什么时候需要显示呢？
+
+- hover上去
+- 我们滚动内容的时候
+
+所以我们需要知道当前是否在滚动，其实就是对比一下`之前的topOffset`和`当前的topOffset`就可以了。
+
+然后需要注意的一点是，我们想要的效果是，当我们不滚动，滚动条会在一定时间后`自动消失`，这个我们只需要加一个定时器即可。
+
+```jsx
+// Scrollbar.jsx
+{% raw %}
+const Scrollbar = ({
+  scrollbarContainerHeight,
+  scrollbarRealHeight,
+  topOffset,
+}) => {
+  const [isShow, setIsShow] = useState(false);
+  const [isHover, setIsHover] = useState(false);
+
+  let timeoutRef = useRef();
+
+  useEffect(() => {
+    setIsShow(true);
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      setIsShow(false);
+    }, 1000);
+  }, [topOffset]);
+
+  const draggerHeight = useMemo(() => {
+    /**
+     *  scrollbarContainerHeight                 x
+     *  ------------------------   =   ----------------------
+     *   scrollbarRealHeight          scrollbarContainerHeight
+     */
+    return Math.pow(scrollbarContainerHeight, 2) / scrollbarRealHeight;
+  }, [scrollbarContainerHeight, scrollbarRealHeight]);
+
+  const draggerTop = useMemo(() => {
+    /**
+     *             x                      currentTopOffset
+     *  -----------------------     =   --------------------
+     *  scrollbarContainerHeight        scrollbarRealHeight
+     */
+    return (topOffset * scrollbarContainerHeight) / scrollbarRealHeight;
+  }, [topOffset, scrollbarContainerHeight, scrollbarRealHeight]);
+
+  const handleMouseOutScrollbar = () => {
+    setIsHover(false);
+  }
+
+  return (
+    <div
+      className="scrollbar-viewer"
+      style={{ height: scrollbarContainerHeight }}
+    >
+      <div
+        className="scrollbar-container"
+        onMouseOver={() => setIsHover(true)}
+        onMouseOut={handleMouseOutScrollbar}
+      >
+        <div
+          className={classNames("scrollbar-dragger", {
+            "scrollbar-dragger-show": isShow,
+            "scrollbar-dragger-show-hover": isHover,
+          })}
+          style={{ height: draggerHeight, top: draggerTop }}
+        ></div>
+      </div>
+    </div>
+  );
+}
+{% endraw %}
+```
+
+可以看到现在实现的效果是这个样子，基本已经初具效果了。
+
+![](/assets/img/2021-06-14/scroll.gif)
+
+但是还差亿点点就是滚动条我们是可以用鼠标拖拽的。
+
+## Step 6: 可拖拽的滚动条
 
 
 
