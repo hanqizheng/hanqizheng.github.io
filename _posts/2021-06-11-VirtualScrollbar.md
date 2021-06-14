@@ -341,6 +341,56 @@ const Scrollbar = ({
 
 ## Step 6: 可拖拽的滚动条
 
+首先我们需要监听到鼠标按下的事件
+
+```jsx
+{% raw %}
+// 改造一下这里
+const handleMouseOutScrollbar = () => {
+  if (!isMouseDown) {
+    setIsHover(false);
+  }
+}
+
+const handleMouseDown = () => {
+  setIsMouseDown(true);
+}
+{% endraw %}
+```
+需要注意的是之前我们写的监听`鼠标移出指定区域`的事件，现在，只要是按下鼠标的情况，就不能让滚动条消失，因为用户这个时候正在拖动滚动条。
+
+但是遇到了新的问题，当鼠标移出规定区域，怎么获取`鼠标按键抬起事件`呢？否则滚动条将永久显示，这时候需要在全局的`document`上添加一个`mouseup`的事件监听，且我们只需要在`isMouseDown = true`的时候进行某些操作即可。
+
+因为后面我们还要计算鼠标移动的距离之类的，所以这个时候再在`document`上加一个`mousemove`的事件监听。
+
+```js
+const handleMouseUp = useCallback(() => {
+  if (isMouseDown) {
+    setIsMouseDown(false);
+  }
+}, [isMouseDown]);
+
+const handleMouseMove = useCallback(() => {
+
+}, []);
+
+useEffect(() => {
+  document.addEventListener('mouseup', handleMouseUp);
+  document.addEventListener('mousemove', handleMouseMove);
+  return () => {
+    document.removeEventListener('mouseup', handleMouseUp);
+    document.removeEventListener('mousemove', handleMouseMove);
+  }
+}, [handleMouseUp, handleMouseMove]);
+```
+
+然后就到了，整篇文章中我觉得最麻烦的地方了。还是先来一张图吧。
+
+我们依然是要计算一个
+
+![](/assets/img/2021-06-14/dragging.gif)
+
+
 
 
 # 源代码
@@ -349,4 +399,4 @@ const Scrollbar = ({
 
 # 参考
 
-说实话这次没啥可以参考的东西...
+说实话这次没啥可以参考的东西...跟着思路一步步来即可。
