@@ -14,7 +14,7 @@ author: "Qizheng Han"
 
 最近写Table的虚拟化组件，因为Table实际是计算出位置的一个个div拼成的Grid，所以在整个组件中，`位置`极为重要。
 
-但是`滚动条`它出现了。首先你以为它是一个小天使，在你需要滚动的时候出现，没有滚动的时候消失，大概是这个样子的...
+但是`滚动条`它出现了。最初你以为它是一个小天使，在你需要滚动的时候出现，没有滚动的时候消失，大概是这个样子的...
 
 ![](/assets/img/2021-06-14/expect.gif)
 
@@ -73,7 +73,7 @@ export default App;
 
 首先我们先来明确一下滚动条由哪几部分组成。
 
-![]() // TODO
+![](/assets/img/2021-06-14/scrollbarStructure.jpg)
 
 可以看到滚动条是由3部分组成的
 
@@ -172,7 +172,7 @@ export default Scrollbar;
 
 其实就是一个简单的`比例公式`
 
-![]()
+![](/assets/img/2021-06-14/draggerHeight.jpg)
 
 其实根据这张图就能清楚的看出来比例关系了。
 
@@ -180,7 +180,8 @@ export default Scrollbar;
 
 通过下面这样一个公式就能求出`draggerHeight`
 
-![]()
+![](/assets/img/2021-06-14/draggerHeightFormula.jpg)
+
 
 给出代码
 
@@ -234,11 +235,11 @@ function App() {
 
 然后我们将`topOffset`作为参数传入滚动条组件，用于后续计算。
 
-![]()
+![](/assets/img/2021-06-14/draggerOffset.jpg)
 
 而滚动条的`偏移量`我们看这张图，`偏移距离`在`视口高度`的占比就是`滚动偏移量`在`总高度`中的占比
 
-![]()
+![](/assets/img/2021-06-14/draggerOffsetFormula.jpg)
 
 ```jsx
 const draggerTop = useMemo(() => {
@@ -385,6 +386,8 @@ useEffect(() => {
 ```
 
 然后就到了，整篇文章中我觉得最麻烦的地方了。还是先来一张图吧。
+
+![]()
 
 我们依然是要计算一个
 
