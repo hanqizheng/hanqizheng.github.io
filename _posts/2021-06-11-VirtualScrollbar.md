@@ -387,9 +387,16 @@ useEffect(() => {
 
 然后就到了，整篇文章中我觉得最麻烦的地方了。还是先来一张图吧。
 
-![]()
+![](/assets/img/2021-06-14/draggerTopOffset.jpg)
 
-我们依然是要计算一个
+我们的任务，是根据鼠标拖拽的距离，来推算出`dragger对应的偏移量`，然后再加上`dragger本身原有的偏移量`即可。具体公式如下：
+
+![](/assets/img/2021-06-14/draggerTopOffsetFormula.jpg)
+
+// TODO: 代码
+
+
+最终我们实现了如下效果。
 
 ![](/assets/img/2021-06-14/dragging.gif)
 
