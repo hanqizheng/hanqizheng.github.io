@@ -1,0 +1,41 @@
+.scrollbar-viewer {
+  position: absolute;
+  user-select: none;
+  display: block;
+  right: 0px;
+  width: 6px;
+  transition: background-color 0.2s ease;
+  z-index: 1;
+}
+
+.scrollbar-viewer:hover {
+  width: 8px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.scrollbar-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border: none;
+  overflow: scroll;
+}
+
+.scrollbar-dragger {
+  position: absolute;
+  border-radius: 6px;
+  width: 6px;
+  background-color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .2s ease 0s;
+}
+
+.scrollbar-dragger-show {
+  opacity: 1;
+}
+
+.scrollbar-dragger-show-hover {
+  width: 8px;
+  opacity: 1;
+}
