@@ -205,6 +205,7 @@ function test<Type extends Array<any>>(arg: Type): Type {
 我来举一个非常具体的例子
 
 ```tsx
+{% raw %}
 // AddUser.tsx
 import React from 'react';
 import './test.css';
@@ -212,6 +213,12 @@ import './test.css';
 export interface User {
   name: string;
   age: number | string;
+}
+
+export interface NormalUser {
+  name: string;
+  age: number | string;
+  nickName: string;
 }
 
 interface AppProps {
@@ -238,13 +245,15 @@ class AddUser extends React.Component<AppProps> {
 }
 
 export default AddUser;
+{% endraw %}
 ```
 
 然后来使用一下这个组件
 
 ```tsx
+{% raw %}
 import React from 'react';
-import { User }, AddUser from './AddUser';
+import { User, NormalUser }, AddUser from './AddUser';
 import './test.css';
 
 const users: Array<User> = [
@@ -253,8 +262,8 @@ const users: Array<User> = [
 ]
 
 class App extends React.Component {
-  _handleAddUser(age: string | number) {
-    console.log('age: ', 1 + age);
+  _handleAddUser(user: User | NormalUser) {
+    // something you wanna do but not comfortable.
   }
 
   render() {
@@ -266,8 +275,108 @@ class App extends React.Component {
   }
 }
 export default App;
+{% endraw %}
 ```
 
+这个时候我更希望`onChange`暴露出来以后，参数应该是跟随我所传的参数来给出更紧的类型
+
+这个时候就要引入一个概念，叫做`泛型组件`
+
+## 泛型组件
+
+```tsx
+{% raw %}
+// AddUser
+import React from 'react';
+import './test.css';
+
+export interface User {
+  name: string;
+  age: number | string;
+}
+
+export interface NormalUser {
+  name: string;
+  age: number | string;
+  nickName: string;
+}
+
+interface AppProps<U extends User> {
+  users: Array<U>
+  onChange: (user: U) => void;
+}
+
+
+class AddUser<U extends User> extends React.Component<AppProps<U>> {
+  state = {
+    count: 0,
+  }
+
+  _handleAddUser() {
+    const { users } = this.props;
+    const { count } = this.state;
+    this.setState({ count: count + 1 });
+    this.props.onChange(users[count + 1 % 2]);
+  }
+
+  render() {
+    return <button className="button" onClick={this._handleAddUser}>Add User</button>;
+  }
+}
+
+export default AddUser;
+{% endraw %}
+```
+
+```tsx
+{% raw %}
+import React from 'react';
+import { User, NormalUser } from './AddUser';
+import './test.css';
+import AddUser from './AddUser';
+
+const users: Array<User> = [
+  { name: 'Adam', age: 27 },
+  { name: 'Adam', age: '38岁' },
+]
+
+const normalUsers: Array<NormalUser> = [
+  { name: 'Adam', age: 27, nickName: 'aaa' },
+  { name: 'Adam', age: '38岁', nickName: 'bbb' },
+]
+
+class App extends React.Component {
+  render() {
+    return (
+      <div className="container">
+        <AddUser users={users} onChange={(user) => console.log(user.name)} />
+        <AddUser users={normalUsers} onChange={(user) => console.log(user.nickName)} />
+      </div>
+    );
+  }
+}
+
+export default App;
+{% endraw %}
+```
+这么写就是让TypeScript自己去推断传入的类型，然后回调函数就可以根据传入的类型来推断出回调函数参数的类型。
+
+![](/assets/img/2021-07-25/infer1.png)
+![](/assets/img/2021-07-25/infer2.png)
+
+### 到底是怎么做到的呢？
+
+最开始让我迷惑的是
+
+我确实让组件变成了`泛型组件`，泛型接受一个参数`U`，甚至后续会有更多的参数传入泛型之中。
+
+那这些参数是怎么关联上回调的参数类型的呢？
+
+其实远离特别特别简单
+
+就是我们把传入的参数类型`“赋值”`给了某一个`prop`当作它的类型，这样就建立了关联
+
+TypeScript会根据传入泛型的类型就开始推断，直到顺着prop在组件中的应用路径，走到了回到函数的参数类型这里。自然是可以推断出来。
 
 
 # 参考
