@@ -16,11 +16,11 @@ author: "Qizheng Han"
 
 但是随后就会遇到很多这样的报错
 
-![]()
+![](/assets/img/2021-07-25/valueType1.png)
 
 还有这样的报错...
 
-![]()
+![](/assets/img/2021-07-25/valueType2.png)
 
 长话短说，在`TypeScript`的世界里，值和类型是需要根据不同的使用情况去判断的。
 
@@ -70,6 +70,8 @@ Because this is [literal type](https://www.typescriptlang.org/docs/handbook/2/ev
 **但`TypeScript`其实是一个具有``图林完备的编程语言**，大白话就是，想想之前的类型体操训练，写的每一行代码都是TS根本没JS啥事。
 
 引用一张之前组里分享的图片，和一段话：
+
+![](/assets/img/2021-07-25/tsjs.png)
 
 **TypeScript是隐藏在JavaScript中的关于type的编程语言。**有一种TypeScript让JavaScript更完整的感觉。
 # 什么是泛型？
@@ -194,8 +196,77 @@ function test<Type extends Array<any>>(arg: Type): Type {
 
 友情提示接下来的内容可能会让你有这种感觉
 
-![](/assets/img/2021-07-25/difficult.png)
+<!-- ![](/assets/img/2021-07-25/difficult.png) -->
 
+其实这里主要想讲述的就是在写组件的过程中，经常`会暴露出一些回调函数`来供组件使用者去使用。
+
+但有的时候回调函数的参数类型没有给出对应的类型，而是any之类的，这样组件在使用的过程中其实就会`不好用`。
+
+我来举一个非常具体的例子
+
+```tsx
+// AddUser.tsx
+import React from 'react';
+import './test.css';
+
+export interface User {
+  name: string;
+  age: number | string;
+}
+
+interface AppProps {
+  users: Array<User>
+  onChange: (age: string | number) => void;
+}
+
+
+class AddUser extends React.Component<AppProps> {
+  state = {
+    count: 0,
+  }
+
+  _handleAddUser() {
+    const { users } = this.props;
+    const { count } = this.state;
+    this.setState({ count: count + 1 });
+    this.props.onChange(users[count + 1 % 2].age);
+  }
+
+  render() {
+    return <button className="button" onClick={this._handleAddUser}>Add User</button>;
+  }
+}
+
+export default AddUser;
+```
+
+然后来使用一下这个组件
+
+```tsx
+import React from 'react';
+import { User }, AddUser from './AddUser';
+import './test.css';
+
+const users: Array<User> = [
+  { name: 'Adam', age: 27 },
+  { name: 'Adam', age: '38岁' },
+]
+
+class App extends React.Component {
+  _handleAddUser(age: string | number) {
+    console.log('age: ', 1 + age);
+  }
+
+  render() {
+    return (
+      <div className="container">
+        <AddUser users={users} onChange={this._handleAddUser} />
+      </div>
+    );
+  }
+}
+export default App;
+```
 
 
 
