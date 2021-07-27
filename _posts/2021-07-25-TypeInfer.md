@@ -1,10 +1,10 @@
 ---
 layout: post
-title: "TS中的类型推断应用"
+title: "关于TS中泛型的一些思考"
 author: "Qizheng Han"
 ---
 
-最近在写Table的过程中了解到一些关于TypeScript的`类型推断`的一些知识。 
+最近在写 Table 的过程中了解到一些关于TypeScript的`类型推断`的一些知识。 
 
 > 前排提示：这篇博客包含大量的`TypeScript`报错截图，可能会引起不适。
 
@@ -99,15 +99,108 @@ type id<T> = (arg: T) => T
 
 ## 把泛型理解成函数
 
-我从学习TS到现在对
+![](/assets/img/2021-07-25/likeFunc.jpeg)
 
-我想，了解过TS的小伙伴一定知道这种写法，我就不解释了。
+> 图片源自[你不知道的 TypeScript 泛型（万字长文，建议收藏）](https://segmentfault.com/a/1190000022993503)
+
+把`Function`和`Generic(泛型)`放在一起比较就会发现，这俩东西不能说毫不相干，只能说一摸一样。
+
+当我们把`泛型`当作是一个`函数`去理解(不太确定这样是不是好的，但是对我理解泛型很有帮助)就会容易很多。
+
+```ts
+type ToValueUnion<T> = T[keyof T];
+```
+
+这里给出一个简单的例子，`ToValueUnion`可以理解为函数的名称，`T`就是函数的参数，剩下就是函数体的相关操作。
+
 
 **但是泛型真的不止于此**
 
-# 有趣的类型推断
+# 我学到的一些泛型的使用场景
+
+## Narrowing(紧化类型)
+
+首先我想先解释一下什么是`Narrowing`。
+
+假如现在有一个方法，是计算元素padding的
+
+```ts
+function padLeft(padding: number | string, input: string): string {
+  // Do something but not important at here.
+}
+```
+
+如果这个时候`padding`是`number`，那么将在函数体内，一切对padding的操作将会按照number来进行操作，
+
+然后到了今天的重点，用泛型去做一些事情，比如，你想通过padding的个数来添加空格然后形成缩进
+
+```ts
+function padLeft(padding: number | string, input: string): string {
+  // Do something but not important at here.
+  return new Array(padding + 1).join(" ") + input
+}
+```
+这时候就会出现报错
+
+![](/assets/img/2021-07-25/narrowing1.png)
+
+TS会产生一条警告，提醒你`+`运算符如果将一个`number`和一个`number | string`类型的变量相加可能会得到你不期望的结果。
+
+这个时候就说明，我定义的padding这个类型`不够紧`。
+
+```ts
+function padLeft(padding: number | string, input: string) {
+  if (typeof padding === "number") {
+    return new Array(padding + 1).join(" ") + input;
+  }
+  return padding + input;
+}
+```
+
+如果这个时候要是我们主动的去`narrow`一下，让每一个分支更细化，应对的情况更清晰，这个时候就不会有问题。
+
+而这个将一个更宽泛的范围变窄，变得更明确的过程就是`narrowing`。
+
+## 给自己的泛型加一些限制
+
+> [Generic Constraints](https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints)
+
+比如现在有这样一种情况
+
+```ts
+function test<Type>(arg: Type): Type {
+  console.log(arg.length);
+  return arg;
+}
+```
+我希望这个函数的参数
+
+这个函数的泛型接受一个`Type`，按照这个函数的功能来说，`至少`我是需要它是数组类型，至于是什么类型的数组，可能不去关心。
+
+但现在，由于我们没有对泛型做任何的限制，它`不光可能是数组`，也可能是`number` / `string`...
+
+这时候就要对泛型做限制，其实我理解也是一种`narrowing`.
+
+```TS
+function test<Type extends Array<any>>(arg: Type): Type {
+  console.log(arg.length);
+  return arg;
+}
+```
+
+在我们限制了Type必须是Array类型时，一切都正常了。
+
+## 重头戏：组件中的类型反推断
+
+友情提示接下来的内容可能会让你有这种感觉
+
+![](/assets/img/2021-07-25/difficult.png)
+
+
 
 
 # 参考
 
-- []()
+- [The TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
+- [你不知道的 TypeScript 泛型（万字长文，建议收藏）](https://segmentfault.com/a/1190000022993503)
+- 
