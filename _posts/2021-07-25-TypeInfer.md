@@ -34,7 +34,7 @@ true
 [1, 2, 3]
 ```
 
-就像上述给定的这些例子，它们可以是Value，也可以是Type
+就像上述给定的这些例子，它们可以是value，也可以是type
 
 ```ts
 // 1 as a type
@@ -57,7 +57,9 @@ Because this is [literal type](https://www.typescriptlang.org/docs/handbook/2/ev
 
 这里的例子并不是想要你学会literal type。
 
-而是想传达一种，在`TypeScript`中，我们需要`时刻都要有类型的意识`。可能听起来很玄学，但一旦有了类型的意识，就会越来越觉得TypeScript really make sense.
+而是想传达一种，在`TypeScript`中，我们需要`时刻具备类型意识`。
+
+可能听起来很玄学，但一旦有了类型的意识，就会越来越觉得TypeScript really make sense.
 
 # TypeScript !== JavaScript + type
 
@@ -183,7 +185,7 @@ function test<Type>(arg: Type): Type {
 
 这时候就要对泛型做限制，其实我理解也是一种`narrowing`.
 
-```TS
+```ts
 function test<Type extends Array<any>>(arg: Type): Type {
   console.log(arg.length);
   return arg;
@@ -196,7 +198,7 @@ function test<Type extends Array<any>>(arg: Type): Type {
 
 友情提示接下来的内容可能会让你有这种感觉
 
-<!-- ![](/assets/img/2021-07-25/difficult.png) -->
+![](/assets/img/2021-07-25/difficult.png)
 
 其实这里主要想讲述的就是在写组件的过程中，经常`会暴露出一些回调函数`来供组件使用者去使用。
 
