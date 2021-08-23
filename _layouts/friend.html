@@ -1,0 +1,31 @@
+---
+layout: default
+---
+
+<div class="catalogue">
+  {% for friend in paginator.posts %}
+    <a href="{{ friend.url | prepend: site.baseurl }}" class="catalogue-item">
+      <div>
+        <time datetime="{{ friend.date }}" class="catalogue-time">{{ friend.date | date: "%B %d, %Y" }}</time>
+        <h1 class="catalogue-title">{{ friend.title }}</h1>
+        <div class="catalogue-line"></div>
+
+        <p>
+          {{ friend.content | strip_html | truncatewords: 5 }}
+        </p>
+
+      </div>
+    </a>
+  {% endfor %}
+</div>
+
+<div class="pagination">
+  {% if paginator.previous_page %}
+    <a href="{{ paginator.previous_page_path | prepend: site.baseurl }}" class="left arrow">&#8592;</a>
+  {% endif %}
+  {% if paginator.next_page %}
+    <a href="{{ paginator.next_page_path | prepend: site.baseurl }}" class="right arrow">&#8594;</a>
+  {% endif %}
+
+  <span>{{ paginator.page }}</span>
+</div>

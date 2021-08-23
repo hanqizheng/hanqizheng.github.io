@@ -1,11 +1,16 @@
 ---
-layout: post
+layout: home
 title: "About"
-author: "Chester"
+author: "Handler"
 permalink: /about/
 ---
 
 <div align="center">
+你好，我是韩启正。
+</div>
+
+<div align="center">
+
 
 Welcome to the real world,
 

@@ -14,6 +14,10 @@ footer,
 }
 
 .nav {
+  position: sticky;
+  top: 0;
+  left: 0;
+  background-color: white;
   box-shadow: 0 2px 2px -2px $shadow-color;
   overflow: auto;
 
@@ -24,15 +28,15 @@ footer,
   }
 
   &-title {
-    @include transition(all .2s ease-out);
+    @include transition(all 0.2s ease-out);
     color: $default-color;
     display: inline-block;
     margin: 0;
-    padding-right: .2rem;
+    padding-right: 0.2rem;
 
     &:hover,
     &:focus {
-      opacity: .6;
+      opacity: 0.6;
     }
   }
 
@@ -43,16 +47,54 @@ footer,
     text-align: center;
   }
 
+  .friend-button {
+    background-image: linear-gradient(
+      90deg,
+      #0084ff 0%,
+      #00ff95 25%,
+      #fbff00 50%,
+      #eeb600 75%,
+      #fc4f4f 100%
+    );
+    position: relative;
+    padding: 2px;
+    display: inline-flex;
+    border-radius: 8px;
+    opacity: 1;
+    & > a {
+      display: inline-block;
+      background: white;
+      color: #191919;
+      padding: 0 10px;
+      text-transform: uppercase;
+      border-radius: 5px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+        "Segoe UI Symbol";
+      font-weight: bold;
+      font-size: 14px;
+    }
+  }
+
+  .friends-li {
+    text-align: center;
+    padding: 0 10px;
+    margin-right: 10px;
+    background-color: #48f597;
+    border-radius: 7px;
+    font-weight: 600;
+  }
+
   li {
-    @include transition(all .2s ease-out);
+    @include transition(all 0.2s ease-out);
     color: $default-color;
     display: inline-block;
-    opacity: .6;
+    opacity: 0.6;
     padding: 0 2rem 0 0;
 
-    &:last-child {
-      padding-right: 0;
-    }
+    // &:last-child {
+    //   padding-right: 0;
+    // }
 
     &:hover,
     &:focus {
@@ -87,6 +129,6 @@ footer {
 
   span {
     color: $default-color;
-    font-size: .8rem;
+    font-size: 0.8rem;
   }
 }
