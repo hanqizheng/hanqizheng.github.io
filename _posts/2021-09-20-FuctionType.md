@@ -55,14 +55,35 @@ type TestType2 = (arg1: number) => number;
 **函数 props 的类型定义带有泛型的函数组件**，在使用箭头函数方式书写时，泛型必须通过`extends`来进行一次类型收紧(收紧)。
 
 ```tsx
+{% raw %}
 // 错误
+const TestComponent = <T>(props:T) => {
+  // TODO
+}
+{% endraw %}
 ```
+
+![](/assets/img/2021-09-25/arrowError.jpg)
+
+就像上述的例子和图片里一样，如果使用箭头函数定义一个props是泛型类型的component，就会报错。
+
+差了很多资料，找到了几种解决方式：
 
 ```tsx
-// 举例正确的方式
+const TestComponent1 = <T,>(props:T) => {
+  // TODO
+}
+
+const TestComponent2 = <T extends unknown>(props:T) => {
+  // TODO
+}
+
+const TestComponent3 = <T extends {}>(props:T) => {
+  // TODO
+}
 ```
 
-到底是为什么必须要使用上述这种写法，才可以不报错呢？
+到底是为什么必须要使用上述这种写法，才可以不报错呢？为什么必须要extends或者加一些东西才行呢？
 
 最终还是决定来看看`React.FC`的类型定义
 
@@ -141,10 +162,42 @@ const b = firstElement2([1, 2, 3]);
 
 ## 用更少的类型参数
 
-## 出现至少2次再用类型参数
+还是老样子，先上例子
 
+```ts
+function test1<Type>(arr: Type[], func: (arg: Type) => boolean): Type[] {
+  return arr.filter(func);
+}
+ 
+function test2<Type, Func extends (arg: Type) => boolean>(
+  arr: Type[],
+  func: Func
+): Type[] {
+  return arr.filter(func);
+}
+```
 
+可能（我是说可能），有同学认为第二种写法会高级一些（因为用到泛型总比不用高级）。
 
+其实这个同学，就是最开始学习TS的我。总觉得`泛型比普通类型高级`，但其实，比如上面这个例子，
+
+`Func`在函数中甚至就使用了一次，且`Func`甚至没有关联多种类型可能性（就是`Func`被`extends`后已经定死了）。
+
+这样是完全没有必要的。
+
+## 类型参数至少能接收2种不同的类型
+
+```ts
+function tired<Str extends string>(s: Str) {
+  console.log("Hello, " + s);
+}
+ 
+greet("but world sucks.");
+```
+
+这里其实有点像第二种情况，`泛型`本身有点像`函数重载`(参数个数位置相同类型不同的情况下)。我们至少允许这个`类型参数`能接受2种不同的类型，才能达到`泛型`最基本的功能。
+
+例子中`Str`这个类型参数已经被限制为`仅是string`类型，完全失去了`泛型`基本的意义。
 
 # 参考
 
