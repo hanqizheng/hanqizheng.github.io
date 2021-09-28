@@ -12,6 +12,42 @@ author: "Qizheng Han"
 
 # What is call signature?
 
+一直不太明白`call signature`的作用是什么。
+
+## 先来看看什么是call signature
+
+```ts
+interface TestType {
+  (arg1: number): number;
+  test1: string;
+  test2: boolean;
+}
+```
+
+例子中` (arg1: number): number;`就是类型`TestType`的call signature;
+
+这有什么用呢？单独的把它拎出来看，其实
+
+```ts
+interface TestType {
+  (arg1: number): number;
+}
+
+type TestType2 = (arg1: number) => number;
+```
+
+在上面这个例子中，`TestType` 和 `TestType2`其实是等价的，都是限定了一个函数的类型，接受一个参数，类型为`number`，返回值的类型为`number`。
+
+**那么就有小伙伴问了，那call signature和函数类型的定义有什么区别呢？**
+
+如果`单纯地`拿类似于`TestType`这样的类型（也就是interface中仅有一个call signature的定义）来和函数类型比较。
+
+**我只能说call signature和函数类型完全一样，没啥区别。**
+
+但是！！！！
+
+我们不能忘了`interface`本身是定义一个对象的类型，它能做的事情，比单纯的函数类型的定义`要多`，所以这就是为什么call signature存在的意义了。
+
 # 为什么带泛型的箭头函数必须加限制？
 
 其实这个问题应该被再细化一些：
