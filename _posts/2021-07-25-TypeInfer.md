@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "TS思考篇——泛型与类型推断"
+title: "TS思考 - 泛型与类型推断"
 author: "Qizheng Han"
 ---
 

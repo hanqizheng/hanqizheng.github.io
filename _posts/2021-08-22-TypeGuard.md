@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "TS思考篇——Type Guard "
+title: "TS思考 - Type Guard "
 author: "Qizheng Han"
 ---
 

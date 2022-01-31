@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "TS思考篇——函数"
+title: "TS思考 - 函数"
 author: "Qizheng Han"
 ---
 
