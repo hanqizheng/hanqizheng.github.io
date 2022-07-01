@@ -63,9 +63,7 @@ interface Test {
 const t: Test = {
   100: "test",
 };
-```
 
-```ts
 interface Test {
   name: string;
 }
