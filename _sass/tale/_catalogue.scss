@@ -6,10 +6,6 @@
     border-radius: 1rem;
     transition: background-color .3s ease;
 
-    &:hover {
-      background-color: #eeeeee;
-    }
-
     &:hover .catalogue-line,
     &:focus .catalogue-line {
       width: 5rem;
@@ -18,6 +14,10 @@
     &:last-child {
       border: 0;
     }
+  }
+
+  &:hover .catalogue-item {
+    background-color: #eeeeee;
   }
 
   &-time {
