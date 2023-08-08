@@ -59,17 +59,15 @@ prompt 本身是通过 langchain 的[prompt template](https://js.langchain.com/d
 
 prompt 的主体 question prompt 中，最灵活的就是 review standard 这部分 prompt。他是决定 prompt 区分了编程语言的关键。
 
-  
 
 经过这次区分，基本上就得到了最后要丢给 GPT 的 prompt。 一个文件对应一类 code review standard， 而每一个 standard 都会对应一个拼凑好的 prompt。
 
-  
 
 最终，我们得到了若干个 prompt。可以理解成 prompt 数组。
 
 ![](/assets/img/2023-07-27/promptArray.png)
 
-丢给 GPT
+# 丢给 GPT
 
 丢给 GPT 其实也有一些工作要做，不是简单的丢给他。
 
