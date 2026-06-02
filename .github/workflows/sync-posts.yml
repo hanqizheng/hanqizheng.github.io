@@ -1,4 +1,4 @@
-name: Sync posts to Supabase
+name: Sync posts to database
 
 on:
   push:
@@ -33,5 +33,5 @@ jobs:
       - name: Sync posts
         run: pnpm sync:posts
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          BLOG_DATABASE_PROVIDER: postgres
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
