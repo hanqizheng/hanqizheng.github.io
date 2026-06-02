@@ -5,3 +5,11 @@
 _site
 Gemfile.lock
 .jekyll-cache
+node_modules
+.next
+out
+.vercel
+.env
+.env*.local
+!.env.example
+.claude
