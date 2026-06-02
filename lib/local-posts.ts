@@ -1,31 +1,26 @@
 import type { PostRecord } from "@/lib/db";
+import { DEFAULT_LOCALE, isLocale, type Locale } from "@/lib/i18n";
 import { canonicalPostSlug } from "@/lib/slug";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import YAML from "yaml";
 
-export function hasSupabaseEnv() {
-  return Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
-}
-
-export function listLocalPublishedPosts() {
+export function listLocalPublishedPosts(locale?: Locale) {
   return readLocalPosts()
-    .filter((post) => post.status === "published")
+    .filter((post) => post.status === "published" && (!locale || post.locale === locale))
     .sort((a, b) => String(b.published_at).localeCompare(String(a.published_at)));
 }
 
-export function getLocalPostBySlug(slug: string) {
-  return readLocalPosts().find((post) => post.slug === slug) ?? null;
+export function getLocalPostBySlug(slug: string, locale: Locale = DEFAULT_LOCALE) {
+  return readLocalPosts().find((post) => post.locale === locale && post.slug === slug) ?? null;
 }
 
-export function getLocalPostBySlugOrCanonicalSlug(slug: string) {
-  return readLocalPosts().find((post) => post.slug === slug || canonicalPostSlug(post.slug) === slug) ?? null;
+export function getLocalPostBySlugOrCanonicalSlug(slug: string, locale: Locale = DEFAULT_LOCALE) {
+  return readLocalPosts().find((post) => post.locale === locale && matchesPostSlug(post, slug)) ?? null;
 }
 
-export function getLocalPublishedPostBySlugOrCanonicalSlug(slug: string) {
-  return (
-    listLocalPublishedPosts().find((post) => post.slug === slug || canonicalPostSlug(post.slug) === slug) ?? null
-  );
+export function getLocalPublishedPostBySlugOrCanonicalSlug(slug: string, locale: Locale = DEFAULT_LOCALE) {
+  return listLocalPublishedPosts(locale).find((post) => matchesPostSlug(post, slug)) ?? null;
 }
 
 export function getLocalPublishedPostByLegacyPath(params: {
@@ -36,9 +31,11 @@ export function getLocalPublishedPostByLegacyPath(params: {
 }) {
   const publishedDate = `${params.year}-${params.month}-${params.day}`;
   return (
-    listLocalPublishedPosts().find((post) => {
-      return post.slug === params.slug && post.published_at?.startsWith(publishedDate);
-    }) ?? null
+    listLocalPublishedPosts()
+      .sort((a, b) => Number(b.locale === DEFAULT_LOCALE) - Number(a.locale === DEFAULT_LOCALE))
+      .find((post) => {
+        return post.slug === params.slug && post.published_at?.startsWith(publishedDate);
+      }) ?? null
   );
 }
 
@@ -51,18 +48,26 @@ function readLocalPosts(): PostRecord[] {
   return files.map((file) => {
     const raw = readFileSync(join(contentDir, file), "utf8");
     const parsed = parseFrontMatter(raw, file);
-    const fileMatch = file.match(/^(\d{4})-(\d{2})-(\d{2})-(.+)\.md$/);
+    const fileMatch = file.match(/^(\d{4})-(\d{2})-(\d{2})-(.+?)(?:\.([a-z]{2}))?\.md$/);
 
     if (!fileMatch) {
-      throw new Error(`Post filename must be YYYY-MM-DD-slug.md: ${file}`);
+      throw new Error(`Post filename must be YYYY-MM-DD-slug.md or YYYY-MM-DD-slug.locale.md: ${file}`);
     }
 
-    const [, year, month, day, fileSlug] = fileMatch;
+    const [, year, month, day, fileSlug, fileLocale] = fileMatch;
+    const locale = parsed.data.locale ?? fileLocale ?? DEFAULT_LOCALE;
+
+    if (!isLocale(locale)) {
+      throw new Error(`Unsupported locale "${locale}" in ${file}`);
+    }
+
     const publishedAt = normalizePublishedAt(parsed.data.publishedAt ?? `${year}-${month}-${day}`);
 
     return {
       id: file,
       slug: parsed.data.slug ?? fileSlug,
+      locale,
+      translation_key: parsed.data.translationKey ?? fileSlug,
       title: parsed.data.title,
       author: parsed.data.author ?? "Qizheng Han",
       excerpt: parsed.data.excerpt ?? null,
@@ -96,6 +101,10 @@ function parseFrontMatter(raw: string, filePath: string) {
     data: YAML.parse(yamlText) ?? {},
     body: raw.slice(bodyStart)
   };
+}
+
+function matchesPostSlug(post: Pick<PostRecord, "slug" | "translation_key">, slug: string) {
+  return post.slug === slug || canonicalPostSlug(post.slug) === slug || canonicalPostSlug(post.translation_key) === slug;
 }
 
 function normalizePublishedAt(value: unknown) {

@@ -1,5 +1,5 @@
 import { PostArticle } from "@/components/PostArticle";
-import { getPublishedPostBySlugOrCanonicalSlug } from "@/lib/posts";
+import { getPublishedPostByAnyLocaleSlugOrCanonicalSlug } from "@/lib/posts";
 import { canonicalPostSlug } from "@/lib/slug";
 import { postPath } from "@/lib/urls";
 import type { Metadata } from "next";
@@ -47,10 +47,10 @@ export default async function PostPage({ params }: Props) {
     permanentRedirect(path);
   }
 
-  return <PostArticle post={post} />;
+  return <PostArticle post={post} locale={post.locale} />;
 }
 
 async function loadPost(params: Params) {
   const slug = canonicalPostSlug(decodeURIComponent(params.slug));
-  return getPublishedPostBySlugOrCanonicalSlug(slug);
+  return getPublishedPostByAnyLocaleSlugOrCanonicalSlug(slug);
 }

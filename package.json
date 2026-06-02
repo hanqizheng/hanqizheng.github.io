@@ -8,12 +8,16 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
+    "db:local:up": "docker compose up -d db",
+    "db:local:down": "docker compose down",
+    "db:migrate": "node scripts/run-migration.mjs",
     "sync:posts": "node scripts/sync-posts.mjs",
     "validate:content": "node scripts/validate-content.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
     "next": "^15.0.3",
+    "pg": "^8.20.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^9.0.1",
@@ -28,6 +32,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@types/node": "^22.10.1",
+    "@types/pg": "^8.20.0",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.1",
     "eslint": "^9.16.0",

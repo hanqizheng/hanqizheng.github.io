@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: handler-blog-postgres
+    environment:
+      POSTGRES_DB: handler_blog
+      POSTGRES_PASSWORD: handler_blog
+      POSTGRES_USER: handler_blog
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U handler_blog -d handler_blog"]
+      interval: 5s
+      retries: 10
+      timeout: 5s
+    ports:
+      - "54322:5432"
+    volumes:
+      - handler-blog-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  handler-blog-postgres-data:

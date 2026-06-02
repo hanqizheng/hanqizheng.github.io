@@ -1,12 +1,17 @@
-import { listPublishedPosts } from "@/lib/posts";
+import { LOCALES, localeAboutPath, localeHomePath } from "@/lib/i18n";
+import { listAllPublishedPosts } from "@/lib/posts";
 import { postPath, siteUrl } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   const baseUrl = siteUrl();
-  const posts = await listPublishedPosts();
-  const urls = ["/", "/about", ...posts.map(postPath)]
+  const posts = await listAllPublishedPosts();
+  const urls = [
+    ...LOCALES.map((locale) => localeHomePath(locale)),
+    ...LOCALES.map((locale) => localeAboutPath(locale)),
+    ...posts.map((post) => postPath(post))
+  ]
     .map((path) => `<url><loc>${new URL(path, baseUrl).toString()}</loc></url>`)
     .join("");
 

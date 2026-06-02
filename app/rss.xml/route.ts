@@ -1,10 +1,10 @@
-import { listPublishedPosts } from "@/lib/posts";
+import { listAllPublishedPosts } from "@/lib/posts";
 import { postPath, siteUrl } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const posts = await listPublishedPosts();
+  const posts = await listAllPublishedPosts();
   const baseUrl = siteUrl();
 
   const items = posts

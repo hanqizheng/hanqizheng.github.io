@@ -7,8 +7,8 @@ const files = readdirSync(contentDir)
   .filter((file) => file.endsWith(".md"))
   .sort();
 
-const slugs = new Set();
-const canonicalSlugs = new Set();
+const localeSlugs = new Set();
+const localeCanonicalSlugs = new Set();
 const missingImages = [];
 
 for (const file of files) {
@@ -18,19 +18,22 @@ for (const file of files) {
     throw new Error(`Missing title in ${file}`);
   }
 
-  if (slugs.has(post.slug)) {
-    throw new Error(`Duplicate slug: ${post.slug}`);
+  const localeSlug = `${post.locale}:${post.slug}`;
+
+  if (localeSlugs.has(localeSlug)) {
+    throw new Error(`Duplicate slug: ${localeSlug}`);
   }
 
-  slugs.add(post.slug);
+  localeSlugs.add(localeSlug);
 
   const canonicalSlug = canonicalPostSlug(post.slug);
+  const localeCanonicalSlug = `${post.locale}:${canonicalSlug}`;
 
-  if (canonicalSlugs.has(canonicalSlug)) {
-    throw new Error(`Duplicate canonical slug: ${canonicalSlug}`);
+  if (localeCanonicalSlugs.has(localeCanonicalSlug)) {
+    throw new Error(`Duplicate canonical slug: ${localeCanonicalSlug}`);
   }
 
-  canonicalSlugs.add(canonicalSlug);
+  localeCanonicalSlugs.add(localeCanonicalSlug);
 
   for (const match of post.contentMarkdown.matchAll(/!\[[^\]]*]\(([^)]+)\)/g)) {
     const rawRef = match[1].split(/[?#]/)[0];
@@ -58,8 +61,8 @@ console.log(
   JSON.stringify(
     {
       postCount: files.length,
-      uniqueSlugCount: slugs.size,
-      uniqueCanonicalSlugCount: canonicalSlugs.size,
+      uniqueLocaleSlugCount: localeSlugs.size,
+      uniqueLocaleCanonicalSlugCount: localeCanonicalSlugs.size,
       missingImageCount: missingImages.length,
       missingImages
     },

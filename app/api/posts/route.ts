@@ -1,4 +1,5 @@
 import { createApiPost, getPostBySlugOrCanonicalSlug } from "@/lib/posts";
+import { DEFAULT_LOCALE } from "@/lib/i18n";
 import { canonicalPostSlug, slugify } from "@/lib/slug";
 import { z } from "zod";
 
@@ -7,6 +8,8 @@ export const dynamic = "force-dynamic";
 const createPostSchema = z.object({
   title: z.string().min(1),
   slug: z.string().min(1).optional(),
+  locale: z.enum(["zh", "en"]).optional(),
+  translationKey: z.string().min(1).optional(),
   author: z.string().min(1).optional(),
   excerpt: z.string().nullable().optional(),
   contentMarkdown: z.string().min(1),
@@ -38,7 +41,9 @@ export async function POST(request: Request) {
 
   const body = parsed.data;
   const slug = body.slug ?? slugify(body.title);
-  const existing = await getPostBySlugOrCanonicalSlug(canonicalPostSlug(slug));
+  const locale = body.locale ?? DEFAULT_LOCALE;
+  const translationKey = body.translationKey ?? slug;
+  const existing = await getPostBySlugOrCanonicalSlug(canonicalPostSlug(slug), locale);
 
   if (existing) {
     return Response.json({ error: "A post with this slug already exists" }, { status: 409 });
@@ -47,6 +52,8 @@ export async function POST(request: Request) {
   const post = await createApiPost({
     title: body.title,
     slug,
+    locale,
+    translationKey,
     author: body.author ?? "Qizheng Han",
     excerpt: body.excerpt ?? null,
     contentMarkdown: body.contentMarkdown,

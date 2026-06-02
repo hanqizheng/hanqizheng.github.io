@@ -25,6 +25,11 @@ export function GET(request: Request) {
                   properties: {
                     title: { type: "string" },
                     slug: { type: "string" },
+                    locale: { type: "string", enum: ["zh", "en"], default: "zh" },
+                    translationKey: {
+                      type: "string",
+                      description: "Shared key that groups translated versions of the same post."
+                    },
                     author: { type: "string", default: "Qizheng Han" },
                     excerpt: { type: ["string", "null"] },
                     contentMarkdown: {
