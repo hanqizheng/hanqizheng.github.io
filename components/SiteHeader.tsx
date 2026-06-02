@@ -1,12 +1,10 @@
 "use client";
 
 import {
-  getAlternateLocale,
   getDictionary,
   getLocaleFromPathname,
   localeAboutPath,
   localeHomePath,
-  switchLocalePath,
   type Locale
 } from "@/lib/i18n";
 import Link from "next/link";
@@ -18,7 +16,6 @@ type Theme = "light" | "dark";
 export function SiteHeader() {
   const pathname = usePathname() || "/";
   const locale = getLocaleFromPathname(pathname);
-  const nextLocale = getAlternateLocale(locale);
   const dict = getDictionary(locale);
   const [theme, setTheme] = useState<Theme>("light");
 
@@ -62,15 +59,6 @@ export function SiteHeader() {
           >
             <span aria-hidden="true">{theme === "dark" ? "☀" : "☾"}</span>
           </button>
-          <Link
-            className="site-action-button"
-            href={switchLocalePath(pathname, nextLocale)}
-            aria-label={dict.actions.switchLanguage}
-            hrefLang={nextLocale}
-            title={dict.actions.switchLanguage}
-          >
-            <span aria-hidden="true">{dict.alternateLocaleLabel}</span>
-          </Link>
         </div>
       </div>
     </header>

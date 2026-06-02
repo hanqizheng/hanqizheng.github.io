@@ -11,6 +11,7 @@
     "db:local:up": "docker compose up -d db",
     "db:local:down": "docker compose down",
     "db:migrate": "node scripts/run-migration.mjs",
+    "vercel:build": "node scripts/vercel-build.mjs",
     "sync:posts": "node scripts/sync-posts.mjs",
     "validate:content": "node scripts/validate-content.mjs"
   },
