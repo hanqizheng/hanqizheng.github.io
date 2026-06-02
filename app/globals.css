@@ -107,8 +107,7 @@ a:hover {
 
 .site-actions {
   display: grid;
-  grid-template-columns: repeat(2, 32px);
-  gap: 3px;
+  grid-template-columns: 32px;
   padding: 4px;
   background: var(--panel);
   border: 1px solid color-mix(in srgb, var(--border), transparent 45%);
@@ -161,9 +160,7 @@ a:hover {
   padding: 40px 0 44px 16px;
   border-left: 2px solid transparent;
   border-bottom: 1px solid var(--border);
-  transition:
-    border-color 160ms ease,
-    transform 160ms ease;
+  transition: border-color 160ms ease;
 }
 
 .post-list-item:hover,
@@ -171,12 +168,19 @@ a:hover {
   border-left-color: color-mix(in srgb, var(--accent), transparent 28%);
   outline: none;
   text-decoration: none;
-  transform: translateX(2px);
 }
 
 .post-list-item article {
   display: grid;
   gap: 13px;
+  transform: translateX(0);
+  transition: transform 160ms ease;
+  will-change: transform;
+}
+
+.post-list-item:hover article,
+.post-list-item:focus-visible article {
+  transform: translateX(4px);
 }
 
 .post-list-title {

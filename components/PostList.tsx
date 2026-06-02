@@ -23,10 +23,19 @@ export function PostList({ posts, locale }: { posts: PublishedPost[]; locale: Lo
             <time className="post-list-meta" dateTime={post.published_at ?? undefined}>
               {formatDisplayDate(post.published_at, locale)}
             </time>
-            {post.excerpt ? <p className="post-list-excerpt">{post.excerpt}…</p> : null}
+            {post.excerpt ? <p className="post-list-excerpt">{formatPostExcerpt(post.excerpt)}</p> : null}
           </article>
         </Link>
       ))}
     </div>
   );
+}
+
+function formatPostExcerpt(excerpt: string) {
+  const maxLength = 160;
+  const normalized = excerpt.replace(/\s+/g, " ").trim().replace(/(?:\.{3}|…)+$/u, "").trim();
+  const characters = Array.from(normalized);
+  const clipped = characters.length > maxLength ? characters.slice(0, maxLength).join("").trimEnd() : normalized;
+
+  return `${clipped}...`;
 }
