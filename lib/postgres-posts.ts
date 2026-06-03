@@ -1,11 +1,14 @@
 import { getPostgresPool, type PostRecord, type PostStatus } from "@/lib/db";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n";
+import { canonicalPostSlug } from "@/lib/slug";
 
 type PostRow = PostRecord & {
   created_at: Date | string;
   published_at: Date | string | null;
   updated_at: Date | string;
 };
+
+type PostSlugRow = Pick<PostRecord, "id" | "slug" | "translation_key">;
 
 export async function listPostgresPublishedPosts() {
   const { rows } = await getPostgresPool().query<PostRow>(
@@ -37,6 +40,30 @@ export async function getPostgresPostBySlug(slug: string, locale: Locale = DEFAU
     "select * from public.posts where locale = $1 and slug = $2 limit 1",
     [locale, slug]
   );
+
+  return rows[0] ? normalizePostRow(rows[0]) : null;
+}
+
+export async function getPostgresPostBySlugOrCanonicalSlug(slug: string, locale: Locale = DEFAULT_LOCALE) {
+  const direct = await getPostgresPostBySlug(slug, locale);
+
+  if (direct) {
+    return direct;
+  }
+
+  const { rows: slugRows } = await getPostgresPool().query<PostSlugRow>(
+    "select id, slug, translation_key from public.posts where locale = $1",
+    [locale]
+  );
+  const match = slugRows.find((post) => matchesPostSlug(post, slug));
+
+  if (!match) {
+    return null;
+  }
+
+  const { rows } = await getPostgresPool().query<PostRow>("select * from public.posts where id = $1 limit 1", [
+    match.id
+  ]);
 
   return rows[0] ? normalizePostRow(rows[0]) : null;
 }
@@ -121,4 +148,8 @@ function normalizePostRow(row: PostRow): PostRecord {
 
 function normalizeDate(value: Date | string) {
   return value instanceof Date ? value.toISOString() : value;
+}
+
+function matchesPostSlug(post: Pick<PostRecord, "slug" | "translation_key">, slug: string) {
+  return post.slug === slug || canonicalPostSlug(post.slug) === slug || canonicalPostSlug(post.translation_key) === slug;
 }

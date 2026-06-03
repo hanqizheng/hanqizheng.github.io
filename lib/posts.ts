@@ -10,8 +10,8 @@ import {
 import {
   createPostgresApiPost,
   getPostgresPostBySlug,
+  getPostgresPostBySlugOrCanonicalSlug,
   getPostgresPublishedPostByLegacyPath,
-  listPostgresPosts,
   listPostgresPublishedPosts,
   listPostgresPublishedPostsByLocale
 } from "@/lib/postgres-posts";
@@ -97,15 +97,13 @@ export async function getPostBySlugOrCanonicalSlug(slug: string, locale: Locale 
   }
 
   if (provider === "postgres") {
-    const direct = await getPostgresPostBySlug(slug, locale);
-
-    if (direct) {
-      return direct;
-    }
-
-    return (await listPostgresPosts(locale)).find((post) => matchesPostSlug(post, slug)) ?? null;
+    return getPostgresPostBySlugOrCanonicalSlug(slug, locale);
   }
 
+  return getSupabasePostBySlugOrCanonicalSlug(slug, locale);
+}
+
+async function getSupabasePostBySlugOrCanonicalSlug(slug: string, locale: Locale) {
   const direct = await getPostBySlug(slug, locale);
 
   if (direct) {
@@ -113,13 +111,30 @@ export async function getPostBySlugOrCanonicalSlug(slug: string, locale: Locale 
   }
 
   const supabase = getSupabaseAdmin();
-  const { data, error } = await supabase.from("posts").select("*").eq("locale", locale);
+  const { data: slugRows, error: slugError } = await supabase
+    .from("posts")
+    .select("id, slug, translation_key")
+    .eq("locale", locale);
 
-  if (error) {
-    throw new Error(`Failed to load posts: ${error.message}`);
+  if (slugError) {
+    throw new Error(`Failed to load post slugs: ${slugError.message}`);
   }
 
-  return ((data ?? []) as PostRecord[]).find((post) => matchesPostSlug(post, slug)) ?? null;
+  const match = ((slugRows ?? []) as Pick<PostRecord, "id" | "slug" | "translation_key">[]).find((post) =>
+    matchesPostSlug(post, slug)
+  );
+
+  if (!match) {
+    return null;
+  }
+
+  const { data, error } = await supabase.from("posts").select("*").eq("id", match.id).maybeSingle();
+
+  if (error) {
+    throw new Error(`Failed to load post: ${error.message}`);
+  }
+
+  return data as PostRecord | null;
 }
 
 export async function getPublishedPostBySlugOrCanonicalSlug(slug: string, locale: Locale = DEFAULT_LOCALE) {

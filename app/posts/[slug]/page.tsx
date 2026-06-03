@@ -1,9 +1,11 @@
 import { PostArticle } from "@/components/PostArticle";
+import { createPostMetadata } from "@/lib/post-metadata";
 import { getPublishedPostByAnyLocaleSlugOrCanonicalSlug } from "@/lib/posts";
 import { canonicalPostSlug } from "@/lib/slug";
 import { postPath } from "@/lib/urls";
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
+import { cache } from "react";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +18,8 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await loadPost(await params);
+  const { slug } = await params;
+  const post = await loadPost(slug);
 
   if (!post) {
     return {
@@ -24,18 +27,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  return {
-    title: post.title,
-    description: post.excerpt ?? undefined,
-    authors: [{ name: post.author }],
-    alternates: {
-      canonical: postPath(post)
-    }
-  };
+  return createPostMetadata(post);
 }
 
 export default async function PostPage({ params }: Props) {
-  const post = await loadPost(await params);
+  const { slug } = await params;
+  const post = await loadPost(slug);
 
   if (!post) {
     notFound();
@@ -43,14 +40,14 @@ export default async function PostPage({ params }: Props) {
 
   const path = postPath(post);
 
-  if (path !== `/posts/${encodeURIComponent(decodeURIComponent((await params).slug))}`) {
+  if (path !== `/posts/${encodeURIComponent(decodeURIComponent(slug))}`) {
     permanentRedirect(path);
   }
 
   return <PostArticle post={post} locale={post.locale} />;
 }
 
-async function loadPost(params: Params) {
-  const slug = canonicalPostSlug(decodeURIComponent(params.slug));
+const loadPost = cache(async (slugParam: string) => {
+  const slug = canonicalPostSlug(decodeURIComponent(slugParam));
   return getPublishedPostByAnyLocaleSlugOrCanonicalSlug(slug);
-}
+});

@@ -21,6 +21,8 @@ type Dictionary = {
     draft: string;
     writtenBy: string;
     publishedOn: string;
+    backToPosts: string;
+    loading: string;
   };
   about: {
     paragraphs: string[];
@@ -51,7 +53,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
       empty: "还没有文章。",
       draft: "草稿",
       writtenBy: "作者",
-      publishedOn: "发布于"
+      publishedOn: "发布于",
+      backToPosts: "返回文章",
+      loading: "文章加载中"
     },
     about: {
       paragraphs: ["你好，我是韩启正。", "Welcome to the real world,", "it sucks, you're gonna love it!"]
@@ -80,7 +84,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
       empty: "No posts yet.",
       draft: "Draft",
       writtenBy: "Written by",
-      publishedOn: "on"
+      publishedOn: "on",
+      backToPosts: "Back to posts",
+      loading: "Loading post"
     },
     about: {
       paragraphs: ["Hi, I am Qizheng Han.", "Welcome to the real world,", "it sucks, you're gonna love it!"]
