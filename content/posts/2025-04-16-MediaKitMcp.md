@@ -3,7 +3,7 @@ title: 资源池 Media Kit 关键信息提取
 slug: MediaKitMcp
 author: Qizheng Han
 publishedAt: 2025-04-16
-status: published
+status: draft
 excerpt: TLDR; > 感兴趣的话，项目代码在这里：media_kit_mcp_server 什么是 Media Kit？ Media
   Kit（媒体资料包）是一种专业化的工具，用于向广告主、合作伙伴、媒体机构或其他利益相关方展示品牌、平台或个人的核心信息、受众数据和商业合作价值。
   可以简单的理解为一个自我推销介绍。 为什么要完

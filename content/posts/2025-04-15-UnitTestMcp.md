@@ -3,7 +3,7 @@ title: 组件库单元测试完全自动化生成
 slug: UnitTestMcp
 author: Qizheng Han
 publishedAt: 2025-04-15
-status: published
+status: draft
 excerpt: 组件库单元测试完全自动化生成 TLDR; > 感兴趣的话，请看这里 unit_test_generator_mcp_server 通过构建
   MCP server 的方式，将组件库源代码进行暴露。原先的手动操作命令行的部分全部移除，变为 Cursor Agent 调用 mcp tools 的方式。
   AI 生成单元测进化史

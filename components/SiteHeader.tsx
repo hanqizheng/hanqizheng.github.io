@@ -49,17 +49,15 @@ export function SiteHeader() {
             {dict.nav.about}
           </Link>
         </nav>
-        <div className="site-actions" aria-label="Display settings">
-          <button
-            className="site-action-button"
-            type="button"
-            onClick={toggleTheme}
-            aria-label={dict.actions.switchTheme}
-            title={theme === "dark" ? dict.actions.lightTheme : dict.actions.darkTheme}
-          >
-            <span aria-hidden="true">{theme === "dark" ? "☀" : "☾"}</span>
-          </button>
-        </div>
+        <button
+          className="site-action-button"
+          type="button"
+          onClick={toggleTheme}
+          aria-label={dict.actions.switchTheme}
+          title={theme === "dark" ? dict.actions.lightTheme : dict.actions.darkTheme}
+        >
+          <span aria-hidden="true">{theme === "dark" ? "☀" : "☾"}</span>
+        </button>
       </div>
     </header>
   );

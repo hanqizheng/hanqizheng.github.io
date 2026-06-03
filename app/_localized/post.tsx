@@ -1,10 +1,12 @@
 import { PostArticle } from "@/components/PostArticle";
-import { localeHomePath, localizedAlternates, type Locale } from "@/lib/i18n";
+import { localeHomePath, type Locale } from "@/lib/i18n";
+import { createPostMetadata, localizedPostAlternates } from "@/lib/post-metadata";
 import { getPublishedPostByAnyLocaleSlugOrCanonicalSlug, getPublishedPostBySlugOrCanonicalSlug } from "@/lib/posts";
 import { canonicalPostSlug } from "@/lib/slug";
 import { postPath } from "@/lib/urls";
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
+import { cache } from "react";
 
 type PostParams = {
   slug: string;
@@ -19,15 +21,7 @@ export async function postMetadata(locale: Locale, params: PostParams): Promise<
     };
   }
 
-  return {
-    title: post.title,
-    description: post.excerpt ?? undefined,
-    authors: [{ name: post.author }],
-    alternates: {
-      canonical: postPath(post),
-      languages: localizedAlternates(`/posts/${canonicalPostSlug(post.translation_key)}`)
-    }
-  };
+  return createPostMetadata(post, localizedPostAlternates(post));
 }
 
 export async function LocalizedPostPage({ locale, params }: { locale: Locale; params: PostParams }) {
@@ -52,12 +46,12 @@ export async function LocalizedPostPage({ locale, params }: { locale: Locale; pa
   return <PostArticle post={post} locale={locale} />;
 }
 
-async function loadPost(locale: Locale, slugParam: string) {
+const loadPost = cache(async (locale: Locale, slugParam: string) => {
   const slug = canonicalPostSlug(decodeURIComponent(slugParam));
   return getPublishedPostBySlugOrCanonicalSlug(slug, locale);
-}
+});
 
-async function loadAnyLocalePost(slugParam: string) {
+const loadAnyLocalePost = cache(async (slugParam: string) => {
   const slug = canonicalPostSlug(decodeURIComponent(slugParam));
   return getPublishedPostByAnyLocaleSlugOrCanonicalSlug(slug);
-}
+});
