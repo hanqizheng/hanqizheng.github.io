@@ -104,14 +104,21 @@ One-time setup:
    | `NEXT_PUBLIC_SITE_URL` | `https://hanqizheng.vercel.app` |
    | `SUPABASE_URL` | `https://<project>.supabase.co` |
    | `SUPABASE_SERVICE_ROLE_KEY` | the Supabase service role key |
+   | `DATABASE_URL` | the Supabase Postgres connection string used by production migrations |
    | `BLOG_WRITE_TOKEN` | a long random token (only if you use `POST /api/posts`) |
+   | `CRON_SECRET` | a random string of at least 16 characters used to authenticate the database keep-alive cron |
 
-   Leave `BLOG_DATABASE_PROVIDER` unset — it auto-selects `supabase` when `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are present. `DATABASE_URL` is only needed for migrations and the sync script, not for the running site.
+   Leave `BLOG_DATABASE_PROVIDER` unset — it auto-selects `supabase` when `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are present. `DATABASE_URL` is used by the production build to run migrations, while requests use the Supabase client.
 
-4. **Set GitHub Actions secrets** so the content-sync workflow (`.github/workflows/sync-posts.yml`) can write to Supabase (Repo → Settings → Secrets and variables → Actions):
+   The Vercel cron invokes `GET /api/cron/keep-alive` once per day. The endpoint
+   performs one minimal query against Supabase so a low-traffic Free Plan project
+   still has regular external database activity. Vercel automatically sends
+   `CRON_SECRET` as a Bearer token; do not expose this value through a
+   `NEXT_PUBLIC_` environment variable.
 
-   - `SUPABASE_URL`
-   - `SUPABASE_SERVICE_ROLE_KEY`
+4. **Set the GitHub Actions secret** so the content-sync workflow (`.github/workflows/sync-posts.yml`) can write to Supabase (Repo → Settings → Secrets and variables → Actions):
+
+   - `DATABASE_URL`
 
 5. **Disable GitHub Pages** for this repo (Settings → Pages → Source: *None*). This repo previously served a static site from `master`; after the Next.js refactor lands, Pages can no longer build it, so production should come from Vercel only.
 
