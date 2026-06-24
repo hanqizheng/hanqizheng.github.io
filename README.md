@@ -95,6 +95,11 @@ One-time setup:
    pnpm sync:posts
    ```
 
+   The `public.posts` table has Row-Level Security enabled. Anonymous and
+   authenticated Supabase clients may only read rows where
+   `status = 'published'`; inserts, updates, and deletes must go through the
+   server-side service role key or the direct migration connection.
+
 2. **Connect the repo to Vercel** (Add New → Project → import this repo). Vercel auto-detects Next.js and pnpm; keep the default build (`next build`) and output settings. Set the production branch to `master`.
 
 3. **Set Vercel environment variables** (Project → Settings → Environment Variables, apply to Production and Preview):
