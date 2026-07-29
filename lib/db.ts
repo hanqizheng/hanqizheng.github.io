@@ -4,6 +4,7 @@ import { Pool } from "pg";
 export type PostStatus = "draft" | "published";
 export type PostSource = "git" | "api";
 export type PostLocale = "zh" | "en";
+export type PostCoverTextTone = "light" | "dark";
 
 export type PostRecord = {
   id: string;
@@ -13,6 +14,10 @@ export type PostRecord = {
   title: string;
   author: string;
   excerpt: string | null;
+  cover_src: string | null;
+  cover_position: string | null;
+  cover_text_tone: PostCoverTextTone | null;
+  featured: boolean;
   content_markdown: string;
   status: PostStatus;
   published_at: string | null;
@@ -20,6 +25,8 @@ export type PostRecord = {
   updated_at: string;
   source: PostSource;
 };
+
+export type PostSummary = Omit<PostRecord, "content_markdown">;
 
 export type DatabaseProvider = "local" | "postgres" | "supabase";
 

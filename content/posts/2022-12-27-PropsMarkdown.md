@@ -17,7 +17,7 @@ excerpt: 维护组件库的过程总是充满惊喜的。 但有时候随着频�
 
 而编写文档中，特别特别特别繁琐的一件事就是 编写 props 说明表格。
 
-# 什么是 props 说明表格？
+## 什么是 props 说明表格？
 
 这里就拿 `ant-design` 里面的 props 说明来看一下。
 
@@ -27,13 +27,13 @@ excerpt: 维护组件库的过程总是充满惊喜的。 但有时候随着频�
 
 对，就是这个，每次在维护文档的时候都要写，是一件繁琐且需要细心的事情。
 
-# 可以可以自动生成呢？
+## 可以可以自动生成呢？
 
 其实有遇到过一些可以自动生成 props 说明文档的框架，很好奇怎么实现的。
 
 至少说明一件事情，答案一定可以的。
 
-# 类型定义
+## 类型定义
 
 首先，组件库得是 `TypeScript` 写的。
 
@@ -58,7 +58,7 @@ interface BreadcrumbProps {
 ```
 > 代码段来自：https://github.com/ant-design/ant-design/blob/master/components/breadcrumb/Breadcrumb.tsx
 
-# 解析类型
+## 解析类型
 
 自动生成文档的第一步，就是要解析组件的类型定义，能够识别出哪个是 prop 的名字，哪个是 prop 对应的类型。
 
@@ -68,7 +68,7 @@ interface BreadcrumbProps {
 
 但是因为组件库一般都有自己的官方网站，我们需要的只是解析出来的信息。这里我选择了 json 数据结构
 
-## 入口
+### 入口
 
 typedoc 需要一个入口配置，告诉它从哪里开始查找类型，解析类型。
 
@@ -92,7 +92,7 @@ wait wait 胃特 胃
 
 拒绝！
 
-## 自动生成typedoc.json
+### 自动生成typedoc.json
 
 `typedoc.json` 这个配置文件，其实就 2 个配置，一个入口，一个出口。
 
@@ -130,7 +130,7 @@ async function generateTypeJsonFile() {
 }
 ```
 
-## 生成类型描述的 json 文件
+### 生成类型描述的 json 文件
 
 这个在配置好配置文件之后很简单，只需要运行命令
 
@@ -189,7 +189,7 @@ shell.exec(`npx typedoc --json ${TYPE_JSON_DOC_PATH}`);
 }
 ```
 
-## 读取描述 json 文件
+### 读取描述 json 文件
 
 读取 json 文件是整个环节里最重要，也是主要的开发量。
 
@@ -274,7 +274,7 @@ function propTypeIdentify(argumentType) {
 
 ```
 
-# 拼凑
+## 拼凑
 
 然后，我们解析出的每一个类型都会被拼接成字符串
 
@@ -353,7 +353,7 @@ function typeDocConcat(componentTypeJson) {
 }
 ```
 
-# 结果
+## 结果
 
 拼凑的字符串会被写入特定文件
 
@@ -382,6 +382,6 @@ function typeDocConcat(componentTypeJson) {
 
 这样就大功告成了。
 
-# 参考
+## 参考
 
 - [typedoc](https://typedoc.org/)

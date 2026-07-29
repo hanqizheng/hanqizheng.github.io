@@ -4,8 +4,6 @@ export const DEFAULT_LOCALE = "zh";
 export type Locale = (typeof LOCALES)[number];
 
 type Dictionary = {
-  localeName: string;
-  alternateLocaleLabel: string;
   nav: {
     posts: string;
     about: string;
@@ -19,16 +17,26 @@ type Dictionary = {
   posts: {
     empty: string;
     draft: string;
+    journal: string;
+    collectionTitle: string;
+    collectionIntro: string;
+    featured: string;
+    archive: string;
+    readArticle: string;
     writtenBy: string;
     publishedOn: string;
     backToPosts: string;
     loading: string;
+    gallery: {
+      previous: string;
+      next: string;
+      status: string;
+    };
   };
   about: {
     paragraphs: string[];
   };
   actions: {
-    switchLanguage: string;
     switchTheme: string;
     lightTheme: string;
     darkTheme: string;
@@ -37,8 +45,6 @@ type Dictionary = {
 
 export const dictionaries: Record<Locale, Dictionary> = {
   zh: {
-    localeName: "中文",
-    alternateLocaleLabel: "EN",
     nav: {
       posts: "文章",
       about: "关于"
@@ -52,24 +58,32 @@ export const dictionaries: Record<Locale, Dictionary> = {
     posts: {
       empty: "还没有文章。",
       draft: "草稿",
+      journal: "Handler Journal",
+      collectionTitle: "文章与思考",
+      collectionIntro: "关于前端工程、人工智能与持续构建的个人记录。",
+      featured: "近期专题",
+      archive: "全部文章",
+      readArticle: "阅读文章",
       writtenBy: "作者",
       publishedOn: "发布于",
       backToPosts: "返回文章",
-      loading: "文章加载中"
+      loading: "文章加载中",
+      gallery: {
+        previous: "上一张",
+        next: "下一张",
+        status: "图片组，第 {current} 张，共 {total} 张"
+      }
     },
     about: {
       paragraphs: ["你好，我是韩启正。", "Welcome to the real world,", "it sucks, you're gonna love it!"]
     },
     actions: {
-      switchLanguage: "Switch to English",
       switchTheme: "切换主题",
       lightTheme: "浅色主题",
       darkTheme: "深色主题"
     }
   },
   en: {
-    localeName: "English",
-    alternateLocaleLabel: "中",
     nav: {
       posts: "Posts",
       about: "About"
@@ -83,16 +97,26 @@ export const dictionaries: Record<Locale, Dictionary> = {
     posts: {
       empty: "No posts yet.",
       draft: "Draft",
+      journal: "Handler Journal",
+      collectionTitle: "Notes & essays",
+      collectionIntro: "Personal writing on frontend engineering, artificial intelligence, and the practice of building.",
+      featured: "Featured",
+      archive: "Archive",
+      readArticle: "Read article",
       writtenBy: "Written by",
       publishedOn: "on",
       backToPosts: "Back to posts",
-      loading: "Loading post"
+      loading: "Loading post",
+      gallery: {
+        previous: "Previous slide",
+        next: "Next slide",
+        status: "Gallery, slide {current} of {total}"
+      }
     },
     about: {
       paragraphs: ["Hi, I am Qizheng Han.", "Welcome to the real world,", "it sucks, you're gonna love it!"]
     },
     actions: {
-      switchLanguage: "切换到中文",
       switchTheme: "Switch theme",
       lightTheme: "Light theme",
       darkTheme: "Dark theme"
@@ -117,10 +141,6 @@ export function getLocaleFromPathname(pathname: string) {
   return normalizeLocale(segment);
 }
 
-export function getAlternateLocale(locale: Locale): Locale {
-  return locale === "zh" ? "en" : "zh";
-}
-
 export function localePath(locale: Locale, path = "/") {
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
   return normalizedPath === "/" ? `/${locale}` : `/${locale}${normalizedPath}`;
@@ -132,26 +152,6 @@ export function localeHomePath(locale: Locale) {
 
 export function localeAboutPath(locale: Locale) {
   return localePath(locale, "/about");
-}
-
-export function switchLocalePath(pathname: string, nextLocale: Locale) {
-  const parts = pathname.split("/");
-  const firstSegment = parts[1];
-
-  if (isLocale(firstSegment)) {
-    parts[1] = nextLocale;
-    return parts.join("/") || `/${nextLocale}`;
-  }
-
-  if (pathname === "/") {
-    return localeHomePath(nextLocale);
-  }
-
-  if (pathname === "/about" || pathname.startsWith("/posts/")) {
-    return localePath(nextLocale, pathname);
-  }
-
-  return localeHomePath(nextLocale);
 }
 
 export function localizedAlternates(path: string) {

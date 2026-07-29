@@ -9,24 +9,24 @@ excerpt: 组件库单元测试完全自动化生成 TLDR; > 感兴趣的话，�
   AI 生成单元测进化史
 ---
 
-# 组件库单元测试完全自动化生成
+## 组件库单元测试完全自动化生成
 
-## TLDR;
+### TLDR;
 
 > 感兴趣的话，请看这里 [unit_test_generator_mcp_server](https://github.com/hanqizheng/unit-test-generator-mcp-server)
 
 通过构建 MCP server 的方式，将组件库源代码进行暴露。原先的手动操作命令行的部分全部移除，变为 Cursor Agent 调用 mcp tools 的方式。
 
-## AI 生成单元测进化史
+### AI 生成单元测进化史
 
-### 初期
+#### 初期
 
 ![初期](/assets/img/2025-04-15/prototype.PNG)
 
 最初期的单元测试生成其实和其他任何 AI 场景一样，靠 chat。
 甚至在早期，市面上的主流 AI 不支持附件上传，code 和 其他辅助性的上下文都需要通过文本的方式发送。
 
-### 进化
+#### 进化
 
 结合 Cursor AI 的组件库单元测试生成
 
@@ -37,7 +37,7 @@ excerpt: 组件库单元测试完全自动化生成 TLDR; > 感兴趣的话，�
 
 因为没有与 Cursor 建立直接的关联，还是需要手动将 prompt 复制粘贴到对话框中完成后续操作。
 
-### 现在
+#### 现在
 
 ![引入 MCP Server](/assets/img/2025-04-15/currentMcp.PNG)
 
@@ -51,7 +51,7 @@ Context 搜集的工作变为了 MCP server 的特定 tool 会完成一系列操
 
 借助 Cursor Agent 的能力，可以完全自动化的生成单元测试代码。
 
-## Evaluated 效果衡量
+### Evaluated 效果衡量
 
 | 组件名       | old                                                                | new                                                                | 提升   |
 | ------------ | ------------------------------------------------------------------ | ------------------------------------------------------------------ | ------ |
@@ -60,7 +60,7 @@ Context 搜集的工作变为了 MCP server 的特定 tool 会完成一系列操
 | Avatar       | ![avatarOld.PNG](/assets/img/2025-04-15/avatarOld.png)             | ![avatarNew.PNG](/assets/img/2025-04-15/avatarNew.png)             | 21.06% |
 | AsyncConfirm | ![asyncConfirmOld.PNG](/assets/img/2025-04-15/asyncConfirmOld.png) | ![asyncConfirmNew.PNG](/assets/img/2025-04-15/asyncConfirmNew.png) | 36.36% |
 
-## 说说未来
+### 说说未来
 
 单元测试的场景，只是对组件库通过 MCP 的方式与 AI 交互的第一步。
 如果 AI 可以通过 MCP 暴露的 codebase 生成单测，就能干其他事情。

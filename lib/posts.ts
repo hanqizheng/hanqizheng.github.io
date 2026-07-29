@@ -1,4 +1,11 @@
-import { databaseProvider, getSupabaseAdmin, type PostRecord, type PostStatus } from "@/lib/db";
+import {
+  databaseProvider,
+  getSupabaseAdmin,
+  type PostCoverTextTone,
+  type PostRecord,
+  type PostSummary,
+  type PostStatus
+} from "@/lib/db";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n";
 import {
   getLocalPostBySlug,
@@ -17,7 +24,10 @@ import {
 } from "@/lib/postgres-posts";
 import { canonicalPostSlug } from "@/lib/slug";
 
-export async function listPublishedPosts(locale: Locale = DEFAULT_LOCALE) {
+const POST_SUMMARY_COLUMNS =
+  "id, slug, locale, translation_key, title, author, excerpt, cover_src, cover_position, cover_text_tone, featured, status, published_at, created_at, updated_at, source";
+
+export async function listPublishedPosts(locale: Locale = DEFAULT_LOCALE): Promise<PostSummary[]> {
   const provider = databaseProvider();
 
   if (provider === "local") {
@@ -31,7 +41,7 @@ export async function listPublishedPosts(locale: Locale = DEFAULT_LOCALE) {
   const supabase = getSupabaseAdmin();
   const { data, error } = await supabase
     .from("posts")
-    .select("*")
+    .select(POST_SUMMARY_COLUMNS)
     .eq("status", "published")
     .eq("locale", locale)
     .order("published_at", { ascending: false });
@@ -40,10 +50,10 @@ export async function listPublishedPosts(locale: Locale = DEFAULT_LOCALE) {
     throw new Error(`Failed to list posts: ${error.message}`);
   }
 
-  return (data ?? []) as PostRecord[];
+  return (data ?? []) as PostSummary[];
 }
 
-export async function listAllPublishedPosts() {
+export async function listAllPublishedPosts(): Promise<PostSummary[]> {
   const provider = databaseProvider();
 
   if (provider === "local") {
@@ -57,7 +67,7 @@ export async function listAllPublishedPosts() {
   const supabase = getSupabaseAdmin();
   const { data, error } = await supabase
     .from("posts")
-    .select("*")
+    .select(POST_SUMMARY_COLUMNS)
     .eq("status", "published")
     .order("published_at", { ascending: false });
 
@@ -65,7 +75,7 @@ export async function listAllPublishedPosts() {
     throw new Error(`Failed to list posts: ${error.message}`);
   }
 
-  return (data ?? []) as PostRecord[];
+  return (data ?? []) as PostSummary[];
 }
 
 export async function getPostBySlug(slug: string, locale: Locale = DEFAULT_LOCALE) {
@@ -201,6 +211,10 @@ export async function createApiPost(input: {
   translationKey: string;
   author: string;
   excerpt: string | null;
+  coverSrc: string | null;
+  coverPosition: string | null;
+  coverTextTone: PostCoverTextTone | null;
+  featured: boolean;
   contentMarkdown: string;
   status: PostStatus;
   publishedAt: string;
@@ -219,6 +233,10 @@ export async function createApiPost(input: {
       translation_key: input.translationKey,
       author: input.author,
       excerpt: input.excerpt,
+      cover_src: input.coverSrc,
+      cover_position: input.coverPosition,
+      cover_text_tone: input.coverTextTone,
+      featured: input.featured,
       content_markdown: input.contentMarkdown,
       status: input.status,
       published_at: input.publishedAt,
@@ -235,6 +253,7 @@ export async function createApiPost(input: {
 }
 
 export type PublishedPost = PostRecord;
+export type PublishedPostSummary = PostSummary;
 
 function matchesPostSlug(post: Pick<PostRecord, "slug" | "translation_key">, slug: string) {
   return post.slug === slug || canonicalPostSlug(post.slug) === slug || canonicalPostSlug(post.translation_key) === slug;

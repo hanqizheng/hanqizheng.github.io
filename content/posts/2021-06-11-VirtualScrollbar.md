@@ -15,7 +15,7 @@ excerpt: 最近在写组件，遇到的第一个问题就是浏览器的`滚动�
 
 什么？为什么要这么大费周章？滚动条这个磨人的小妖精，我觉得她值得...
 
-# 起因
+## 起因
 
 最近写 Table 的虚拟化组件，因为 Table 实际是计算出位置的一个个 div 拼成的 Grid，所以在整个组件中，`位置`极为重要。
 
@@ -37,7 +37,7 @@ WTF!
 
 ![](/assets/img/2021-06-14/wtfGirl.jpeg)
 
-## Step 1: 干掉原有的滚动条
+### Step 1: 干掉原有的滚动条
 
 首先我们先搭个架子
 
@@ -74,7 +74,7 @@ export default App;
 }
 ```
 
-## Step2: 构建自己的 scrollbar 组件
+### Step2: 构建自己的 scrollbar 组件
 
 首先我们先来明确一下滚动条由哪几部分组成。
 
@@ -172,7 +172,7 @@ export default Scrollbar;
 
 这样一个大概的滚动条组件架子就搭起来了。但是现在显然是没有任何效果的，我们 hover 上去只能看到滚动条的轨道却看不到滚动条本身的样子。
 
-## Step3: 计算 dragger 的高度
+### Step3: 计算 dragger 的高度
 
 刚才说过滚动条的 dragger 的高度其实是与`滚动条容器的高度(scrollbarContainerHeight)` & `滚动条真实的高度(scrollbarRealHeight)`有关。
 
@@ -205,7 +205,7 @@ const draggerHeight = useMemo(() => {
 
 ![](/assets/img/2021-06-14/draggerHeight.gif)
 
-## Step 4: 让滚动条动起来
+### Step 4: 让滚动条动起来
 
 在上一步我们让滚动条的 dragger 有了正确的高度，但是滚动内容时滚动条显然还不会动，我们接下来就让他动起来！
 
@@ -261,7 +261,7 @@ const draggerTop = useMemo(() => {
 
 我们漏了一个显示滚动条的逻辑（目前只有 hover 上去显示的逻辑）
 
-## Step5: 滚动条的显隐
+### Step5: 滚动条的显隐
 
 滚动条什么时候需要显示呢？
 
@@ -345,7 +345,7 @@ const Scrollbar = ({
 
 但是还差亿点点就是滚动条我们是可以用鼠标拖拽的。
 
-## Step 6: 可拖拽的滚动条
+### Step 6: 可拖拽的滚动条
 
 首先我们需要监听到鼠标按下的事件
 
@@ -444,10 +444,10 @@ const handleScrollTo = useCallback((offset) => {
 
 ![](/assets/img/2021-06-14/dragging.gif)
 
-# 源代码
+## 源代码
 
 - [点击这里]()
 
-# 参考
+## 参考
 
 说实话这次没啥可以参考的东西...跟着思路一步步来即可。

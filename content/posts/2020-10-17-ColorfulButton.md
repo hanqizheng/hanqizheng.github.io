@@ -14,7 +14,7 @@ excerpt: 其实这一期我早就想写了，应该是年初的时候，那会�
 感谢春雷的提示🎉🎉
 
 
-# 契机
+## 契机
 
 其实就是偶然需要重新登陆一下QQ，结果看到了这么一个Button。
 
@@ -22,7 +22,7 @@ excerpt: 其实这一期我早就想写了，应该是年初的时候，那会�
 
 > GIF的画质实在不行，可以自行QQ退出登录看一下😂
 
-### 可以看到这个Button的效果是`背景是渐变色且是动态的`。
+#### 可以看到这个Button的效果是`背景是渐变色且是动态的`。
 
 
 ---
@@ -33,7 +33,7 @@ excerpt: 其实这一期我早就想写了，应该是年初的时候，那会�
 
 别的不说，引出两个秘密武器！！😄
 
-# CSS filter: hue-rotate()
+## CSS filter: hue-rotate()
 
 引用
 
@@ -41,7 +41,7 @@ excerpt: 其实这一期我早就想写了，应该是年初的时候，那会�
 > 
 > HSL (which stands for Hue Saturation Lightness) is a hue-based representation of the RGB color space of computer graphics. The HSL model is widely considered to be more intuitive than the RGB model. This is because, the HSL model allows you to select a base hue, and then adjust its saturation and lightness as desired.
 
-## 大致翻译一下 😅
+### 大致翻译一下 😅
 
 HSL代表的是
 
@@ -60,7 +60,7 @@ H代表`hue`也就是`色调`。以这个色环的最上部为`0 deg`，也就�
 
 
 
-# 我们来先写一个小Demo来看一下
+## 我们来先写一个小Demo来看一下
 
 依旧是常规操作
 
@@ -157,7 +157,7 @@ const handleMouseMove = useCallback((e) => {
 默认给这个圆的背景色`red`，让其从`0deg`开始，可以看到随着`hue-rotate()`的参数不断的改变，颜色也随之改变。
 
 
-# 生活处处都用到的`高斯模糊`, filter: blur()
+## 生活处处都用到的`高斯模糊`, filter: blur()
 
 高斯模糊在生活中很多地方用到，比如`ios系统`就有太多太多高斯模糊了
 
@@ -176,11 +176,11 @@ const handleMouseMove = useCallback((e) => {
 ![](/assets/img/2020-10-17/blur.gif)
 
 
-# 进入今天主题
+## 进入今天主题
 
 介绍了两个秘密武器之后，我们接下来用CSS写一下这个按钮。
 
-## 其实原理非常非常简单
+### 其实原理非常非常简单
 
 我们先来看一张图
 
@@ -192,7 +192,7 @@ const handleMouseMove = useCallback((e) => {
 - 而每个`animation`内部其实改变的就是`颜色`以及`让圆圈模糊后和背景融合`
 - 给button本身一个`背景色`
 
-## 1. 先来一个Button本身
+### 1. 先来一个Button本身
 
 ```jsx
 {% raw %}
@@ -217,7 +217,7 @@ const handleMouseMove = useCallback((e) => {
 
 ![](/assets/img/2020-10-17/step1.jpg)
 
-## 2. 然后我们先来一个spot(也就是上图中蓝色的圆)
+### 2. 然后我们先来一个spot(也就是上图中蓝色的圆)
 
 我们先让他的`色调`随时间改变。因为我默认按照`red`为起始色，所以我需要按照`上方的色环图`，可以看出蓝色主要聚集在`200 - 240 deg`这个范围。
 
@@ -262,7 +262,7 @@ const handleMouseMove = useCallback((e) => {
 
 ![](/assets/img/2020-10-17/step2.gif)
 
-## 3. 接下来请出高斯模糊
+### 3. 接下来请出高斯模糊
 
 ```css
 {% raw %}
@@ -284,7 +284,7 @@ const handleMouseMove = useCallback((e) => {
 
 ![](/assets/img/2020-10-17/step3.gif)
 
-## 4. 再多来几个这样的Spot
+### 4. 再多来几个这样的Spot
 
 ```css
 .spot1 {
@@ -363,9 +363,9 @@ overflow: hidden;
 
 ![](/assets/img/2020-10-17/step5.gif)
 
-### 啊哈😁，已经有初步的样子了。
+#### 啊哈😁，已经有初步的样子了。
 
-## step5. 让背景色动起来
+### step5. 让背景色动起来
 
 其实就是在动画中加上位移
 
@@ -394,7 +394,7 @@ overflow: hidden;
 }
 ```
 
-### Spot有些不太显眼，我们也改进一下～👻
+#### Spot有些不太显眼，我们也改进一下～👻
 
 为了让效果更平滑舒适，让Button的背景色也在不同的蓝色之间动起来，从而突出动态的背景Spot。
 
@@ -436,17 +436,17 @@ import arrow from './arrow.svg'
 {% endraw %}
 ```
 
-# 最终效果
+## 最终效果
 
 ![](/assets/img/2020-10-17/result.gif)
 
 这样我们就大功告成了！！🎉🎉
 
-# 相关源码
+## 相关源码
 
 [点这里！！](https://github.com/hanqizheng/hanqizheng.github.io/tree/master/assets/sourceCode/colorfulButton)
 
-# 相关参考
+## 相关参考
 
 - [CSS Background 之神奇渐变色](https://juejin.im/entry/6844903463273365517)
 - [CSS hue-rotate() Function](https://www.quackit.com/css/functions/css_hue-rotate_function.cfm)

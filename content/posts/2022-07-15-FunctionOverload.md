@@ -13,7 +13,7 @@ excerpt: "`TS思考`系列又与大家准时见面了～(其实是我没有别�
 
 今天来看一看我一直搞不懂的，`函数重载`。
 
-# 什么时候要用到函数重载呢？
+## 什么时候要用到函数重载呢？
 
 其实我在看官网例子的时候，一头雾水
 
@@ -115,7 +115,7 @@ const result2 = getUserInfo('2');
 
 可以看到重载后，返回值的类型是可以明确推断出来的。
 
-# 重载的顺序
+## 重载的顺序
 
 TypeScript 重载的过程是，拿传入的参数和重载的方法签名列表中由上往下逐个匹配，直到找到一个完全匹配的函数签名，否则报错。所以推荐的做法是将签名更加具体的重载放上面，不那么具体的放后面。
 
@@ -151,7 +151,7 @@ const str: string = A.reduce((str, a) => `${str} ${a.toString()}`, '')
 
 所以函数重载的签名顺序也有学问哈哈哈。
 
-# 参考
+## 参考
 
 - [Function Overloads](https://www.typescriptlang.org/docs/handbook/2/functions.html#function-overloads)
 - [Overloaded Functions](https://www.typescriptlang.org/docs/handbook/declaration-files/by-example.html#overloaded-functions)

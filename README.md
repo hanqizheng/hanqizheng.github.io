@@ -23,12 +23,18 @@ author: "Qizheng Han"
 publishedAt: "2026-06-01"
 status: "published"
 excerpt: "Short summary"
+cover: "/covers/my-post.webp"
+coverPosition: "center"
+coverTextTone: "dark"
+featured: false
 ---
 
 Raw Markdown content goes here.
 ```
 
-`locale` can be `zh` or `en`. `translationKey` groups translated versions of the same article; keep it identical in both files. If both language versions can share the same URL slug, `translationKey` and `slug` can be the same value. If the English and Chinese URL slugs differ, keep `translationKey` stable so the language switch can redirect readers to the matching translation.
+`locale` can be `zh` or `en`. `translationKey` groups translated versions of the same article; keep it identical in both files. If both language versions can share the same URL slug, `translationKey` and `slug` can be the same value. If the English and Chinese URL slugs differ, keep `translationKey` stable so localized canonical URLs and alternate-language metadata remain aligned.
+
+The complete authoring contract is documented in [`docs/post-authoring.md`](docs/post-authoring.md), with a copyable template at [`content/post-template.zh.md`](content/post-template.zh.md). It defines the static cover fields, editorial `featured` flag, heading hierarchy, normal images, sticky full-width banners, and looping image groups. Covers live under `public/covers/` and are deployed as static Vercel assets; Markdown and the database store only their root-relative paths and presentation metadata.
 
 Publish through Git:
 
@@ -42,7 +48,7 @@ GitHub Actions syncs Markdown into Supabase. The Markdown body is stored as raw 
 
 Published posts use canonical URLs like `/zh/posts/my-post` and `/en/posts/my-post`. Legacy URLs such as `/posts/my-post` and `/2026/06/01/MyPost.html` redirect permanently to the canonical localized post URL.
 
-Before syncing bilingual posts to an existing database, apply the migrations in `supabase/migrations` so the `posts` table has `locale` and `translation_key`.
+Before syncing content to an existing database, apply every migration in `supabase/migrations` so the `posts` table includes localization and cover presentation fields.
 
 ## Development
 
@@ -76,7 +82,7 @@ Environment variables:
 
 ## Deployment (Vercel)
 
-The site is server-rendered (App Router) and reads from Supabase at request time, so it runs on Vercel rather than GitHub Pages. Once the repo is connected to Vercel, every push to `master` deploys to production and every pull request gets its own preview deployment — no extra workflow is needed.
+The site is server-rendered (App Router) and reads from Supabase at request time, so it runs on Vercel rather than GitHub Pages. Published post reads use a five-minute server data cache; `POST /api/posts` invalidates that cache immediately after a successful publish. List queries fetch only card and metadata fields, while full Markdown is loaded only for an article page and rendered on the server. Once the repo is connected to Vercel, every push to `master` deploys to production and every pull request gets its own preview deployment — no extra workflow is needed.
 
 One-time setup:
 
@@ -137,7 +143,7 @@ After the first production deploy, the publishing loop is fully automatic: commi
 curl -X POST "$SITE_URL/api/posts" \
   -H "Authorization: Bearer $BLOG_WRITE_TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{"title":"Hello","contentMarkdown":"# Hello\n\nRaw markdown."}'
+  -d '{"title":"Hello","contentMarkdown":"Opening paragraph.\n\n## Section\n\nRaw markdown.","cover":"/covers/hello.webp","coverTextTone":"dark","featured":true}'
 ```
 
 The OpenAPI schema is available at `/openapi.json`.

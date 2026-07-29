@@ -1,6 +1,6 @@
 import { PostList } from "@/components/PostList";
+import { listCachedPublishedPosts } from "@/lib/cached-posts";
 import { getDictionary, localizedAlternates, localeHomePath, type Locale } from "@/lib/i18n";
-import { listPublishedPosts } from "@/lib/posts";
 import type { Metadata } from "next";
 
 export function homeMetadata(locale: Locale): Metadata {
@@ -17,7 +17,7 @@ export function homeMetadata(locale: Locale): Metadata {
 }
 
 export async function LocalizedHomePage({ locale }: { locale: Locale }) {
-  const posts = await listPublishedPosts(locale);
+  const posts = await listCachedPublishedPosts(locale);
 
   return <PostList posts={posts} locale={locale} />;
 }

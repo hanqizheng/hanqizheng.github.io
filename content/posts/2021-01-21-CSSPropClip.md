@@ -15,7 +15,7 @@ excerpt: 最近的我，有点才思枯竭的感觉🤯。其实就是拖延。 
 
 今天我们引来了一个新的神级属性(自封)`clip`，ta～da～! 
 
-## 先来个简单的
+### 先来个简单的
 
 ![](/assets/img/2021-01-24/text.jpg)
 
@@ -23,7 +23,7 @@ excerpt: 最近的我，有点才思枯竭的感觉🤯。其实就是拖延。 
 
 对，它是彩色的。
 
-## background-clip
+### background-clip
 
 秘密就在这个属性`background-clip`。
 
@@ -58,7 +58,7 @@ excerpt: 最近的我，有点才思枯竭的感觉🤯。其实就是拖延。 
 
 `gradient`系列属性是`background-image`的一种属性！
 
-### 这个属性是干什么的？
+#### 这个属性是干什么的？
 
 那么我更喜欢从`clip`这个词说起。
 
@@ -135,7 +135,7 @@ excerpt: 最近的我，有点才思枯竭的感觉🤯。其实就是拖延。 
 
   ![](/assets/img/2021-01-24/textTransparent.jpg)
 
-## 当然还有另一种实现彩色字体的方法 - mask
+### 当然还有另一种实现彩色字体的方法 - mask
 
 CSS中的mask属性允许用户屏蔽或剪裁特定点的图像来实现，部分或完全隐藏某个元素的可见性。
 
@@ -170,7 +170,7 @@ CSS中的mask属性允许用户屏蔽或剪裁特定点的图像来实现，部�
 
 ![](/assets/img/2021-01-24/maskText.jpg)
 
-# clip-path
+## clip-path
 
 接下来引出第二个神奇的属性`clip-path`。这个属性个人认为比`background-clip`还要神奇一些。
 
@@ -192,13 +192,13 @@ CSS中的mask属性允许用户屏蔽或剪裁特定点的图像来实现，部�
 - `basic-shape`接受一些基本图形，比如circle(), polygon()等。
 - `geometry-box`这个属性我没弄明白有什么含义。
 
-## 用clip-path制作一个YouTube的暂停/播放按钮动画
+### 用clip-path制作一个YouTube的暂停/播放按钮动画
 
 先看一下YouTube的暂停/播放按钮效果是什么样的。
 
 ![](./../assets/img/2021-01-24/YouTubeButton.gif)
 
-### 首先我需要用`clip-path`画两个矩形。
+#### 首先我需要用`clip-path`画两个矩形。
 
 ```html
 <div className="buttonBody">
@@ -233,7 +233,7 @@ CSS中的mask属性允许用户屏蔽或剪裁特定点的图像来实现，部�
 
 ![](/assets/img/2021-01-24/two.jpg)
 
-### 然后我要让两个矩形分别动起来。
+#### 然后我要让两个矩形分别动起来。
 
 因为是demo我就`不用click`来触发事件而是用`hover`。
 
@@ -337,7 +337,7 @@ CSS中的mask属性允许用户屏蔽或剪裁特定点的图像来实现，部�
 ![](/assets/img/2021-01-24/finally.gif)
 
 
-# 参考
+## 参考
 
 - [简单说 通过 CSS 实现 文字渐变色 的两种方式](https://segmentfault.com/a/1190000011882933)
 - [CSS —— gradient 渐变专题](https://juejin.cn/post/6844903593800105992)

@@ -32,6 +32,24 @@ export function GET(request: Request) {
                     },
                     author: { type: "string", default: "Qizheng Han" },
                     excerpt: { type: ["string", "null"] },
+                    cover: {
+                      type: ["string", "null"],
+                      description: "Root-relative path to a static asset under public/."
+                    },
+                    coverPosition: {
+                      type: ["string", "null"],
+                      description: "CSS object-position used when the cover is cropped."
+                    },
+                    coverTextTone: {
+                      type: ["string", "null"],
+                      enum: ["light", "dark", null],
+                      description: "Foreground tone used for title and metadata over the cover."
+                    },
+                    featured: {
+                      type: "boolean",
+                      default: false,
+                      description: "Editorial placement in the featured section; requires a cover."
+                    },
                     contentMarkdown: {
                       type: "string",
                       description: "Raw Markdown. Whitespace, indentation, and newlines are preserved."

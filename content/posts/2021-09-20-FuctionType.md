@@ -15,11 +15,11 @@ excerpt: 已经是 TS 思考篇的第三篇了，今天来说说`函数`。 自�
 
 所以今天，就来看一看之前一直弄不懂的一些概念和新学到的在写 TS 时，函数相关的注意事项。
 
-# What is call signature?
+## What is call signature?
 
 一直不太明白`call signature`的作用是什么。
 
-## 先来看看什么是call signature
+### 先来看看什么是call signature
 
 ```ts
 interface TestType {
@@ -53,7 +53,7 @@ type TestType2 = (arg1: number) => number;
 
 我们不能忘了`interface`本身是定义一个对象的类型，它能做的事情，比单纯的函数类型的定义`要多`，所以这就是为什么call signature存在的意义了。
 
-# 为什么带泛型的箭头函数必须加限制？
+## 为什么带泛型的箭头函数必须加限制？
 
 其实这个问题应该被再细化一些：
 
@@ -140,9 +140,9 @@ return (
 ，仅此而已。
 
 
-# Generic Function 的好习惯
+## Generic Function 的好习惯
 
-## 坐实类型参数
+### 坐实类型参数
 
 ```ts
 function firstElement1<Type>(arr: Type[]) {
@@ -165,7 +165,7 @@ const b = firstElement2([1, 2, 3]);
 
 所以在写函数时，能单纯的使用`类型本身`，就不要去限制它。
 
-## 用更少的类型参数
+### 用更少的类型参数
 
 还是老样子，先上例子
 
@@ -190,7 +190,7 @@ function test2<Type, Func extends (arg: Type) => boolean>(
 
 这样是完全没有必要的。
 
-## 类型参数至少能接收2种不同的类型
+### 类型参数至少能接收2种不同的类型
 
 ```ts
 function tired<Str extends string>(s: Str) {
@@ -204,7 +204,7 @@ greet("but world sucks.");
 
 例子中`Str`这个类型参数已经被限制为`仅是string`类型，完全失去了`泛型`基本的意义。
 
-# 参考
+## 参考
 
 - [More on Functions](https://www.typescriptlang.org/docs/handbook/2/functions.html)
 - [Typescript - JSX](https://www.typescriptlang.org/docs/handbook/jsx.html#function-component)

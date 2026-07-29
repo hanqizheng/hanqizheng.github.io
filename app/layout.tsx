@@ -3,6 +3,7 @@ import { ThemeScript } from "@/components/ThemeScript";
 import { getDictionary } from "@/lib/i18n";
 import type { Metadata } from "next";
 import "./globals.css";
+import "./editorial.css";
 
 const defaultDictionary = getDictionary("zh");
 
@@ -24,7 +25,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <SiteHeader />
         <main className="site-shell">{children}</main>
         <footer className="site-footer">
-          <span>&copy; {new Date().getFullYear()} Qizheng Han.</span>
+          <div className="site-footer-inner">
+            <span>&copy; {new Date().getFullYear()} Qizheng Han.</span>
+          </div>
         </footer>
       </body>
     </html>

@@ -13,7 +13,7 @@ excerpt: 久违的`TS思考`系列又来了。 今天带来的是`索引签名(I
 
 今天带来的是`索引签名(Index Signatures)`。
 
-# 什么是索引签名？
+## 什么是索引签名？
 
 一说起`索引签名(Index Signatures)`可能觉得自己没听说过。
 
@@ -35,7 +35,7 @@ interface Test {
 
 有时候你不知道类型中所有属性的属性名，但你知道他们所对应的类型(shape of the values)，这个时候你就可以用`索引签名`来描述它们。
 
-## index 的类型并非支持所有
+### index 的类型并非支持所有
 
 ![](/assets/img/2022-06-25/onlyType.png)
 
@@ -49,7 +49,7 @@ interface Test {
 
 我想你一定注意到了`template literal type`，这个跟今天的重点有点关系。
 
-## 能同时配置 2 个 index signature 吗？
+### 能同时配置 2 个 index signature 吗？
 
 答案是可以的。但是有一定的限制。
 
@@ -107,7 +107,7 @@ interface Test {
 
 ![](/assets/img/2022-04-27/wrongSubType.jpg)
 
-# Record<Keys, Type>
+## Record<Keys, Type>
 
 先看一个例子
 
@@ -134,7 +134,7 @@ interface C {
 type C = Record<"a" | "b", number>;
 ```
 
-## 小插曲 Record & type & interface
+### 小插曲 Record & type & interface
 
 上例子
 
@@ -169,11 +169,11 @@ interface B {
 }
 ```
 
-# 映射类型
+## 映射类型
 
 今天的主要谈论对象是`映射类型`。
 
-## 什么是映射类型？
+### 什么是映射类型？
 
 要解释映射类型，我想用一个实际场景来解释一下。
 
@@ -259,7 +259,7 @@ type NewApprovalOption = {
 因为`APPROVAL_STATUS`通过`typeof`与`as const`变成字面量类型之后，就可以通过它的属性，作为新类型的属性，而新类型属性所对应的值则可以自己定义新的类型。
 
 
-## 一些修饰符
+### 一些修饰符
 
 接触过类型编程的小伙伴其实可能已经用过映射类型了，只不过不知道这种操作是映射类型。
 
@@ -282,7 +282,7 @@ type B = MyReadOnly<A>;
 
 ![](/assets/img/2022-06-25/readonly.png)
 
-## as 重新命名属性
+### as 重新命名属性
 
 可能上面的例子，每个类型的属性想更突出他本身的作用，那么就可以通过`as` + `模版字符串`
 
@@ -294,7 +294,7 @@ type NewApprovalStatus = {
 
 ![](/assets/img/2022-06-25/asName.png)
 
-## 映射不同的属性类型
+### 映射不同的属性类型
 
 可能并不是每个属性所对应的类型都是一样的，这种情况反而多一些。不过这样也能用映射类型
 
@@ -309,7 +309,7 @@ type NewApprovalStatus = {
 我们可以通过一些类型判断甚至写别的范型来完成更复杂的类型推倒。
 
 
-# 参考
+## 参考
 
 - [Index Signatures](https://www.typescriptlang.org/docs/handbook/2/objects.html#index-signatures)
 - [Mapped Types](https://www.typescriptlang.org/docs/handbook/2/mapped-types.html)

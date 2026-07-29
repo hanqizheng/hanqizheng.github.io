@@ -1,21 +1,45 @@
+import { PUBLISHED_POSTS_CACHE_TAG } from "@/lib/cached-posts";
 import { createApiPost, getPostBySlugOrCanonicalSlug } from "@/lib/posts";
 import { DEFAULT_LOCALE } from "@/lib/i18n";
 import { canonicalPostSlug, slugify } from "@/lib/slug";
+import { revalidateTag } from "next/cache";
 import { z } from "zod";
 
 export const dynamic = "force-dynamic";
 
-const createPostSchema = z.object({
-  title: z.string().min(1),
-  slug: z.string().min(1).optional(),
-  locale: z.enum(["zh", "en"]).optional(),
-  translationKey: z.string().min(1).optional(),
-  author: z.string().min(1).optional(),
-  excerpt: z.string().nullable().optional(),
-  contentMarkdown: z.string().min(1),
-  status: z.enum(["draft", "published"]).optional(),
-  publishedAt: z.string().datetime().or(z.string().regex(/^\d{4}-\d{2}-\d{2}$/)).optional()
-});
+const createPostSchema = z
+  .object({
+    title: z.string().min(1),
+    slug: z.string().min(1).optional(),
+    locale: z.enum(["zh", "en"]).optional(),
+    translationKey: z.string().min(1).optional(),
+    author: z.string().min(1).optional(),
+    excerpt: z.string().nullable().optional(),
+    cover: z.string().trim().regex(/^\/(?!\/)/, "cover must be a root-relative public path").nullable().optional(),
+    coverPosition: z.string().trim().min(1).max(80).nullable().optional(),
+    coverTextTone: z.enum(["light", "dark"]).nullable().optional(),
+    featured: z.boolean().optional(),
+    contentMarkdown: z.string().min(1),
+    status: z.enum(["draft", "published"]).optional(),
+    publishedAt: z.string().datetime().or(z.string().regex(/^\d{4}-\d{2}-\d{2}$/)).optional()
+  })
+  .superRefine((value, context) => {
+    if (value.cover && !value.coverTextTone) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["coverTextTone"],
+        message: "covers require an explicit coverTextTone"
+      });
+    }
+
+    if (value.featured && !value.cover) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["cover"],
+        message: "featured posts require a cover"
+      });
+    }
+  });
 
 export async function POST(request: Request) {
   const expectedToken = process.env.BLOG_WRITE_TOKEN;
@@ -56,10 +80,16 @@ export async function POST(request: Request) {
     translationKey,
     author: body.author ?? "Qizheng Han",
     excerpt: body.excerpt ?? null,
+    coverSrc: body.cover ?? null,
+    coverPosition: body.coverPosition ?? null,
+    coverTextTone: body.coverTextTone ?? null,
+    featured: body.featured ?? false,
     contentMarkdown: body.contentMarkdown,
     status: body.status ?? "published",
     publishedAt: normalizePublishedAt(body.publishedAt)
   });
+
+  revalidateTag(PUBLISHED_POSTS_CACHE_TAG);
 
   return Response.json({ post }, { status: 201 });
 }

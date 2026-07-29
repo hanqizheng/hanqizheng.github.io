@@ -11,7 +11,7 @@ excerpt: "`类遗产` 不是什么高级的词汇，所有 TS 类相关的都在
 
 `类遗产` 不是什么高级的词汇，所有 TS 类相关的都在这里了～
 
-# implement
+## implement
 
 `implement` 可以用来检测一个类是否符合一个具体的 `interface` 的定义。
 
@@ -41,7 +41,7 @@ class Ball implements Pingable {
 
 答案是 可以的！
 
-## implement 只检查不做其他
+### implement 只检查不做其他
 
 ```ts
 interface Checkable {
@@ -75,7 +75,7 @@ c.y = 10;
 
 y 属性没有因为 类C implement A 就自动生成。
 
-# extends
+## extends
 
 `extends` 可能 更像我们平时理解的 `继承`。
 
@@ -123,7 +123,6 @@ class Derived extends Base {
 ```
 
 
-# 参考
+## 参考
 
 - [Class Heritage](https://www.typescriptlang.org/docs/handbook/2/classes.html#class-heritage)
-- 

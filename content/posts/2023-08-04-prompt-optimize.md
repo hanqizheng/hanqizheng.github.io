@@ -4,6 +4,10 @@ slug: prompt-optimize
 author: Qizheng Han
 publishedAt: 2023-08-04
 status: published
+cover: /covers/prompt-optimize.webp
+coverPosition: center
+coverTextTone: dark
+featured: true
 excerpt: "到了 CodeReviewGPT 的第二期分享了（自己鼓掌👏） 一个好消息和一个坏消息：
   坏消息是，这一期技术成分很低，**玄学**指数很高。 好消息是，玄学看起来更有趣些，只是很难解释。 先说说背景
   与其说是背景，更像是解释一下这篇文章诞生的原因。 在第一期: CodeReviewGPT 工作流程的分享中，有说到 "
@@ -18,7 +22,7 @@ excerpt: "到了 CodeReviewGPT 的第二期分享了（自己鼓掌👏） 一�
 
 好消息是，玄学看起来更有趣些，只是很难解释。
 
-# 先说说背景
+## 先说说背景
 
 与其说是背景，更像是解释一下这篇文章诞生的原因。
 
@@ -34,18 +38,18 @@ excerpt: "到了 CodeReviewGPT 的第二期分享了（自己鼓掌👏） 一�
 
 该如何给 GPT-3.5 提要求？？？如何让 GPT-3.5 按照要求回答问题？？？
 
-# CR 是典型的补全场景
+## CR 是典型的补全场景
 
 很多小伙伴应该都用过 [ChatGPT](https://openai.com/chatgpt) 。使用场景非常之简单（不包括后续出现的Code Interpreter），就是对话，或者说聊天。
 
-![](/assets/img/2023-08-04/chat.png)
+![ChatGPT 的对话界面](/assets/img/2023-08-04/chat.png "banner")
 
 但是在 GPT-3.5 模型所对应提供的 API 中，是有两种类型的 API：
 
 - [chat](https://platform.openai.com/docs/api-reference/chat)： Given a list of messages comprising a conversation, the model will return a response.
 - [completions](https://platform.openai.com/docs/api-reference/completions): Given a prompt, the model will return one or more predicted completions, and can also return the probabilities of alternative tokens at each position.
 
-## Completion - 补全
+### Completion - 补全
 
 跟 chat 模式不同的是，补全模式仅限一次对话，也就是用户只会发出一句 prompt，GPT 也只会回复一次答案，然后结束。
 
@@ -55,7 +59,7 @@ excerpt: "到了 CodeReviewGPT 的第二期分享了（自己鼓掌👏） 一�
 
   
 
-# 为什么说是玄学？
+## 为什么说是玄学？
 
 因为 GPT-3.5 这个模型是一个黑盒。
 
@@ -69,11 +73,11 @@ excerpt: "到了 CodeReviewGPT 的第二期分享了（自己鼓掌👏） 一�
 为了防止 CodeReviewGPT 的回答过于随机，要做的就是不断的通过各种方式**优化 prompt** 。
 
 
-# prompt优化平时都在做什么？
+## prompt优化平时都在做什么？
 
 如何对 prompt 进行优化，我会以几个场景来展示。
 
-## 太多无用 comment
+### 太多无用 comment
 
 
 有的 MR 收到了 130+ 条的 comment，然后没有一条是有用的。我知道这样的结果确实是很恼人。
@@ -91,7 +95,7 @@ excerpt: "到了 CodeReviewGPT 的第二期分享了（自己鼓掌👏） 一�
 在 prompt 中明确的添加 CR 的规范之后，要求 GPT 仅关注规范内提到的问题，效果就好非常多了。（prompt中要配套添加严格遵守规范 CR 代码的提示）
 
 
-## 对一段注释的每一行进行评论
+### 对一段注释的每一行进行评论
 
 先前遇到的一个场景， CodeReviewGPT 对着一段多行注释展开了猛烈攻击，足足评论了 18 条完全相同的 comment（掀桌.jpg。
 
@@ -113,7 +117,7 @@ excerpt: "到了 CodeReviewGPT 的第二期分享了（自己鼓掌👏） 一�
 
 ![](/assets/img/2023-08-04/fixExample.png)
 
-## few shots 效果好于 zero shot
+### few shots 效果好于 zero shot
 
 这里的 few shots 和 zero shot 是指给 GPT 的 prompt 中是否携带一些解释性的例子🌰。
 
@@ -135,7 +139,7 @@ GPT 只能按照自己的方式去判断什么事魔法字符串。
 效果却好了很多，GPT 会掠过一些之前会经常犯错的地方。
 
 
-# 感受
+## 感受
 
 为了让大家更好的理解，我并没有贴出任何详细的代码片段，仅抽象其中的优化方式。
 
