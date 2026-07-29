@@ -1,4 +1,10 @@
-import { getPostgresPool, type PostRecord, type PostStatus } from "@/lib/db";
+import {
+  getPostgresPool,
+  type PostCoverTextTone,
+  type PostRecord,
+  type PostStatus,
+  type PostSummary
+} from "@/lib/db";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n";
 import { canonicalPostSlug } from "@/lib/slug";
 
@@ -9,22 +15,30 @@ type PostRow = PostRecord & {
 };
 
 type PostSlugRow = Pick<PostRecord, "id" | "slug" | "translation_key">;
+type PostSummaryRow = Omit<PostSummary, "created_at" | "published_at" | "updated_at"> & {
+  created_at: Date | string;
+  published_at: Date | string | null;
+  updated_at: Date | string;
+};
+
+const POST_SUMMARY_COLUMNS =
+  "id, slug, locale, translation_key, title, author, excerpt, cover_src, cover_position, cover_text_tone, featured, status, published_at, created_at, updated_at, source";
 
 export async function listPostgresPublishedPosts() {
-  const { rows } = await getPostgresPool().query<PostRow>(
-    "select * from public.posts where status = 'published' order by published_at desc nulls last"
+  const { rows } = await getPostgresPool().query<PostSummaryRow>(
+    `select ${POST_SUMMARY_COLUMNS} from public.posts where status = 'published' order by published_at desc nulls last`
   );
 
-  return rows.map(normalizePostRow);
+  return rows.map(normalizePostSummaryRow);
 }
 
 export async function listPostgresPublishedPostsByLocale(locale: Locale) {
-  const { rows } = await getPostgresPool().query<PostRow>(
-    "select * from public.posts where status = 'published' and locale = $1 order by published_at desc nulls last",
+  const { rows } = await getPostgresPool().query<PostSummaryRow>(
+    `select ${POST_SUMMARY_COLUMNS} from public.posts where status = 'published' and locale = $1 order by published_at desc nulls last`,
     [locale]
   );
 
-  return rows.map(normalizePostRow);
+  return rows.map(normalizePostSummaryRow);
 }
 
 export async function listPostgresPosts(locale?: Locale) {
@@ -100,6 +114,10 @@ export async function createPostgresApiPost(input: {
   translationKey: string;
   author: string;
   excerpt: string | null;
+  coverSrc: string | null;
+  coverPosition: string | null;
+  coverTextTone: PostCoverTextTone | null;
+  featured: boolean;
   contentMarkdown: string;
   status: PostStatus;
   publishedAt: string;
@@ -113,12 +131,16 @@ export async function createPostgresApiPost(input: {
         translation_key,
         author,
         excerpt,
+        cover_src,
+        cover_position,
+        cover_text_tone,
+        featured,
         content_markdown,
         status,
         published_at,
         source
       )
-      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'api')
+      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 'api')
       returning *
     `,
     [
@@ -128,6 +150,10 @@ export async function createPostgresApiPost(input: {
       input.translationKey,
       input.author,
       input.excerpt,
+      input.coverSrc,
+      input.coverPosition,
+      input.coverTextTone,
+      input.featured,
       input.contentMarkdown,
       input.status,
       input.publishedAt
@@ -138,6 +164,15 @@ export async function createPostgresApiPost(input: {
 }
 
 function normalizePostRow(row: PostRow): PostRecord {
+  return {
+    ...row,
+    created_at: normalizeDate(row.created_at),
+    published_at: row.published_at ? normalizeDate(row.published_at) : null,
+    updated_at: normalizeDate(row.updated_at)
+  };
+}
+
+function normalizePostSummaryRow(row: PostSummaryRow): PostSummary {
   return {
     ...row,
     created_at: normalizeDate(row.created_at),

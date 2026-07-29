@@ -13,10 +13,11 @@
     "db:migrate": "node scripts/run-migration.mjs",
     "vercel:build": "node scripts/vercel-build.mjs",
     "sync:posts": "node scripts/sync-posts.mjs",
-    "validate:content": "node scripts/validate-content.mjs"
+    "validate:content": "node scripts/validate-content.mjs && node scripts/validate-markdown.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
+    "lucide-react": "^1.27.0",
     "next": "^15.0.3",
     "pg": "^8.20.0",
     "react": "^19.0.0",

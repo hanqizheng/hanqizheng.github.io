@@ -16,14 +16,14 @@ Severless的相关内容也是一个自己博客心愿单中的老钉子户了�
 也不由的就会把这件事拖延了。但是今天，我们拒绝❌拖延，node也好serverless也罢，我们就从一句`hello，world!`学起。
 
 
-# 总得来点概念
+## 总得来点概念
 
 感觉Serverless还是很有必要从基本概念聊起来(谁说我在混字数！！拖出去！)。咳～ 咱们继续。
 
 像我这样从0基础开始了解serverless的人，真的是看到这个词仅限会读阶段，完全一脸懵逼。
 
 
-## Serverless只是让Server became more and more less
+### Serverless只是让Server became more and more less
 
 猛地一看Serverless这个词，可能会认为是一个完全可以让前端抛弃后端技术栈的技术栈(滑稽.jpg)
 
@@ -37,9 +37,9 @@ Severless的相关内容也是一个自己博客心愿单中的老钉子户了�
 
 `服务端逻辑由开发者实现，运行在无状态的计算容器中，由事件触发`这些都是是什么意思呢？？？
 
-## Baas & Faas
+### Baas & Faas
 
-### Baas(Backend as a Service)
+#### Baas(Backend as a Service)
 
 意为`后端即服务`。它的应用架构由大量第三方云服务器和API组成的，使应用中关于服务器的逻辑和状态都由服务提供方来管理的。
 
@@ -55,7 +55,7 @@ Severless的相关内容也是一个自己博客心愿单中的老钉子户了�
 
 **Serverless 的内涵就是对全部底层资源和运维工作的封装，让开发者专注于业务逻辑。**
 
-### Faas(Function as a Service)
+#### Faas(Function as a Service)
 
 > FaaS 就是至今为止最细粒度的算力分配方式，我们先理解下什么叫算力分配方式。
 
@@ -76,11 +76,11 @@ Severless的相关内容也是一个自己博客心愿单中的老钉子户了�
 云上可以函数作为一个计算单元，变成每一次业务执行分配一次资源，没有业务就没有资源分配。所以，FaaS 是一个以函数（业务）为粒度的算力分配方式。
 
 
-# 枯燥的概念到此为止，我们来写点东西
+## 枯燥的概念到此为止，我们来写点东西
 
 哈哈哈哈哈哈今天我们就用`Serverless`来写一个hello，world。
 
-## 我终于用另一个命令搭项目了
+### 我终于用另一个命令搭项目了
 
 因为`Vercel`简单易上手，所以选择在Vercel上来完成本次的Serverless探索。
 
@@ -142,7 +142,7 @@ function Page() {
 
 ![](/assets/img/2020-11-15/vercel.jpg)
 
-# 准备工作已经就绪，来开始写今天的hello，world
+## 准备工作已经就绪，来开始写今天的hello，world
 
 今天我的主要目的就是通过Serverless来实现一下`渲染界面`，`模拟一个表单提交`。
 
@@ -242,7 +242,7 @@ function Page({ data }) {
 
 ![](/assets/img/2020-11-15/name.jpg)
 
-## 完成另一个目标，用Severless function来实现一个表单
+### 完成另一个目标，用Severless function来实现一个表单
 
 ```jsx
 {% raw %}
@@ -362,7 +362,7 @@ app.prepare()
 
 其实感觉也没有什么特别的，后续Serverless的学习还需要继续深入下去。
 
-# 小插曲
+## 小插曲
 
 只是顺便把自己的博客也部署到了vercel，期间踩了几个小坑，在这里顺便记录一下。
 
@@ -380,7 +380,7 @@ app.prepare()
   最终去掉，以`/assets`就好了！！！
 
 ![](/assets/img/2020-11-15/blog.jpg)
-# 参考
+## 参考
 
 - [入门 Serverless：如何实现 Hello World？](https://zhuanlan.zhihu.com/p/121544612)
 - [Serverless Handbook](https://jimmysong.io/serverless-handbook/)

@@ -1,6 +1,6 @@
 import { PostArticle } from "@/components/PostArticle";
+import { getCachedPublishedPostByAnyLocaleSlugOrCanonicalSlug } from "@/lib/cached-posts";
 import { createPostMetadata } from "@/lib/post-metadata";
-import { getPublishedPostByAnyLocaleSlugOrCanonicalSlug } from "@/lib/posts";
 import { canonicalPostSlug } from "@/lib/slug";
 import { postPath } from "@/lib/urls";
 import type { Metadata } from "next";
@@ -49,5 +49,5 @@ export default async function PostPage({ params }: Props) {
 
 const loadPost = cache(async (slugParam: string) => {
   const slug = canonicalPostSlug(decodeURIComponent(slugParam));
-  return getPublishedPostByAnyLocaleSlugOrCanonicalSlug(slug);
+  return getCachedPublishedPostByAnyLocaleSlugOrCanonicalSlug(slug);
 });

@@ -13,7 +13,7 @@ excerpt: "最近在写 Table 的过程中了解到一些关于TypeScript的`类�
 
 > 前排提示：这篇博客包含大量的`TypeScript`报错截图，可能会引起不适。
 
-# 类型和值
+## 类型和值
 
 其实在最开始接触`TS`的时候，没有`区分`值和类型的概念。
 
@@ -66,7 +66,7 @@ Because this is [literal type](https://www.typescriptlang.org/docs/handbook/2/ev
 
 可能听起来很玄学，但一旦有了类型的意识，就会越来越觉得TypeScript really make sense.
 
-# TypeScript !== JavaScript + type
+## TypeScript !== JavaScript + type
 
 往往在刚才我们说的`类型意识`之后，就会自然而然的认为`我只是在原来代码的基础上添加了类型`。
 
@@ -74,14 +74,14 @@ Because this is [literal type](https://www.typescriptlang.org/docs/handbook/2/ev
 
 我个人的理解就是，如果把`TypeScript`理解成`JavaScript + type`，那么这里的`type`在脱离了`JavaScript`之后就什么都不是，它`没办法独立`出来。
 
-**但`TypeScript`其实是一个具有``图林完备的编程语言**，大白话就是，想想之前的类型体操训练，写的每一行代码都是TS根本没JS啥事。
+**但`TypeScript`其实是一个具有`图灵完备`性的编程语言**，大白话就是，想想之前的类型体操训练，写的每一行代码都是TS根本没JS啥事。
 
 引用一张之前组里分享的图片，和一段话：
 
 ![](/assets/img/2021-07-25/tsjs.png)
 
 **TypeScript是隐藏在JavaScript中的关于type的编程语言。**有一种TypeScript让JavaScript更完整的感觉。
-# 什么是泛型？
+## 什么是泛型？
 
 可能在最开始的时候，我对泛型的理解是`复用`
 
@@ -106,7 +106,7 @@ type idString = (arg: string) => string;
 type id<T> = (arg: T) => T
 ```
 
-## 把泛型理解成函数
+### 把泛型理解成函数
 
 ![](/assets/img/2021-07-25/likeFunc.jpeg)
 
@@ -125,9 +125,9 @@ type ToValueUnion<T> = T[keyof T];
 
 **但是泛型真的不止于此**
 
-# 我学到的一些泛型的使用场景
+## 我学到的一些泛型的使用场景
 
-## Narrowing(紧化类型)
+### Narrowing(紧化类型)
 
 首先我想先解释一下什么是`Narrowing`。
 
@@ -170,7 +170,7 @@ function padLeft(padding: number | string, input: string) {
 
 而这个将一个更宽泛的范围变窄，变得更明确的过程就是`narrowing`。
 
-## 给自己的泛型加一些限制
+### 给自己的泛型加一些限制
 
 > [Generic Constraints](https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints)
 
@@ -199,7 +199,7 @@ function test<Type extends Array<any>>(arg: Type): Type {
 
 在我们限制了Type必须是Array类型时，一切都正常了。
 
-## 重头戏：组件中的类型反推断
+### 重头戏：组件中的类型反推断
 
 友情提示接下来的内容可能会让你有这种感觉
 
@@ -289,7 +289,7 @@ export default App;
 
 这个时候就要引入一个概念，叫做`泛型组件`
 
-## 泛型组件
+### 泛型组件
 
 ```tsx
 {% raw %}
@@ -371,7 +371,7 @@ export default App;
 ![](/assets/img/2021-07-25/infer1.png)
 ![](/assets/img/2021-07-25/infer2.png)
 
-### 到底是怎么做到的呢？
+#### 到底是怎么做到的呢？
 
 最开始让我迷惑的是
 
@@ -386,8 +386,7 @@ export default App;
 TypeScript会根据传入泛型的类型就开始推断，直到顺着prop在组件中的应用路径，走到了回到函数的参数类型这里。自然是可以推断出来。
 
 
-# 参考
+## 参考
 
 - [The TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
 - [你不知道的 TypeScript 泛型（万字长文，建议收藏）](https://segmentfault.com/a/1190000022993503)
-- 

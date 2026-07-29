@@ -1,7 +1,10 @@
 import { PostArticle } from "@/components/PostArticle";
+import {
+  getCachedPublishedPostByAnyLocaleSlugOrCanonicalSlug,
+  getCachedPublishedPostBySlugOrCanonicalSlug
+} from "@/lib/cached-posts";
 import { localeHomePath, type Locale } from "@/lib/i18n";
 import { createPostMetadata, localizedPostAlternates } from "@/lib/post-metadata";
-import { getPublishedPostByAnyLocaleSlugOrCanonicalSlug, getPublishedPostBySlugOrCanonicalSlug } from "@/lib/posts";
 import { canonicalPostSlug } from "@/lib/slug";
 import { postPath } from "@/lib/urls";
 import type { Metadata } from "next";
@@ -48,10 +51,10 @@ export async function LocalizedPostPage({ locale, params }: { locale: Locale; pa
 
 const loadPost = cache(async (locale: Locale, slugParam: string) => {
   const slug = canonicalPostSlug(decodeURIComponent(slugParam));
-  return getPublishedPostBySlugOrCanonicalSlug(slug, locale);
+  return getCachedPublishedPostBySlugOrCanonicalSlug(slug, locale);
 });
 
 const loadAnyLocalePost = cache(async (slugParam: string) => {
   const slug = canonicalPostSlug(decodeURIComponent(slugParam));
-  return getPublishedPostByAnyLocaleSlugOrCanonicalSlug(slug);
+  return getCachedPublishedPostByAnyLocaleSlugOrCanonicalSlug(slug);
 });

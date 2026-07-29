@@ -11,7 +11,7 @@ excerpt: 经典再现，这次，是 NewTable 的又一 milestone，支持`树�
 
 经典再现，这次，是 NewTable 的又一 milestone，支持`树形结构`的数据渲染。
 
-# 数据处理
+## 数据处理
 
 读过前两篇的你应该有记着，NewTable 的渲染逻辑是服务于虚拟渲染的。
 
@@ -22,7 +22,7 @@ excerpt: 经典再现，这次，是 NewTable 的又一 milestone，支持`树�
 答案是肯定的，因为我们有 `拍平数据` 这一法宝。
 
 
-## 注入信息
+### 注入信息
 
 树形结构有一些特别的地方就是为了后续的渲染和一些交互逻辑更方便，减少循环次数提高性能，尽量保证一次循环就能完成所有额外的拍平数据逻辑，而不需要后续再去循环操作什么。
 
@@ -48,7 +48,7 @@ interface TreeData {
 
 具体每个属性的详细使用方式会在对应功能章节解释。
 
-## 拍平数据
+### 拍平数据
 
 NewTable 的树形数据拍平使用的是 `递归`。
 
@@ -69,7 +69,7 @@ interface TableTreeProps {
 
 ![](/assets/img/2022-10-28/treeCell.png)
 
-## 拍平数据有一定缺陷
+### 拍平数据有一定缺陷
 
 拍平数据有一个很明显的缺陷就是会`干扰默认 index 作为 rowKey`的情况。
 
@@ -92,7 +92,7 @@ interface TableTreeProps {
 应对的策略就是在 props 的定义上就限制 `rowKey` 作为必填 props。
 
 
-# 自适应缩进距离
+## 自适应缩进距离
 
 缩进区域的宽度计算方式，这里就用到了第二个注入的属性`depth`：
 
@@ -123,7 +123,7 @@ interface TableTreeProps {
 
 可以看到缩进的`份数`是不会变的，改变的是 每一份的`缩进宽度`。
 
-# 展开收起
+## 展开收起
 
 展开收起是树的一个基本操作。
 
@@ -148,7 +148,7 @@ if (isExpand) {
 }
 ```
 
-# 拖拽
+## 拖拽
 
 拖拽是树的又一经典操作。
 
@@ -166,7 +166,7 @@ if (isExpand) {
 
 有了这些关键信息，组件使用者可以根据具体的业务场景来自行操作数据。
 
-# 参考
+## 参考
 
 - [NewTable技术说明](https://hanqizheng.vercel.app/2021/11/28/NewTable.html)
 - [NewTable分组功能](https://hanqizheng.vercel.app/2021/12/31/NewTableGroup.html)

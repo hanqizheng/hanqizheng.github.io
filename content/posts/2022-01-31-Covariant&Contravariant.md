@@ -14,7 +14,7 @@ TypeScript思考篇又来了
 之前听到同事分享`逆变与协变`，自己很感兴趣但一直没有去研究，今天就来康康～
 
 
-# extends
+## extends
 
 开始前可能要准备一下基础知识。`extends`关键字在TS中非常常用，它有如下几个功能
 
@@ -47,7 +47,7 @@ interface AddressWithUnit {
 
 有很多方法可以去简化这种写法。这时候引入一个插曲
 
-## 交叉类型和继承有什么区别
+### 交叉类型和继承有什么区别
 
 ```ts
 interface BasicAddress {
@@ -156,7 +156,7 @@ type B  = A & {
 > 而交叉类型更像是一种`平级关系`，两个类型的内容`取交集`就是新类型的结果。
 
 
-# 言归正传，什么是`子类型`
+## 言归正传，什么是`子类型`
 
 `子类型`大概有两种形式，第一种是对象类型
 
@@ -196,7 +196,7 @@ type B = 'a' | 'b' | 'c';
 
 **所以判断哪个是子类型，就是比较具体的那个类型**
 
-# 协变
+## 协变
 
 `子类型`的概念引入非常的重要，因为`协变`和`逆变`本身就是存在于`子类型(subType)`和`超类型(superType)`(就是我上面一直说的父类型，可能不够准确)之间。
 
@@ -229,7 +229,7 @@ const b: B[] = a;
 ```
 可以看到`A`是`B`的子类型，那么`A`类型的数组同样可以赋值给`B`类型的数组，这也是`满足协变`的
 
-# 逆变
+## 逆变
 
 还是来拿上面的例子来说
 
@@ -268,7 +268,7 @@ let dogFunc = (dog: Dog) => {
 **可以发现函数方面的赋值方向与变量`完全相反`，这就是`逆变`。父类型可以赋值给子类型**
 
 
-# TS类型系统
+## TS类型系统
 
 在一些其他编程语言里面，使用的是名义类型 `Nominal type`，比如我们在 `Java` 中定义了一个`class Parent`，在语言运行时就是有这个`Parent`的类型。因此如果有一个继承自`Parent`的`Child`类型，则`Child`类型和`Parent`就是类型兼容的。但是如果`两个不同的class`，即使他们`内部结构完全一样`，他俩也是`完全不同的两个类型`。
 
@@ -277,7 +277,7 @@ let dogFunc = (dog: Dog) => {
 因此在 TypeScript 中，判断两个类型是否兼容，`只需要`判断他们的“结构”是否一致，也就是说结构属性名和类型是否一致。而不需要关心他们的“名字”是否相同。
 
 
-# 协变逆变有啥用？
+## 协变逆变有啥用？
 
 首先，是为了保证`类型安全`
 
@@ -286,7 +286,7 @@ let dogFunc = (dog: Dog) => {
 
 
 
-# 参考
+## 参考
 
 - [Extending Types](https://www.typescriptlang.org/docs/handbook/2/objects.html#extending-types)
 - [extends Clauses](https://www.typescriptlang.org/docs/handbook/2/classes.html#extends-clauses)

@@ -15,13 +15,13 @@ excerpt: 芜湖！！！这是2020年的最后一篇博客啦！双dan快乐～ 
 
 > 因为是初学，文中有错误欢迎指正！
 
-# 我真的很想知道`webpack到底做了些什么`？
+## 我真的很想知道`webpack到底做了些什么`？
 
 你问我听说过 webpack 吗？我肯定会回答：“啊 webpack，听说过，就是那个`打包用的`。“
 
 其实内心慌的一 p，`打包？`打什么包？什么打包？为什么要打包，打包意义何在？！？！
 
-## 要从什么是 webpack 说起
+### 要从什么是 webpack 说起
 
 > webpack 官网给出的定义:
 >
@@ -38,7 +38,7 @@ webpack 是一个用于现代 JavaScript 应用程序的`静态模块打包工�
 
 但是貌似又回到了那个最初的问题？为什么需要 webpack 去打包这些静态资源？
 
-## 为什么需要 webpack 去打包一些东西？？
+### 为什么需要 webpack 去打包一些东西？？
 
 上面说到 webpack 是一个`bundler`，*为什么需要 webpack*这个问题就变成了*为什么我需要用 bundler*。
 
@@ -64,21 +64,21 @@ webpack 是一个用于现代 JavaScript 应用程序的`静态模块打包工�
 
 但是我要是日后再需要扩展代码呢？我还需要去`考虑新代码和其他已有代码的相互顺序`。是一个非常麻烦且不好维护的事情。
 
-### 要是我们可以通过一种依赖关系，告诉我某个文件依赖着另外哪些文件，这样我就可以知道引用的顺序了。
+#### 要是我们可以通过一种依赖关系，告诉我某个文件依赖着另外哪些文件，这样我就可以知道引用的顺序了。
 
 `This is where webpack steps in.`
 
-## ES6 or CommonJS 带来的转折
+### ES6 or CommonJS 带来的转折
 
 ES6的`import`和CommonJS的`require`带来了模块化的概念，也随之有了我们想要的那种文件与文件之间的引用关系。
 
 webpackl就借助他们来生成依赖关系。随之将他们打包到一起还能保证其执行的顺序。
 
-## 总结一下
+### 总结一下
 
 代码太多了，我们需要把代码按照某种约定分割，这样好扩展也好维护，但是写好的代码我们其实希望他最终是整合在一起的，这时候我们`需要把一个项目打包`，但是我们想打包之后的文件还能确保被分割的代码按照规定的顺序执行(或者说正常执行)。而webpack可以根据`模块化`的规定来生成`dependency graph`来确保这一点。
 
-## 接下来找点东西来打包
+### 接下来找点东西来打包
 
 ```
 $ mkdir webpack-test
@@ -198,7 +198,7 @@ export default Page1;
 
 ![](/assets/img/2020-12-28/init.jpg)
 
-## 迫不及待的想打包一下
+### 迫不及待的想打包一下
 
 ```
 $ webpack --mode=development
@@ -210,7 +210,7 @@ $ webpack --mode=development
 
 `webpack`说它不认识你这种奇怪的写法(我是指 JSX)。`Yuo may need an apropriate loader to handle this file.`
 
-## 我需要`loader`
+### 我需要`loader`
 
 需要的第一个`loader`就是`babel-loader`， Babel 是一个 JS 编译器。可以在后续的博客中一起学习一下(我已经欠了多少篇了哈哈哈哈哈哈)。
 
@@ -286,11 +286,11 @@ module.exports = {
 
 ![](/assets/img/2020-12-28/success.jpg)
 
-## 有点不对劲儿？
+### 有点不对劲儿？
 
 我们之前说，想把自己的项目`打包成一个文件`，我们确实把自己所有的js都打包好了。但是这个js是要用在最后的`那个html`中的(分割了好多个js文件，最终打包成一个js在html中用script标签引用)。我们还需要来一个`html`啊！
 
-## Loader说完说说Plugin
+### Loader说完说说Plugin
 
 这个时候我们已经打包好`bundle.js`了，但是每次打包都有`唯一的hash`，每次我们都去自己写的html中修改引用的`js文件的名字`也太傻了，这时候就可以用`plugin`来帮我们解决这个问题。
 
@@ -327,7 +327,7 @@ module.exports = {
 
 ![](/assets/img/2020-12-28/distIndex.jpg)
 
-## html有了可是咋看效果啊？
+### html有了可是咋看效果啊？
 
 我们在最开始，`没有webpack`的时候，运行`npm run start`其实就是运行`react-scripts start`来启动项目查看效果。
 
@@ -346,7 +346,7 @@ module.exports = {
 ![](/assets/img/2020-12-28/servePage.jpg)
 
 可以看到效果和之前一样。
-## 说好的要把2020打包的 📦
+### 说好的要把2020打包的 📦
 
 哈哈哈哈啊哈哈记得这么一段对话
 
@@ -399,13 +399,13 @@ Pack2020Plugin.prototype.apply = function () {
 module.exports = Pack2020Plugin;
 ```
 
-## compiler & compilation
+### compiler & compilation
 
-`compiler`就是一个`webpack的完整配置`以`对象形式`作为`参数`传入plugin`。
+`compiler`就是一个`webpack的完整配置`以`对象形式`作为`参数`传入`plugin`。
 
 `compilation`我理解是一个`回调函数`...
 
-## 先来看看效果
+### 先来看看效果
 
 ```js
 module.exports = {
@@ -510,7 +510,7 @@ const hopeOf2021 = `把2020打包，2021，${this.name}要努力加油！！`
 
 这样就是一个非常非常简单的Plugin了。`当然这只是非常入门的`。想要了解Plugin还是要继续学习webpack。
 
-## 插曲
+### 插曲
 
 [项目地址](https://github.com/hanqizheng/WebpackDemo)
 
@@ -520,7 +520,7 @@ ps: 其实就是我还没写完....
 
 
 
-# 参考
+## 参考
 
 - [Webpack — why and what](https://medium.com/js-imaginea/webpack-why-and-what-4948433cc2d3)
 - [Webpack: When To Use And Why](https://blog.andrewray.me/webpack-when-to-use-and-why/)

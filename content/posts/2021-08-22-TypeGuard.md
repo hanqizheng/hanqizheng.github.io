@@ -17,7 +17,7 @@ excerpt: 为什么突然要学`type guard`呢？ 突然有一天被问到了`typ
 
 那么今天就来好好的了解一下什么是`type guard`。
 
-# 一个场景
+## 一个场景
 
 ```ts
 interface A {
@@ -42,7 +42,7 @@ function Func(param: Test) {
 
 其实这个场景很多情况下都会存在，一个`union`类型的变量想要用其中一个分支的属性，但是这个时候就会报错。
 
-# narrowing(类型收紧) 和 type guard(类型保护)是什么关系？
+## narrowing(类型收紧) 和 type guard(类型保护)是什么关系？
 
 其实最开始迷惑这两个概念是因为`typescript`的官方文档。
 
@@ -54,7 +54,7 @@ function Func(param: Test) {
 
 ![](/assets/img/2021-08-22/newDoc.png)
 
-### 难道是`type guard`被`narrowing`取代了吗？
+#### 难道是`type guard`被`narrowing`取代了吗？
 
 个人认为：
 
@@ -64,7 +64,7 @@ function Func(param: Test) {
 
 > 盲猜这也是官方把`type guard`的文档废弃而编写了`narrowing`的文档的原因。
 
-# typeof type guards
+## typeof type guards
 
 ```ts
 function padLeft(padding: number | string, input: string) {
@@ -92,7 +92,7 @@ function padLeft(padding: number | string, input: string) {
 
 和通过`typeof`来建立不同分支，在每个分支中类型都更紧的这种操作类似的还有
 
-## Truthiness narrowing
+### Truthiness narrowing
 
 一说到if来创建条件语句，那么就离不开`true` or `false`。
 
@@ -108,7 +108,7 @@ JavaScript中有很多的值会被转为`false`
 同样是创建分支来完成类型收紧，排除可能为`false`的值，来进行后续的操作。
 
 
-# in操作符
+## in操作符
 
 个人认为，`in`操作符其实就是判断当前这个类型中有无此属性。
 
@@ -127,7 +127,7 @@ function move(animal: Fish | Bird) {
 
 上述这个例子，通过判断`"swim"`属性是否在当前变量中，来**让TS自己推断出**具体的类型。因为swim可以`唯一标识`一个类型。
 
-## 不得不说的 never
+### 不得不说的 never
 
 我们还使用一下开头那个例子
 
@@ -180,7 +180,7 @@ function Func(param: Test) {
 wait a minute... `exhaustive checking`这是个撒子？
 
 
-# Exhaustiveness checking
+## Exhaustiveness checking
 
 `exhaust`有`精疲力尽的，用尽`的意思。
 
@@ -188,8 +188,7 @@ wait a minute... `exhaustive checking`这是个撒子？
 
 所以当分支能让TS类型推断出`never`那说明类型检查真的**走到头**了。
 
-# 参考
+## 参考
 
--[Type Guards and Differentiating Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types)
--[Narrowing](https://www.typescriptlang.org/docs/handbook/2/narrowing.html)
-
+- [Type Guards and Differentiating Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types)
+- [Narrowing](https://www.typescriptlang.org/docs/handbook/2/narrowing.html)

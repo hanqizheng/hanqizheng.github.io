@@ -19,7 +19,7 @@ excerpt: 新的需求是要用`Class Component`来写，说实话高举`hooks`�
 
 今天就主题就来研究一下`Class Component`的新旧生命周期。
 
-# 被标记为UNSAFE的三个生命周期
+## 被标记为UNSAFE的三个生命周期
 
 在`React v16`之后，将3个生命周期
 
@@ -35,7 +35,7 @@ excerpt: 新的需求是要用`Class Component`来写，说实话高举`hooks`�
 
 ![](/assets/img/2021-05-25/warning2.png)
 
-## UNSAFE_componentWillMount
+### UNSAFE_componentWillMount
 
 `componentWillMount()` 在挂载之前被调用。也就说明它是在`render()`之前被调用的。
 
@@ -73,7 +73,7 @@ export default App;
 
 ![](/assets/img/2021-05-25/willMount.png)
 
-### 验证一下父组件更新会不会再次触发子组件的willMount
+#### 验证一下父组件更新会不会再次触发子组件的willMount
 
 现在有一个父组件`App`
 
@@ -147,7 +147,7 @@ export default Test1;
 
 点击按钮让父组件重新渲染，虽然`父组件的改变会导致子组件重新渲染`，但是！`并不会再触发componentWillMount()`。
 
-### 对将componentWillMount()标为UNSAFE的一些思考
+#### 对将componentWillMount()标为UNSAFE的一些思考
 
 我们之前说过：
 
@@ -194,7 +194,7 @@ export default Test1;
 
 因为我没有研究过`服务端渲染`，所以结论只能源于其他blog。
 
-## UNSAFE_componentWillReceiveProps
+### UNSAFE_componentWillReceiveProps
 
 `componentWillReceiveProps`的官方定义是如果父组件导致组件重新渲染，即使 props 没有更改，也会调用此方法。如果只想处理更改，请确保进行当前值与变更值的比较。
 
@@ -248,7 +248,7 @@ export default App;
 
 还需要注意的一点是，`componentWillReceiveProps`在`挂载阶段不执行！！`
 
-### 对将componentWillReceiveProps标记为UNSAFE的一些思考
+#### 对将componentWillReceiveProps标记为UNSAFE的一些思考
 
 `componentWillReceiveProps`能拿到下一次`最新的props`，就显然是要和`当前的props`做比较，这才是这个lifecycle的意义所在。
 
@@ -298,7 +298,7 @@ export default Test1;
 这就会`产生不同的`可以`更新state`的途径。让state的数据源变得`不纯洁（单一）`。
 
 而且需要区分`首次挂载`还是`后续更新`这种额外的逻辑总是会时不时的引发一些奇怪的bug。
-## UNSAFE_componentWillUpdate
+### UNSAFE_componentWillUpdate
 
 官方对`componentWillUpdate`的定义是：
 
@@ -308,7 +308,7 @@ export default Test1;
 
 ![](/assets/img/2021-05-25/willUpdate.jpg)
 
-### 对将componentWillUpdate标为UNSAFE的思考
+#### 对将componentWillUpdate标为UNSAFE的思考
 
 其实说实话，我看了很久也没有搞懂为什么会把`componentWillUpdate`标记为UNSAFE
 
@@ -321,12 +321,12 @@ export default Test1;
 这段话中描述特别特别像`React Concurrent Mode`中提及的特性。
 
 所以难道是为了给`Concurrent Mode`铺路(纯属推测无任何依据)？
-# 新给出的两个生命周期
+## 新给出的两个生命周期
 
 旧的不去，新的不来。
 
 将3个生命周期标记为不安全之后，React官方也给出了两个新的生命周期函数。`getDerivedStateFromProps` 和 `getSnapshotBeforeUpdate`
-## static getDerivedStateFromProps
+### static getDerivedStateFromProps
 
 `static getDerivedStateFromProps` 会在调用 render 方法之前调用，并且在初始挂载及后续更新时都会被调用。它应返回一个对象来更新 state，如果返回 null 则不更新任何内容。
 
@@ -368,7 +368,7 @@ export default Test1;
 
 这个时候`getDerivedStateFromProps`每次渲染都会执行一次。
 
-## getSnapshotBeforeUpdate
+### getSnapshotBeforeUpdate
 
 这个生命周期对我来说非常陌生，我基本没有怎么了解过它。
 
@@ -424,7 +424,7 @@ export default Test2;
 
 `componentDidUpdate`肯定是在`render`之后才会执行的生命周期。可以看到上面动图中，`getSnapshotBeforeUpdate`是`晚于`render`早于`componentDidUpdate。
 
-### 在render()的输出被渲染到DOM之前被调用之前
+#### 在render()的输出被渲染到DOM之前被调用之前
 
 这句话其实值得好好揣摩一下，因为我们知道React是先操作`Virtual DOM`最终一系列操作之后将其渲染成真实的DOM。
 
@@ -442,7 +442,7 @@ export default Test2;
 
 但说实话，我可能没有领悟到这个生命周期的真谛。
 
-# 一些思考
+## 一些思考
 
 在这个部分所说的话`纯属个人理解`，没有任何理论依据，也没有证实过，如果有错误欢迎指出。(hanqizheng598@gmail.com)
 
@@ -450,7 +450,7 @@ export default Test2;
 
 页面就像是河床，而数据就像水流一样流过每个`页面(河床)`。某些作为依赖的数据改变了就会驱使对应的`hooks`执行一次，从而让界面重新渲染。
 
-### 统一class中state的数据源
+#### 统一class中state的数据源
 
 而前些日子，听一个大佬给讲class里他觉得特别好的一个写法就是去`善用getDerivedStateFromProps()`。
 
@@ -472,19 +472,18 @@ export default Test2;
 
 给出一张特别不恰当的图，这张图`没有任何实际含义`，就是想让大家感受一下这种`数据驱动`的思想，感受一下Class也可以有类似的驱动操作。
 
-![](/assets/img/2021-05-25/dataDriven.jpg)
 ![](/assets/img/2021-05-25/propsDriven.jpg)
 
 --- 
 
 新的生命周期，还是要真实的在开发中才能理解的更透彻一些，这些，只是开发前的理论基础吧。
 
-# 参考
+## 参考
 
 - [ECMAScript 6 入门](https://es6.ruanyifeng.com/)
 - [Components and Props](https://reactjs.org/docs/components-and-props.html)
 - [Update on Async Rendering](https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html)
 - [You Probably Don't Need Derived State](https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html)
-- [React concurrent Mode](https://reactjs.org/docs/concurrent-mode-intro.htmlhttps://reactjs.org/docs/concurrent-mode-intro.html)
+- [React concurrent Mode](https://reactjs.org/docs/concurrent-mode-intro.html)
 - [Reconciliation - Dan's blog](https://overreacted.io/react-as-a-ui-runtime/#reconciliation)
 - [Reconciliation - Official Document](https://reactjs.org/docs/reconciliation.html)

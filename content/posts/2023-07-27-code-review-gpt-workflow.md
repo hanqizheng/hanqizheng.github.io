@@ -4,6 +4,10 @@ slug: code-review-gpt-workflow
 author: Qizheng Han
 publishedAt: 2023-07-27
 status: published
+cover: /covers/code-review-gpt-workflow.webp
+coverPosition: center
+coverTextTone: dark
+featured: true
 excerpt: 旨在以简单的描述来解释 CodeReviewGPT 的工作流程（因为没啥难的东西）。 让 GPT-3.5 进行 CR需要几步？
   答案是3步，打开冰箱门 → 放进冰箱 → 关上冰箱门 （不是） DiffCode 的准备工作 当然如果真的这么简单，也就没有这篇文章了。 diff
   code在丢给 GPT 前有很多准备工作要做
@@ -11,7 +15,7 @@ excerpt: 旨在以简单的描述来解释 CodeReviewGPT 的工作流程（因�
 
 旨在以简单的描述来解释 CodeReviewGPT 的工作流程（因为没啥难的东西）。
 
-# 让 GPT-3.5 进行 CR需要几步？
+## 让 GPT-3.5 进行 CR需要几步？
 
 ![](/assets/img/2023-07-27/simpleWorkflow.png)
 
@@ -31,7 +35,7 @@ CodeReviewGPT在构建prompt时，主要做了以下几步：
 - 根据编程语言区分 code review standard（CR标准）
 
   
-## 区分编程语言
+### 区分编程语言
 
 ![](/assets/img/2023-07-27/distinguish%20Language.png)
 
@@ -46,7 +50,7 @@ CodeReviewGPT所做的，就是每个文件将对应一次单独 prompt， 进�
 （因为Gitlab的diff可能每个文件有多段，所以实际运行是一段 code diff 一个特定的prompt）**
 
 
-## 通过CR标准进一步衍生prompt
+### 通过CR标准进一步衍生prompt
 
 ![](/assets/img/2023-07-27/seperateStandard.png)
 
@@ -56,7 +60,7 @@ CodeReviewGPT所做的，就是每个文件将对应一次单独 prompt， 进�
 
   
 
-## 那么prompt的结构是什么样子的？
+### 那么prompt的结构是什么样子的？
 
 ![](/assets/img/2023-07-27/promptStructure.png)
 
@@ -72,7 +76,7 @@ prompt 的主体 question prompt 中，最灵活的就是 review standard 这部
 
 ![](/assets/img/2023-07-27/promptArray.png)
 
-# 丢给 GPT
+## 丢给 GPT
 
 丢给 GPT 其实也有一些工作要做，不是简单的丢给他。
 
@@ -86,7 +90,7 @@ prompt 的主体 question prompt 中，最灵活的就是 review standard 这部
 
 就这样，把若干个 prompt 按顺序丢给 GPT 就得到了最终的结果。
 
-# 总结
+## 总结
 
 ![](/assets/img/2023-07-27/conclusion.png)
 
