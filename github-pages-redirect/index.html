@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Handler 已迁移</title>
+    <script>
+      (() => {
+        const destination = new URL("https://hanqizheng.vercel.app");
+        const currentPath = window.location.pathname;
+        destination.pathname =
+          currentPath === "/" || currentPath === "/index.html" ? "/zh" : currentPath;
+        destination.search = window.location.search;
+        destination.hash = window.location.hash;
+        window.location.replace(destination.toString());
+      })();
+    </script>
+    <noscript>
+      <meta http-equiv="refresh" content="0; url=https://hanqizheng.vercel.app/zh" />
+    </noscript>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+      }
+
+      body {
+        display: grid;
+        min-height: 100vh;
+        place-items: center;
+        margin: 0;
+        color: CanvasText;
+        background: Canvas;
+      }
+
+      main {
+        padding: 24px;
+        text-align: center;
+      }
+
+      a {
+        color: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p>博客已迁移，正在前往新地址。</p>
+      <a href="https://hanqizheng.vercel.app/zh">继续访问 Handler</a>
+    </main>
+  </body>
+</html>
