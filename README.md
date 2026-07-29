@@ -131,7 +131,7 @@ One-time setup:
 
    - `DATABASE_URL`
 
-5. **Disable GitHub Pages** for this repo (Settings → Pages → Source: *None*). This repo previously served a static site from `master`; after the Next.js refactor lands, Pages can no longer build it, so production should come from Vercel only.
+5. **Keep GitHub Pages as a redirect only.** The `deploy-pages-redirect.yml` workflow publishes the static files under `github-pages-redirect/`, so `https://hanqizheng.github.io/` and historical paths forward readers to the Vercel deployment. The Next.js application itself still runs only on Vercel because it depends on server rendering and Supabase.
 
 After the first production deploy, the publishing loop is fully automatic: commit a bilingual Markdown pair under `content/posts`, open a PR (Vercel builds a preview), and merge to `master` — the merge triggers the Vercel production deploy, and the `sync-posts` workflow loads the new Markdown into Supabase.
 
